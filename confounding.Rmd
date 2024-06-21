@@ -1,28 +1,40 @@
 ---
-title: "Confounding effect on DetectImport trees"
+title: "Confounding effect on joined rcoal trees"
 author: "Xavier Didelot"
 date: '`r Sys.Date()`'
 output:
   pdf_document: default
 vignette: >
   %\VignetteEngine{knitr::rmarkdown}
-  %\VignetteIndexEntry{Confounding effect on DetectImport trees}
+  %\VignetteIndexEntry{Confounding effect on joined rcoal trees}
   %\usepackage[utf8]{inputenc}
 ---
 
-First we generate a dated tree with root in 2000 and five populations existing for only a year each and separated by 5 years.
+First we generate a dated tree with root in 2000 and three equally related clades.
+Each clade is sampled 30 times at a single timepoint. 
+The first clade is sampled in 2010, the second one in 2010.1 and the third one in 2010.2.
+This is more or less equivalent to Fig 1d of Murray2016.
+One difference is that we consider the root known exactly, to show that the problem does not come from misidentification
+of the root.
 
 ```{r}
 library(BactDating)
 library(ape)
-library(DetectImports)
-set.seed(0)
-NeFunImp=function(t,texp) {return(pmax(0,(t-texp)-(t-texp)^2))}
-xs=seq(0,2,0.01);plot(xs,NeFunImp(xs,0),type='l',xlab='Time since pop start',ylab='Pop size')
-dt=simImports(localPopStart = 2000,importDates=c(2005,2010,2015,2020),samplingStartDate = 2000,samplingEndDate = 3000,samplingNumber = 100,globalNeg = 1,NeFunImp = NeFunImp)
-dates=dt$stats[,'dates'][1:Ntip(dt)]
-dates=dates+2000-dt$root.time
+set.seed(12)#cherry-picked a nice example
+t1=rcoal(30)
+h1=dist.nodes(t1)[1,Ntip(t1)+1]
+t1$root.edge=10-h1
+t2=rcoal(30)
+h2=dist.nodes(t2)[1,Ntip(t2)+1]
+t2$root.edge=10.1-h2
+t3=rcoal(30)
+h3=dist.nodes(t3)[1,Ntip(t3)+1]
+t3$root.edge=10.2-h3
+dt=bind.tree(t1,t2,position=t1$root.edge)
+dt=bind.tree(dt,t3,position=dt$root.edge)
+dates=unname(dist.nodes(dt)[Ntip(dt)+1,1:Ntip(dt)])
 dt$root.time=2000
+dates=dates+dt$root.time
 plot(dt,show.tip.label=F)
 axisPhylo(1,backward = F)
 ```
