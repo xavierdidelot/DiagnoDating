@@ -36,9 +36,8 @@ t3$root.edge=10.2-h3
 dt=bind.tree(t1,t2,position=t1$root.edge)
 dt$root.edge=s
 dt=bind.tree(dt,t3,position=dt$root.edge)
-dates=unname(dist.nodes(dt)[Ntip(dt)+1,1:Ntip(dt)])
 dt$root.time=2000
-dates=dates+dt$root.time
+dates=unname(dist.nodes(dt)[Ntip(dt)+1,1:Ntip(dt)])+dt$root.time
 plot(dt,show.tip.label=F)
 axisPhylo(1,backward = F)
 ```

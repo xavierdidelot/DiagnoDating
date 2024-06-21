@@ -1,12 +1,12 @@
 ---
-title: "Confounding effect on DetectImport simulation"
+title: "Confounding effect on structured simulation"
 author: "Xavier Didelot"
 date: '`r Sys.Date()`'
 output:
   pdf_document: default
 vignette: >
   %\VignetteEngine{knitr::rmarkdown}
-  %\VignetteIndexEntry{Confounding effect on DetectImport simulation}
+  %\VignetteIndexEntry{Confounding effect on structured simulation}
   %\usepackage[utf8]{inputenc}
 ---
 
@@ -16,13 +16,12 @@ First we generate a dated tree with root in 2000 and three populations existing 
 library(BactDating)
 library(ape)
 library(DetectImports)
-set.seed(180)
-NeFunImp=function(t,texp) {return(pmax(0,(t-texp)-(t-texp)^2))}
-xs=seq(0,2,0.01);plot(xs,NeFunImp(xs,0),type='l',xlab='Time since pop start',ylab='Pop size')
-dt=simImports(localPopStart = 2000,importDates=c(2001,2002),samplingStartDate = 2000,samplingEndDate = 2100,samplingNumber = 100,globalNeg = 10,NeFunImp = NeFunImp)
-dates=dt$stats[,'dates'][1:Ntip(dt)]
-dates=dates+2000-dt$root.time
+source('simStructure.R')
+set.seed(1)
+s=list(rep(2010,30),rep(2010.1,30),rep(2010.2,30))
+dt=simStructure(popStarts=c(2000,2000,2000),globalNeg = 30,samplingDates=s)
 dt$root.time=2000
+dates=unname(dist.nodes(dt)[Ntip(dt)+1,1:Ntip(dt)])+dt$root.time
 plot(dt,show.tip.label=F)
 axisPhylo(1,backward = F)
 ```
