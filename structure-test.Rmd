@@ -1,0 +1,58 @@
+---
+title: "Structure test"
+author: "Xavier Didelot"
+date: '`r Sys.Date()`'
+output:
+  pdf_document: default
+vignette: >
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteIndexEntry{Structure test}
+  %\usepackage[utf8]{inputenc}
+---
+
+In this vignette we show that the Mantel test will be significant even if there is no structure.
+
+We start by generating a dated tree with root in 2000 and small $N_e g=1$ year relative to sampling frame of 10 years:
+
+```{r}
+library(BactDating)
+library(ape)
+set.seed(0)
+dates=runif(100,0,10)
+dt=simcoaltree(dates,alpha=1)
+dates=dates+2000-dt$root.time
+dt$root.time=2000
+plot(dt,show.tip.label = F)
+axisPhylo(backward = F)
+```
+
+Next we generate a phylogenetic tree using a Poisson(10) mutation model:
+```{r}
+tree=simobsphy(dt,mu=10,model='poisson')
+plot(tree,show.tip.label = F)
+axisPhylo(1,backward=F)
+```
+
+A root-to-tip regression analysis works perfectly:
+
+```{r}
+res=roottotip(tree,dates)
+```
+
+The bactdate analysis also works perfectly:
+
+```{r}
+r=bactdate(tree,dates,model='poisson',updateRoot = F)
+plot(r,'trace')
+plot(r,'treeCI',show.tip.label=F)
+print(r)
+```
+
+There is strong association between genetic and temporal distances, even if this is not actually an issue for dating:
+
+```{r}
+tim=as.matrix(dist(dates))
+gen=cophenetic.phylo(tree)
+plot(tim[upper.tri(tim)],gen[upper.tri(gen)],xlab='Time distance',ylab='Genetic distance')
+vegan::mantel(gen,tim)
+```

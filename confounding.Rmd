@@ -10,62 +10,30 @@ vignette: >
   %\usepackage[utf8]{inputenc}
 ---
 
-## Analysis without structure or sampling bias
-
-We start by generating a dataset with small $N_e g$ relative to sampling frame:
+First we generate a dated tree with root in 2000 and two populations existing for only a year each and separated by 10 years.
 
 ```{r}
 library(BactDating)
 library(ape)
-set.seed(0)
-dates=seq(2000,2020,0.5)
-phy=simcoaltree(dates,alpha=1)
-plot(phy,show.tip.label = F)
-axisPhylo(backward = F)
-title(sprintf('Root date is %.2f',phy$root.time))
-tree=simobsphy(phy,mu=10,model='poisson')
-```
-
-A root-to-tip regression analysis gives the correct results:
-
-```{r}
-res=roottotip(tree,dates)
-```
-
-The bactdate analysis also works as expected:
-
-```{r}
-r=bactdate(tree,dates,model='poisson',updateRoot = F)
-plot(r,'trace')
-plot(r,'treeCI',show.tip.label=F)
-print(res)
-```
-
-There is strong association between genetic and temporal distances, even if this is not actually an issue for dating:
-
-```{r}
-tim=as.matrix(dist(dates))
-gen=cophenetic.phylo(tree)
-plot(tim[upper.tri(tim)],gen[upper.tri(gen)],xlab='Time distance',ylab='Genetic distance')
-vegan::mantel(gen,tim)
-```
-
-TODO: need a better test that does not raise an issue in this case.
-
-## Analysis with structure and sampling bias
-
-```{r}
 library(DetectImports)
 set.seed(0)
 NeFunImp=function(t,texp) {return(pmax(0,(t-texp)-(t-texp)^2))}
 xs=seq(0,2,0.01);plot(xs,NeFunImp(xs,0),type='l',xlab='Time since pop start',ylab='Pop size')
 dt=simImports(localPopStart = 2010,importDates=2020,samplingStartDate = 2010,samplingEndDate = 2023,samplingNumber = 100,globalNeg = 10,NeFunImp = NeFunImp)
+dates=dt$stats[,'dates'][1:Ntip(dt)]
+dates=dates+2000-dt$root.time
+dt$root.time=2000
 plot(dt,show.tip.label=F)
 axisPhylo(1,backward = F)
-title(sprintf('Root date is %.2f',dt$root.time))
-dates=dt$stats[,'dates'][1:Ntip(dt)]
-tree=simobsphy(dt,mu=1,model='poisson')
 ```
+
+Next we generate a phylogenetic tree using a Poisson(1) mutation model:
+```{r}
+tree=simobsphy(dt,mu=1,model='poisson')
+plot(tree,show.tip.label = F)
+axisPhylo(1,backward=F)
+```
+
 
 Root-to-tip analysis:
 ```{r}
