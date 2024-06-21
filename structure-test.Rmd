@@ -54,5 +54,19 @@ There is strong association between genetic and temporal distances, even if this
 tim=as.matrix(dist(dates))
 gen=cophenetic.phylo(tree)
 plot(tim[upper.tri(tim)],gen[upper.tri(gen)],xlab='Time distance',ylab='Genetic distance')
+```
+
+Mantel test from the vegan package:
+```{r}
 vegan::mantel(gen,tim)
+```
+
+Mantel test from the ape package:
+```{r}
+ape::mantel.test(gen,tim)
+```
+
+Mantel test from the ade4 package:
+```{r}
+ade4::mantel.rtest(as.dist(gen),as.dist(tim))
 ```

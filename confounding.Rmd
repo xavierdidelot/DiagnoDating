@@ -10,7 +10,7 @@ vignette: >
   %\usepackage[utf8]{inputenc}
 ---
 
-First we generate a dated tree with root in 2000 and two populations existing for only a year each and separated by 10 years.
+First we generate a dated tree with root in 2000 and two populations existing for only a year each and separated by 5 years.
 
 ```{r}
 library(BactDating)
@@ -19,7 +19,7 @@ library(DetectImports)
 set.seed(0)
 NeFunImp=function(t,texp) {return(pmax(0,(t-texp)-(t-texp)^2))}
 xs=seq(0,2,0.01);plot(xs,NeFunImp(xs,0),type='l',xlab='Time since pop start',ylab='Pop size')
-dt=simImports(localPopStart = 2010,importDates=2020,samplingStartDate = 2010,samplingEndDate = 2023,samplingNumber = 100,globalNeg = 10,NeFunImp = NeFunImp)
+dt=simImports(localPopStart = 2010,importDates=2015,samplingStartDate = 2010,samplingEndDate = 2023,samplingNumber = 100,globalNeg = 10,NeFunImp = NeFunImp)
 dates=dt$stats[,'dates'][1:Ntip(dt)]
 dates=dates+2000-dt$root.time
 dt$root.time=2000
@@ -27,9 +27,9 @@ plot(dt,show.tip.label=F)
 axisPhylo(1,backward = F)
 ```
 
-Next we generate a phylogenetic tree using a Poisson(1) mutation model:
+Next we generate a phylogenetic tree using a Poisson(10) mutation model:
 ```{r}
-tree=simobsphy(dt,mu=1,model='poisson')
+tree=simobsphy(dt,mu=10,model='poisson')
 plot(tree,show.tip.label = F)
 axisPhylo(1,backward=F)
 ```
