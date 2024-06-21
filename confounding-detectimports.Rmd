@@ -1,25 +1,25 @@
 ---
-title: "Confounding effect on DetectImport trees"
+title: "Confounding effect on DetectImport simulation"
 author: "Xavier Didelot"
 date: '`r Sys.Date()`'
 output:
   pdf_document: default
 vignette: >
   %\VignetteEngine{knitr::rmarkdown}
-  %\VignetteIndexEntry{Confounding effect on DetectImport trees}
+  %\VignetteIndexEntry{Confounding effect on DetectImport simulation}
   %\usepackage[utf8]{inputenc}
 ---
 
-First we generate a dated tree with root in 2000 and five populations existing for only a year each and separated by 5 years.
+First we generate a dated tree with root in 2000 and three populations existing for only 1 year each and separated by 1 years.
 
 ```{r}
 library(BactDating)
 library(ape)
 library(DetectImports)
-set.seed(0)
+set.seed(180)
 NeFunImp=function(t,texp) {return(pmax(0,(t-texp)-(t-texp)^2))}
 xs=seq(0,2,0.01);plot(xs,NeFunImp(xs,0),type='l',xlab='Time since pop start',ylab='Pop size')
-dt=simImports(localPopStart = 2000,importDates=c(2005,2010,2015,2020),samplingStartDate = 2000,samplingEndDate = 3000,samplingNumber = 100,globalNeg = 1,NeFunImp = NeFunImp)
+dt=simImports(localPopStart = 2000,importDates=c(2001,2002),samplingStartDate = 2000,samplingEndDate = 2100,samplingNumber = 100,globalNeg = 10,NeFunImp = NeFunImp)
 dates=dt$stats[,'dates'][1:Ntip(dt)]
 dates=dates+2000-dt$root.time
 dt$root.time=2000
@@ -43,7 +43,7 @@ res=roottotip(tree,dates)
 BactDating analysis:
 
 ```{r}
-r=bactdate(tree,dates,model='poisson',updateRoot = F)
+r=bactdate(tree,dates,model='poisson',updateRoot = F,initMu=10)
 plot(r,'trace')
 plot(r,'treeCI',show.tip.label=F)
 print(r)

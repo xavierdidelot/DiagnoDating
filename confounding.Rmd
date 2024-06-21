@@ -16,15 +16,15 @@ The first clade is sampled in 2010, the second one in 2010.1 and the third one i
 This is more or less equivalent to Fig 1d of Murray2016.
 One difference is that we consider the root known exactly, to show that the problem does not come from misidentification
 of the root.
-Another difference is that instead of having the three clades exactly equally related we introduce a short branch of length 
-$s=0.1$ year, again to make sure that this is not the cause of the problem.
+Another difference is that instead of having the three clades exactly equally related we introduce a branch of length 
+$s=2$ years, again to show that this is not the cause of the problem.
 
 ```{r}
 library(BactDating)
 library(ape)
 set.seed(5)#cherry-picked a nice example
 t1=rcoal(30)
-s=0.1
+s=2
 h1=dist.nodes(t1)[1,Ntip(t1)+1]
 t1$root.edge=10-h1-s
 t2=rcoal(30)
