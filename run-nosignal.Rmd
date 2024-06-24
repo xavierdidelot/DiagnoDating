@@ -1,0 +1,61 @@
+---
+title: "Run on dataset with no temporal signal"
+author: "Xavier Didelot"
+date: '`r Sys.Date()`'
+output:
+  pdf_document: default
+vignette: >
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteIndexEntry{Run on dataset with no temporal signal}
+  %\usepackage[utf8]{inputenc}
+---
+
+We start by generating a dated tree with root in 2000 and $N_e g=10$ years and sampling frame of only 0.01 year:
+
+```{r}
+library(BactDating)
+library(ape)
+set.seed(0)
+dates=runif(100,0,0.01)
+dt=simcoaltree(dates,alpha=10)
+dates=dates+2000-dt$root.time
+dt$root.time=2000
+plot(dt,show.tip.label = F)
+axisPhylo(backward = F)
+```
+
+
+Next we generate a phylogenetic tree using a Poisson(10) mutation model:
+```{r}
+tree=simobsphy(dt,mu=10,model='poisson')
+plot(tree,show.tip.label = F)
+axisPhylo(1,backward=F)
+```
+
+
+Root-to-tip analysis:
+```{r}
+res=roottotip(tree,dates)
+```
+
+BactDating analysis:
+
+```{r}
+r=bactdate(tree,dates,model='poisson',updateRoot = F)
+plot(r,'trace')
+plot(r,'treeCI',show.tip.label=F)
+print(r)
+```
+BactDating analysis with all dates set equal:
+
+```{r}
+r2=bactdate(tree,rep(mean(dates),length(dates)),model='poisson',updateRoot = F,initMu=100)
+plot(r2,'trace')
+plot(r2,'treeCI',show.tip.label=F)
+print(r2)
+```
+
+DIC comparison:
+```{r}
+modelcompare(r,r2)
+```

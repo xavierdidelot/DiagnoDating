@@ -22,7 +22,7 @@ $s=2$ years, again to show that this is not the cause of the problem.
 ```{r}
 library(BactDating)
 library(ape)
-set.seed(5)#cherry-picked a nice example
+set.seed(97)#cherry-picked a nice example
 t1=rcoal(30)
 s=2
 h1=dist.nodes(t1)[1,Ntip(t1)+1]
@@ -62,4 +62,18 @@ r=bactdate(tree,dates,model='poisson',updateRoot = F)
 plot(r,'trace')
 plot(r,'treeCI',show.tip.label=F)
 print(r)
+```
+
+treedater analysis:
+
+```{r}
+library(treedater)
+tre=tree
+l=1e6
+tre$edge.length=tre$edge.length/l
+tre$tip.label=1:Ntip(tre)
+sts=dates
+names(sts)=1:Ntip(tre)
+o=capture.output(rtd<-suppressWarnings(dater(tre,sts,s=l)))
+print(sprintf('Rate=%f and root date=%f',rtd$mean.rate*l,rtd$timeOfMRCA))
 ```
