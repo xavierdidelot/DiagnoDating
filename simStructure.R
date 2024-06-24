@@ -19,7 +19,7 @@ simStructure = function(popStarts=c(2020,2021,2022),globalNeg=1,NeFunImp,samplin
   toadd=rep(NA,npop)
   for (i in 1:npop) {
     while (is.na(toadd[i])||toadd[i]<0) {
-      popTrees[[i]]=simCoal(samplingDates[[i]],NeFun[[i]],1e-2,computeKeyStats=F)
+      popTrees[[i]]=mlesky::simCoal(samplingDates[[i]],NeFun[[i]],1e-2)
       toadd[i]=popTrees[[i]]$root.time-popStarts[i]}
   }
   
@@ -32,7 +32,7 @@ simStructure = function(popStarts=c(2020,2021,2022),globalNeg=1,NeFunImp,samplin
   }
   
   #Simulate global tree
-  t=simCoal(popStarts,function(t){return(globalNeg)},computeKeyStats=F)
+  t=mlesky::simCoal(popStarts,function(t){return(globalNeg)})
   t$tip.label=sprintf('G%d',1:Ntip(t))
   
   #Paste trees together

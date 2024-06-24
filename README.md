@@ -29,7 +29,12 @@ Work on the confounding effect of genetic structure on molecular dating.
 
 # Still to do
 
-- Test to detect when the confounding problem happens
+- simStructure could be based on `mlesky` rather than `DetectImports`,
+  would be more clear
+- What happens when there is no confounding issue but the temporal
+  signal is weak, eg because all sampling dates are the same or very
+  similar
+- Propose new test to detect when the confounding problem happens
 - Propose a solution to when the confounding problem happens, maybe via
   removal of some leaves until test satisfied
 - Is permutation test useful?
