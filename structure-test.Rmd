@@ -70,3 +70,10 @@ Mantel test from the ade4 package:
 ```{r}
 ade4::mantel.rtest(as.dist(gen),as.dist(tim))
 ```
+
+Kruskal-Wallis test:
+```{r}
+source('testConfounding.R')
+pvals=testConfounding(tree,dates)
+min(p.adjust(pvals,"bonferroni"))
+```

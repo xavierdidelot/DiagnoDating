@@ -35,6 +35,10 @@ Work on the confounding effect of genetic structure on molecular dating.
 # Still to do
 
 - Propose new test to detect when the confounding problem happens
+- Implemented first naive idea of doing a Krukal-Wallis test comparing
+  the dates on the left and right for each node, cf testConfounding.R.
+  Get false positive in structure-test.Rmd. Need better test, accounting
+  for branch lengths. Maybe idea of using pseudo-residuals.
 - Propose a solution to when the confounding problem happens, maybe via
   removal of some leaves until test satisfied
 - Is permutation test useful?
@@ -65,3 +69,5 @@ Work on the confounding effect of genetic structure on molecular dating.
   continuous phenotype representing sampling dates.
 - Can a relaxed clock with high relaxation parameter equate a lack of
   temporal signal? What happens in ARC if omega is very high?
+- Alternate method to simulate confounding tree: generate very large
+  phylogeny and subsample from large clusters within in
