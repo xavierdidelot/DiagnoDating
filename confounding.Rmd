@@ -22,7 +22,7 @@ $s=2$ years, again to show that this is not the cause of the problem.
 ```{r}
 library(BactDating)
 library(ape)
-set.seed(97)#cherry-picked a nice example
+set.seed(5)#cherry-picked a nice example
 t1=rcoal(30)
 s=2
 h1=dist.nodes(t1)[1,Ntip(t1)+1]
@@ -76,4 +76,14 @@ sts=dates
 names(sts)=1:Ntip(tre)
 o=capture.output(rtd<-suppressWarnings(dater(tre,sts,s=l)))
 print(sprintf('Rate=%f and root date=%f',rtd$mean.rate*l,rtd$timeOfMRCA))
+```
+
+LSD2 analysis:
+
+```{r}
+library(Rlsd2)
+write.tree(tre,'/tmp/tree.nwk')
+write.table(sts,'/tmp/dates.csv',quote = F,col.names=length(sts))
+o=capture.output(result <- lsd2(inputTree='/tmp/tree.nwk', inputDate='/tmp/dates.csv',outFile = '/tmp/result', seqLen=l))
+print(sprintf('Rate=%f and root date=%f',result$rate*l,result$tMRCA))
 ```
