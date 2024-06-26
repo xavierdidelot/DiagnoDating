@@ -48,6 +48,12 @@ plot(r,'treeCI',show.tip.label=F)
 print(r)
 ```
 
+Pseudo-residual analysis:
+```{r}
+source('pseudo.R')
+plotPseudo(r)
+```
+
 There is strong association between genetic and temporal distances, even if this is not actually an issue for dating:
 
 ```{r}

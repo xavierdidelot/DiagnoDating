@@ -63,27 +63,24 @@ plot(r,'trace')
 plot(r,'treeCI',show.tip.label=F)
 print(r)
 ```
+Pseudo-residual analysis:
+```{r}
+source('pseudo.R')
+plotPseudo(r)
+```
+
 
 treedater analysis:
 
 ```{r}
-library(treedater)
-tre=tree
-l=1e6
-tre$edge.length=tre$edge.length/l
-tre$tip.label=1:Ntip(tre)
-sts=dates
-names(sts)=1:Ntip(tre)
-o=capture.output(rtd<-suppressWarnings(dater(tre,sts,s=l)))
-print(sprintf('Rate=%f and root date=%f',rtd$mean.rate*l,rtd$timeOfMRCA))
+source('wrappers.R')
+res=runTreeDater(tree,dates)
+print(sprintf('Rate=%f and root date=%f',res$rate,res$tmrca))
 ```
 
 LSD2 analysis:
 
 ```{r}
-library(Rlsd2)
-write.tree(tre,'/tmp/tree.nwk')
-write.table(sts,'/tmp/dates.csv',quote = F,col.names=length(sts))
-o=capture.output(result <- lsd2(inputTree='/tmp/tree.nwk', inputDate='/tmp/dates.csv',outFile = '/tmp/result', seqLen=l))
-print(sprintf('Rate=%f and root date=%f',result$rate*l,result$tMRCA))
+res=runLSD(tree,dates)
+print(sprintf('Rate=%f and root date=%f',res$rate,res$tmrca))
 ```

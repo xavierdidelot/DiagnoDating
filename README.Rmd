@@ -19,7 +19,8 @@ Work on the confounding effect of genetic structure on molecular dating.
 
 # Done so far
 
-- Reproduce confounding effect described by Murray2016 on similar coalescent simulation and using BactDating and treedater, cf `confounding.Rmd`
+- Dating via regression, BactDating, treedater and LSD2
+- Reproduce confounding effect described by Murray2016 on similar coalescent simulation, cf `confounding.Rmd`
 - Ruled out possible problem in phylogenetics since working directly with trees, not genetic data
 - Ruled out possible problem with root identification (ie consider root known)
 - Ruled out possible problem with multifurcation at the root (relaxed this in simulation)
