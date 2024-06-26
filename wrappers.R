@@ -1,6 +1,6 @@
 runTreeDater=function(tree,dates) {
   tre=tree
-  l=1e6
+  l=max(tree$edge.length)*1000
   tre$edge.length=tre$edge.length/l
   tre$tip.label=1:Ntip(tre)
   sts=dates
@@ -14,14 +14,13 @@ runTreeDater=function(tree,dates) {
 
 runLSD=function(tree,dates) {
   tre=tree
-  l=1e6
+  l=max(tree$edge.length)*1000
   tre$edge.length=tre$edge.length/l
   tre$tip.label=1:Ntip(tre)
   sts=dates
   names(sts)=1:Ntip(tre)
   write.tree(tre,'/tmp/tree.nwk')
   write.table(sts,'/tmp/dates.csv',quote = F,col.names=length(sts))
-  system('R << ')
   o=capture.output(result <- Rlsd2::lsd2(inputTree='/tmp/tree.nwk', inputDate='/tmp/dates.csv',outFile = '/tmp/result', seqLen=l))
   res=list()
   res$rate=result$rate*l
