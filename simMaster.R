@@ -44,5 +44,6 @@ simMaster = function(demes=3,coalrate=1,migrate=0.1,NeFunImp,samplingDates)
   t=treeio::read.beast('/tmp/simu_master.tree')
   phy=as.phylo(t)
   phy=collapse.singles(phy)#remove migration nodes
+  phy$root.time=max(unlist(s))-max(unname(dist.nodes(phy)[Ntip(phy)+1,1:Ntip(phy)]))
   return(phy)
 }

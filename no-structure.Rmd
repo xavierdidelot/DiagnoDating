@@ -1,27 +1,24 @@
 ---
-title: "Structure test"
+title: "Simulation with no structure"
 author: "Xavier Didelot"
 date: '`r Sys.Date()`'
 output:
   pdf_document: default
 vignette: >
   %\VignetteEngine{knitr::rmarkdown}
-  %\VignetteIndexEntry{Structure test}
+  %\VignetteIndexEntry{Simulation with no structure}
   %\usepackage[utf8]{inputenc}
 ---
 
-In this vignette we show that the Mantel test will be significant even if there is no structure.
-
-We start by generating a dated tree with root in 2000 and small $N_e g=1$ year relative to sampling frame of 10 years:
+We start by generating a dated tree with no structure and a small effective population size 
+$N_e g=1$ year relative to the sampling frame of 10 years between 2010 and 2020:
 
 ```{r}
 library(BactDating)
 library(ape)
 set.seed(0)
-dates=runif(100,0,10)
+dates=runif(100,2010,2020)
 dt=simcoaltree(dates,alpha=1)
-dates=dates+2000-dt$root.time
-dt$root.time=2000
 plot(dt,show.tip.label = F)
 axisPhylo(backward = F)
 ```
@@ -48,15 +45,23 @@ plot(r,'treeCI',show.tip.label=F)
 print(r)
 ```
 
-Pseudo-residual analysis:
+Analysis using LSD:
 ```{r}
-source('pseudo.R')
-plotPseudo(r)
-plotPseudoQQ(r)
-testPseudo(r)
+source('wrappers.R')
+r=runLSD(tree,dates)
+plot(r,show.tip.label=F)
+print(r)
 ```
 
-There is strong association between genetic and temporal distances, even if this is not actually an issue for dating:
+Analysis using treedater:
+
+```{r}
+r=runTreeDater(tree,dates)
+plot(r,show.tip.label=F)
+print(r)
+```
+
+There is strong association between genetic and temporal distances:
 
 ```{r}
 tim=as.matrix(dist(dates))
@@ -79,9 +84,17 @@ Mantel test from the ade4 package:
 ade4::mantel.rtest(as.dist(gen),as.dist(tim))
 ```
 
-Kruskal-Wallis test:
+Kruskal-Wallis test of sampling dates imbalance:
 ```{r}
 source('testConfounding.R')
 pvals=testConfounding(tree,dates)
 min(p.adjust(pvals,"bonferroni"))
+```
+
+Pseudo-residual analysis:
+```{r}
+source('pseudo.R')
+plotPseudo(r)
+plotPseudoQQ(r)
+testPseudo(r)
 ```

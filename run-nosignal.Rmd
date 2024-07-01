@@ -10,7 +10,7 @@ vignette: >
   %\usepackage[utf8]{inputenc}
 ---
 
-We start by generating a dated tree with root in 2000 and $N_e g=10$ years and sampling frame of only 0.01 year:
+We start by generating a dated tree with $N_e g=10$ years and sampling frame of only 0.01 year:
 
 ```{r}
 library(BactDating)
@@ -18,8 +18,6 @@ library(ape)
 set.seed(0)
 dates=runif(100,0,0.01)
 dt=simcoaltree(dates,alpha=10)
-dates=dates+2000-dt$root.time
-dt$root.time=2000
 plot(dt,show.tip.label = F)
 axisPhylo(backward = F)
 ```
