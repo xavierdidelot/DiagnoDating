@@ -1,3 +1,5 @@
+source('phyloUtils.R')
+
 runTreeDater=function(tree,dates) {
   tre=tree
   l=max(tree$edge.length)*1000
@@ -20,6 +22,8 @@ runTreeDater=function(tree,dates) {
   res$record=record
   res$tree=list(edge=rtd$edge,Nnode=rtd$Nnode,tip.label=rtd$tip.label,edge.length=rtd$edge.length,root.time=rtd$timeOfMRCA)
   class(res$tree)<-'phylo'
+  tree=reorderEdges(tree,res$tree)
+  res$tree$subs=tree$edge.length
   class(res)<-'resBactDating'
   return(res)
 }
@@ -33,7 +37,7 @@ runLSD=function(tree,dates,tag=0) {
   names(sts)=1:Ntip(tre)
   write.tree(tre,sprintf('/tmp/tree%d.nwk',tag))
   write.table(sts,sprintf('/tmp/dates%d.csv',tag),quote = F,col.names=length(sts))
-  o=capture.output(result <- Rlsd2::lsd2(inputTree=sprintf('/tmp/tree%d.nwk',tag), inputDate=sprintf('/tmp/dates%d.csv',tag),outFile = sprintf('/tmp/result%d',tag), seqLen=l))
+  o=capture.output(result <- Rlsd2::lsd2(inputTree=sprintf('/tmp/tree%d.nwk',tag), inputDate=sprintf('/tmp/dates%d.csv',tag),outFile = sprintf('/tmp/result%d',tag), seqLen=l,nullblen=-1))
   res=list()
   res$inputtree=tree
   res$model='poisson'
@@ -46,7 +50,9 @@ runLSD=function(tree,dates,tag=0) {
   record[,Ntip(tree)+1]=result$tMRCA
   res$record=record
   res$tree=read.nexus(sprintf('/tmp/result%d.date.nexus',tag))
-  res$tree=multi2di(res$tree)
+#  res$tree=multi2di(res$tree)
+  tree=reorderEdges(tree,res$tree)
+  res$tree$subs=tree$edge.length
   class(res)<-'resBactDating'
   return(res)
 }

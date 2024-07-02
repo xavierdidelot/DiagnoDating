@@ -15,11 +15,13 @@ plotPseudo = function(x) {
   lines(xss,qpois(  plim/2,xss*rate),lty='dashed')
   lines(xss,qpois(1-plim/2,xss*rate),lty='dashed')
   ll=dpois(round(ys),xs*rate,log=T)
+  ll[is.infinite(ll)]=NA
 
-  normed=(ll-min(ll))/(max(ll)-min(ll))
-  cols=grDevices::rgb(1-normed,0,normed)
+  normed=(ll-min(ll,na.rm=T))/(max(ll,na.rm=T)-min(ll,na.rm=T))
+  normed2=normed;normed2[is.na(normed2)]=1
+  cols=ifelse(is.na(normed),grDevices::rgb(0,1,0),grDevices::rgb(1-normed2,0,normed2))
   base=seq(1,0,-0.1)
-  legend("topleft",cex=0.5,legend=sprintf('%.3f',exp(base*(max(ll)-min(ll))+min(ll))),pch=19,col=grDevices::rgb(1-base,0,base))
+  legend("topleft",cex=0.5,legend=sprintf('%.3f',exp(base*(max(ll,na.rm=T)-min(ll,na.rm=T))+min(ll,na.rm=T))),pch=19,col=grDevices::rgb(1-base,0,base))
   par(xpd=NA)
   points(xs,ys,pch=19,col=cols)
   par(xpd=F)
@@ -36,6 +38,10 @@ plotPseudoQQ = function(x) {
   rate=mean(x$record[(nrow(x$record)/2):nrow(x$record),'mu'])
   sigma=mean(x$record[(nrow(x$record)/2):nrow(x$record),'sigma'])
   p=ppois(round(ys),xs*rate)#uniform pseudo-residual
+  if (any(p==1)) {
+    p=p[which(p!=1)]
+    warning('Removing p=1')
+  }
   #p=(ppois(round(ys-1),xs*rate)+ppois(round(ys),xs*rate))/2
   #p=runif(length(ys),ppois(round(ys-1),xs*rate),ppois(round(ys),xs*rate))
   n=qnorm(p)#normal pseudo-residual  
@@ -65,6 +71,10 @@ testPseudo=function(x) {
   rate=mean(x$record[(nrow(x$record)/2):nrow(x$record),'mu'])
   sigma=mean(x$record[(nrow(x$record)/2):nrow(x$record),'sigma'])
   p=ppois(round(ys),xs*rate)#uniform pseudo-residual
+  if (any(p==1)) {
+    p=p[which(p!=1)]
+    warning('Removing p=1')
+  }
   n=qnorm(p)#normal pseudo-residual  
   r=shapiro.test(n)
   return(r)

@@ -63,13 +63,6 @@ plot(r,'trace')
 plot(r,'treeCI',show.tip.label=F)
 print(r)
 ```
-Pseudo-residual analysis:
-```{r}
-source('pseudo.R')
-plotPseudo(r)
-plotPseudoQQ(r)
-testPseudo(r)
-```
 
 
 treedater analysis:

@@ -1,0 +1,86 @@
+---
+title: "Pseudo-residual analysis"
+author: "Xavier Didelot"
+date: '`r Sys.Date()`'
+output:
+  pdf_document: default
+vignette: >
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteIndexEntry{Pseudo-residual analysis}
+  %\usepackage[utf8]{inputenc}
+---
+
+We start by generating a dated tree with no structure and a small effective population size 
+$N_e g=1$ year relative to the sampling frame of 10 years between 2010 and 2020:
+
+```{r}
+library(BactDating)
+library(ape)
+set.seed(0)
+dates=runif(100,2010,2020)
+dt=simcoaltree(dates,alpha=1)
+plot(dt,show.tip.label = F)
+axisPhylo(backward = F)
+```
+
+Next we generate a phylogenetic tree using a Poisson(10) mutation model:
+```{r}
+tree=simobsphy(dt,mu=10,model='poisson')
+plot(tree,show.tip.label = F)
+axisPhylo(1,backward=F)
+```
+
+A root-to-tip regression analysis works perfectly:
+
+```{r}
+res=roottotip(tree,dates)
+```
+
+The bactdate analysis also works perfectly:
+
+```{r}
+r1=bactdate(tree,dates,model='poisson',updateRoot = F)
+plot(r1,'trace')
+plot(r1,'treeCI',show.tip.label=F)
+print(r1)
+```
+Pseudo-residual analysis:
+```{r}
+source('pseudo.R')
+plotPseudo(r1)
+plotPseudoQQ(r1)
+testPseudo(r1)
+```
+
+Analysis using LSD:
+```{r}
+source('wrappers.R')
+r2=runLSD(tree,dates)
+plot(r2,show.tip.label=F)
+print(r2)
+```
+
+Pseudo-residual analysis:
+```{r}
+source('pseudo.R')
+plotPseudo(r2)
+plotPseudoQQ(r2)
+testPseudo(r2)
+```
+
+Analysis using treedater:
+
+```{r}
+source('wrappers.R')
+r3=runTreeDater(tree,dates)
+plot(r3,show.tip.label=F)
+print(r3)
+```
+
+Pseudo-residual analysis:
+```{r}
+source('pseudo.R')
+plotPseudo(r3)
+plotPseudoQQ(r3)
+testPseudo(r3)
+```

@@ -1,22 +1,9 @@
+source('phyloUtils.R')
+
 # New test to determine whether there are lineages with unbalanced dates
+#For each node, perform a Kruskal-Wallis test for the dates on the left and on the right
 testConfounding = function(tree,dates) {
-  #Make vector of parents
-  parent=NA
-  parent[tree$edge[,2]]=tree$edge[,1]
-  
-  #Make matrix of children
-  children=matrix(NA,Ntip(tree)+Nnode(tree),Ntip(tree))
-  for (i in 1:Ntip(tree)) {
-    children[i,1]=i
-    cur=i
-    while (cur!=Ntip(tree)+1) {
-      cur=parent[cur]
-      w=match(NA,children[cur,])
-      children[cur,w]=i
-    }
-  }
-  
-  #For each node, perform a Kruskal-Wallis test for the dates on the left and on the right
+  children=matrixChildren(tree)
   pvals=rep(NA,Nnode(tree))
   for (node in 1:Nnode(tree)) {
     w=tree$edge[which(tree$edge[,1]==node+Ntip(tree)),2]
