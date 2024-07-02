@@ -68,7 +68,7 @@ print(r)
 treedater analysis:
 
 ```{r}
-source('wrappers.R')
+library(confounding)
 res=runTreeDater(tree,dates)
 print(sprintf('Rate=%f and root date=%f',res$rate,res$rootdate))
 ```

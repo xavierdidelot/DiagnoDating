@@ -1,25 +1,24 @@
 ---
-title: "Confounding effect on structured simulation"
+title: "Confounding effect on Master simulation"
 author: "Xavier Didelot"
 date: '`r Sys.Date()`'
 output:
   pdf_document: default
 vignette: >
   %\VignetteEngine{knitr::rmarkdown}
-  %\VignetteIndexEntry{Confounding effect on structured simulation}
+  %\VignetteIndexEntry{Confounding effect on Master simulation}
   %\usepackage[utf8]{inputenc}
 ---
 
-First we generate a dated tree with three populations. Each population is sampled 30 times in non-overlapping windows of 0.1 year each.
+First we generate a dated tree with three populations existing for only 1 year each and separated by 1 years.
 
 ```{r}
 library(BactDating)
 library(ape)
-library(mlesky)
-source('simStructure.R')
-set.seed(1)
+library(confounding)
+set.seed(0)
 s=list(runif(30,2010,2010.1),runif(30,2010.1,2010.2),runif(30,2010.2,2010.3))
-dt=simStructure(popStarts=c(2009,2009,2009),samplingDates=s)
+dt=simMaster(samplingDates=s,demes=3,coalrate = 5,migrate = 0.1)
 dates=unname(dist.nodes(dt)[Ntip(dt)+1,1:Ntip(dt)])+dt$root.time
 plot(dt,show.tip.label=F)
 axisPhylo(1,backward = F)

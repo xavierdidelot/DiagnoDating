@@ -1,4 +1,9 @@
-plotPseudo = function(x) {
+#' Plot probability of branches
+#'
+#' @param x object of class resBactDating
+#' @export
+#'
+plotProbBranches = function(x) {
   if (class(x)!='resBactDating') error('Not a resBactDating object.')
   if (x$model!='poisson') error('Only Poisson model at the moment.')
   xs=x$tree$edge.length
@@ -11,7 +16,7 @@ plotPseudo = function(x) {
   par(xpd=F)
   xss=seq(0,ma,ma/1000)
   plim=0.05
-  
+
   lines(xss,qpois(  plim/2,xss*rate),lty='dashed')
   lines(xss,qpois(1-plim/2,xss*rate),lty='dashed')
   ll=dpois(round(ys),xs*rate,log=T)
@@ -25,12 +30,17 @@ plotPseudo = function(x) {
   par(xpd=NA)
   points(xs,ys,pch=19,col=cols)
   par(xpd=F)
-  
+
   plot(x$tree,show.tip.label = F,edge.color=cols)
   axisPhylo(1,backward = F)
 }
 
-plotPseudoQQ = function(x) {
+#' Plot pseudo-residuals
+#'
+#' @param x object of class resBactDating
+#' @export
+#'
+plotResid = function(x) {
   if (class(x)!='resBactDating') error('Not a resBactDating object.')
   if (x$model!='poisson') error('Only Poisson model at the moment.')
   xs=x$tree$edge.length
@@ -44,26 +54,31 @@ plotPseudoQQ = function(x) {
   }
   #p=(ppois(round(ys-1),xs*rate)+ppois(round(ys),xs*rate))/2
   #p=runif(length(ys),ppois(round(ys-1),xs*rate),ppois(round(ys),xs*rate))
-  n=qnorm(p)#normal pseudo-residual  
+  n=qnorm(p)#normal pseudo-residual
   n=(n-mean(n))/sd(n);p=pnorm(n)#weird normalize
   mi=min(min(n),-3)
   ma=max(max(n),3)
   par(mfrow=c(2,2))
   hist(p,xlab='',main='Uniform pseudo-residuals',freq=F)
   lines(c(0,1),c(1,1))
-  
+
   plot(n,xlab='',ylab='',main='Normal pseudo-residuals',ylim=c(mi,ma))
   abline(h=qnorm(c(0.005,0.025,0.5,0.975,0.995)))
-  
+
   hist(n,xlab='',main='Normal pseudo-residuals',freq=F,xlim=c(mi,ma))
   xs=seq(mi,ma,(ma-mi)/1000)
   lines(xs,dnorm(xs))
-  
+
   qqnorm(n,xlim=c(mi,ma),ylim=c(mi,ma))
   abline(0,1)
 }
 
-testPseudo=function(x) {
+#' Test on pseudo-residuals
+#'
+#' @param x object of class resBactDating
+#' @export
+#'
+testResid=function(x) {
   if (class(x)!='resBactDating') error('Not a resBactDating object.')
   if (x$model!='poisson') error('Only Poisson model at the moment.')
   xs=x$tree$edge.length
@@ -75,7 +90,7 @@ testPseudo=function(x) {
     p=p[which(p!=1)]
     warning('Removing p=1')
   }
-  n=qnorm(p)#normal pseudo-residual  
+  n=qnorm(p)#normal pseudo-residual
   r=shapiro.test(n)
   return(r)
 }

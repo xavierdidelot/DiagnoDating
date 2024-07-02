@@ -1,5 +1,11 @@
-source('phyloUtils.R')
-
+#' Date a tree using treedater
+#'
+#' @param tree Tree to date
+#' @param dates Dates of leaves in the tree
+#'
+#' @return dated tree
+#' @export
+#'
 runTreeDater=function(tree,dates) {
   tre=tree
   l=max(tree$edge.length)*1000
@@ -28,7 +34,16 @@ runTreeDater=function(tree,dates) {
   return(res)
 }
 
-runLSD=function(tree,dates,tag=0) {
+#' Date a tree using LSD
+#'
+#' @param tree Tree to date
+#' @param dates Dates of leaves in the tree
+#'
+#' @return dated tree
+#' @export
+#'
+runLSD=function(tree,dates) {
+  tag=round(runif(1,1,1e8))
   tre=tree
   l=max(tree$edge.length)*1000
   tre$edge.length=tre$edge.length/l

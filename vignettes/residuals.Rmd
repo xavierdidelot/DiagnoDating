@@ -16,6 +16,7 @@ $N_e g=1$ year relative to the sampling frame of 10 years between 2010 and 2020:
 ```{r}
 library(BactDating)
 library(ape)
+library(confounding)
 set.seed(0)
 dates=runif(100,2010,2020)
 dt=simcoaltree(dates,alpha=1)
@@ -46,15 +47,13 @@ print(r1)
 ```
 Pseudo-residual analysis:
 ```{r}
-source('pseudo.R')
-plotPseudo(r1)
-plotPseudoQQ(r1)
-testPseudo(r1)
+plotProbBranches(r1)
+plotResid(r1)
+testResid(r1)
 ```
 
 Analysis using LSD:
 ```{r}
-source('wrappers.R')
 r2=runLSD(tree,dates)
 plot(r2,show.tip.label=F)
 print(r2)
@@ -62,16 +61,14 @@ print(r2)
 
 Pseudo-residual analysis:
 ```{r}
-source('pseudo.R')
-plotPseudo(r2)
-plotPseudoQQ(r2)
-testPseudo(r2)
+plotProbBranches(r2)
+plotResid(r2)
+testResid(r2)
 ```
 
 Analysis using treedater:
 
 ```{r}
-source('wrappers.R')
 r3=runTreeDater(tree,dates)
 plot(r3,show.tip.label=F)
 print(r3)
@@ -79,8 +76,7 @@ print(r3)
 
 Pseudo-residual analysis:
 ```{r}
-source('pseudo.R')
-plotPseudo(r3)
-plotPseudoQQ(r3)
-testPseudo(r3)
+plotProbBranches(r3)
+plotResid(r3)
+testResid(r3)
 ```

@@ -47,7 +47,7 @@ print(r)
 
 Analysis using LSD:
 ```{r}
-source('wrappers.R')
+library(confounding)
 r=runLSD(tree,dates)
 plot(r,show.tip.label=F)
 print(r)
@@ -86,7 +86,6 @@ ade4::mantel.rtest(as.dist(gen),as.dist(tim))
 
 Kruskal-Wallis test of sampling dates imbalance:
 ```{r}
-source('testConfounding.R')
 pvals=testConfounding(tree,dates)
 min(p.adjust(pvals,"bonferroni"))
 ```
