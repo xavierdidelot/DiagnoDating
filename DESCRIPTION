@@ -16,7 +16,8 @@ Suggests: knitr,
     Rlsd2,
     mlesky,
     treedater,
-    treeio
+    treeio,
+    BactDating
 Description: confounding is TODO a full sentence.
 VignetteBuilder: knitr
 License: MIT + file LICENSE

@@ -15,6 +15,7 @@ We start by generating a dated tree with $N_e g=10$ years and sampling frame of 
 ```{r}
 library(BactDating)
 library(ape)
+library(confounding)
 set.seed(0)
 dates=runif(100,0,0.01)
 dt=simcoaltree(dates,alpha=10)
@@ -33,13 +34,14 @@ axisPhylo(1,backward=F)
 
 Root-to-tip analysis:
 ```{r}
-res=roottotip(tree,dates)
+res=runRTT(tree,dates)
+print(res)
 ```
 
 BactDating analysis:
 
 ```{r}
-r=bactdate(tree,dates,model='poisson',updateRoot = F)
+r=runBactDating(tree,dates,model='poisson',updateRoot = F)
 plot(r,'trace')
 plot(r,'treeCI',show.tip.label=F)
 print(r)
@@ -47,7 +49,7 @@ print(r)
 BactDating analysis with all dates set equal:
 
 ```{r}
-r2=bactdate(tree,rep(mean(dates),length(dates)),model='poisson',updateRoot = F,initMu=100)
+r2=runBactDating(tree,rep(mean(dates),length(dates)),model='poisson',updateRoot = F,initMu=100)
 plot(r2,'trace')
 plot(r2,'treeCI',show.tip.label=F)
 print(r2)

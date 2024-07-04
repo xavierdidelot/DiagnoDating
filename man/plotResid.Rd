@@ -7,7 +7,7 @@
 plotResid(x)
 }
 \arguments{
-\item{x}{object of class resBactDating}
+\item{x}{object of class resDating}
 }
 \description{
 Plot pseudo-residuals

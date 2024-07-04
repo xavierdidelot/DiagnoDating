@@ -34,13 +34,14 @@ axisPhylo(1,backward=F)
 
 Root-to-tip analysis:
 ```{r}
-res=roottotip(tree,dates)
+res=runRTT(tree,dates)
+print(res)
 ```
 
 BactDating analysis:
 
 ```{r}
-r=bactdate(tree,dates,model='poisson',updateRoot = F)
+r=runBactDating(tree,dates,model='poisson',updateRoot = F)
 plot(r,'trace')
 plot(r,'treeCI',show.tip.label=F)
 print(r)

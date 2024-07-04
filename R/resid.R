@@ -1,10 +1,10 @@
 #' Plot probability of branches
 #'
-#' @param x object of class resBactDating
+#' @param x object of class resDating
 #' @export
 #'
 plotProbBranches = function(x) {
-  if (!inherits(x,'resBactDating')) stop('Not a resBactDating object.')
+  if (!inherits(x,'resDating')) stop('Not a resDating object.')
   if (x$model!='poisson') stop('Only Poisson model at the moment.')
   xs=x$tree$edge.length
   ys=x$tree$subs
@@ -37,11 +37,11 @@ plotProbBranches = function(x) {
 
 #' Plot pseudo-residuals
 #'
-#' @param x object of class resBactDating
+#' @param x object of class resDating
 #' @export
 #'
 plotResid = function(x) {
-  if (!inherits(x,'resBactDating')) stop('Not a resBactDating object.')
+  if (!inherits(x,'resDating')) stop('Not a resDating object.')
   if (x$model!='poisson') stop('Only Poisson model at the moment.')
   xs=x$tree$edge.length
   ys=x$tree$subs
@@ -75,11 +75,11 @@ plotResid = function(x) {
 
 #' Test on pseudo-residuals
 #'
-#' @param x object of class resBactDating
+#' @param x object of class resDating
 #' @export
 #'
 testResid=function(x) {
-  if (!inherits(x,'resBactDating')) stop('Not a resBactDating object.')
+  if (!inherits(x,'resDating')) stop('Not a resDating object.')
   if (x$model!='poisson') stop('Only Poisson model at the moment.')
   xs=x$tree$edge.length
   ys=x$tree$subs

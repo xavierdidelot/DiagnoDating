@@ -34,17 +34,19 @@ axisPhylo(1,backward=F)
 A root-to-tip regression analysis works perfectly:
 
 ```{r}
-res=roottotip(tree,dates)
+res=runRTT(tree,dates)
+print(res)
 ```
 
 The bactdate analysis also works perfectly:
 
 ```{r}
-r1=bactdate(tree,dates,model='poisson',updateRoot = F)
+r1=runBactDating(tree,dates,model='poisson',updateRoot = F)
 plot(r1,'trace')
 plot(r1,'treeCI',show.tip.label=F)
 print(r1)
 ```
+
 Pseudo-residual analysis:
 ```{r}
 plotProbBranches(r1)

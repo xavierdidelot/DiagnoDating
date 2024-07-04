@@ -4,15 +4,17 @@
 \alias{runLSD}
 \title{Date a tree using LSD}
 \usage{
-runLSD(tree, dates)
+runLSD(tree, dates, ...)
 }
 \arguments{
 \item{tree}{Tree to date}
 
 \item{dates}{Dates of leaves in the tree}
+
+\item{...}{Passed on to Rlsd2::lsd2}
 }
 \value{
-dated tree
+resDating object containing results of LSD analysis
 }
 \description{
 Date a tree using LSD

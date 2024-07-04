@@ -20,6 +20,7 @@ Another difference is that instead of having the three clades exactly equally re
 $s=2$ years, again to show that this is not the cause of the problem.
 
 ```{r}
+library(confounding)
 library(BactDating)
 library(ape)
 set.seed(5)#cherry-picked a nice example
@@ -52,13 +53,14 @@ axisPhylo(1,backward=F)
 
 Root-to-tip analysis:
 ```{r}
-res=roottotip(tree,dates)
+res=runRTT(tree,dates)
+print(res)
 ```
 
 BactDating analysis:
 
 ```{r}
-r=bactdate(tree,dates,model='poisson',updateRoot = F)
+r=runBactDating(tree,dates,model='poisson',updateRoot = F)
 plot(r,'trace')
 plot(r,'treeCI',show.tip.label=F)
 print(r)
@@ -68,14 +70,13 @@ print(r)
 treedater analysis:
 
 ```{r}
-library(confounding)
 res=runTreeDater(tree,dates)
-print(sprintf('Rate=%f and root date=%f',res$rate,res$rootdate))
+print(res)
 ```
 
 LSD2 analysis:
 
 ```{r}
 res=runLSD(tree,dates)
-print(sprintf('Rate=%f and root date=%f',res$rate,res$rootdate))
+print(res)
 ```

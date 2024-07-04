@@ -14,6 +14,7 @@ We start by generating a dated tree with no structure and a small effective popu
 $N_e g=1$ year relative to the sampling frame of 10 years between 2010 and 2020:
 
 ```{r}
+library(confounding)
 library(BactDating)
 library(ape)
 set.seed(0)
@@ -33,13 +34,14 @@ axisPhylo(1,backward=F)
 A root-to-tip regression analysis works perfectly:
 
 ```{r}
-res=roottotip(tree,dates)
+res=runRTT(tree,dates)
+print(res)
 ```
 
 The bactdate analysis also works perfectly:
 
 ```{r}
-r=bactdate(tree,dates,model='poisson',updateRoot = F)
+r=runBactDating(tree,dates,model='poisson',updateRoot = F)
 plot(r,'trace')
 plot(r,'treeCI',show.tip.label=F)
 print(r)
@@ -47,7 +49,6 @@ print(r)
 
 Analysis using LSD:
 ```{r}
-library(confounding)
 r=runLSD(tree,dates)
 plot(r,show.tip.label=F)
 print(r)

@@ -10,19 +10,18 @@ vignette: >
   %\usepackage[utf8]{inputenc}
 ---
 
-First we generate a dated tree with root in 2000 and three populations existing for only 1 year each and separated by 1 years.
+First we generate a dated tree with three populations existing for only 1 year each and separated by 1 years.
 
 ```{r}
 library(BactDating)
 library(ape)
 library(DetectImports)
+library(confounding)
 set.seed(180)
 NeFunImp=function(t,texp) {return(pmax(0,(t-texp)-(t-texp)^2))}
 xs=seq(0,2,0.01);plot(xs,NeFunImp(xs,0),type='l',xlab='Time since pop start',ylab='Pop size')
 dt=simImports(localPopStart = 2000,importDates=c(2001,2002),samplingStartDate = 2000,samplingEndDate = 2100,samplingNumber = 100,globalNeg = 10,NeFunImp = NeFunImp)
 dates=dt$stats[,'dates'][1:Ntip(dt)]
-dates=dates+2000-dt$root.time
-dt$root.time=2000
 plot(dt,show.tip.label=F)
 axisPhylo(1,backward = F)
 ```
@@ -37,13 +36,14 @@ axisPhylo(1,backward=F)
 
 Root-to-tip analysis:
 ```{r}
-res=roottotip(tree,dates)
+res=runRTT(tree,dates)
+print(res)
 ```
 
 BactDating analysis:
 
 ```{r}
-r=bactdate(tree,dates,model='poisson',updateRoot = F)
+r=runBactDating(tree,dates,model='poisson',updateRoot = F)
 plot(r,'trace')
 plot(r,'treeCI',show.tip.label=F)
 print(r)

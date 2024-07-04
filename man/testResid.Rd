@@ -7,7 +7,7 @@
 testResid(x)
 }
 \arguments{
-\item{x}{object of class resBactDating}
+\item{x}{object of class resDating}
 }
 \description{
 Test on pseudo-residuals

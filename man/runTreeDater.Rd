@@ -4,15 +4,17 @@
 \alias{runTreeDater}
 \title{Date a tree using treedater}
 \usage{
-runTreeDater(tree, dates)
+runTreeDater(tree, dates, ...)
 }
 \arguments{
 \item{tree}{Tree to date}
 
 \item{dates}{Dates of leaves in the tree}
+
+\item{...}{Passed on to treedater::dater}
 }
 \value{
-dated tree
+resDating object containing results of treedater analysis
 }
 \description{
 Date a tree using treedater
