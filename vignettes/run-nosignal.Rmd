@@ -34,7 +34,7 @@ axisPhylo(1,backward=F)
 
 Root-to-tip analysis:
 ```{r}
-roottotip(tree,dates)
+r=roottotip(tree,dates)
 ```
 
 BactDating analysis:

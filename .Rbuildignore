@@ -3,3 +3,5 @@
 ^.*\.Rdata$
 ^run$
 ^README\.Rmd$
+^doc$
+^Meta$

@@ -121,8 +121,9 @@ runLSD=function(tree,dates,...) {
 #' @return resDating object containing results of node.dating analysis
 #'
 runNodeDating=function(tree,dates,...) {
-  mu=ape::estimate.mu(tree,dates)
-  d=ape::estimate.dates(tree,dates,mu=mu)
+  try(suppressWarnings(mu<-ape::estimate.mu(tree,dates)),silent=T)
+  if (mu<=0) mu=0.01
+  suppressWarnings(d<-ape::estimate.dates(tree,dates,mu=mu))
   res=list()
   res$algo='node.dating'
   res$model='poisson'
