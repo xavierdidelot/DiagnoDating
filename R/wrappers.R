@@ -8,7 +8,7 @@
 #' @export
 #'
 runRTT=function(tree,dates,...) {
-  r=BactDating::roottotip(tree,dates,...)
+  suppressWarnings(r<-BactDating::roottotip(tree,dates,...))
   r$algo='RTT'
   r$rootdate=r$ori
   class(r)<-'resDating'
