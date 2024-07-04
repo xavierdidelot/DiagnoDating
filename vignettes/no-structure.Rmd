@@ -34,14 +34,14 @@ axisPhylo(1,backward=F)
 A root-to-tip regression analysis works perfectly:
 
 ```{r}
-res=runRTT(tree,dates)
+res=roottotip(tree,dates)
 print(res)
 ```
 
 The bactdate analysis also works perfectly:
 
 ```{r}
-r=runBactDating(tree,dates,model='poisson',updateRoot = F)
+r=runDating(tree,dates,algo='BactDating')
 plot(r,'trace')
 plot(r,'treeCI',show.tip.label=F)
 print(r)
@@ -49,7 +49,7 @@ print(r)
 
 Analysis using LSD:
 ```{r}
-r=runLSD(tree,dates)
+r=runDating(tree,dates,algo='LSD')
 plot(r,show.tip.label=F)
 print(r)
 ```
@@ -57,7 +57,14 @@ print(r)
 Analysis using treedater:
 
 ```{r}
-r=runTreeDater(tree,dates)
+r=runDating(tree,dates,algo='treedater')
+plot(r,show.tip.label=F)
+print(r)
+```
+
+Analysis using node.dating:
+```{r}
+r=runDating(tree,dates,algo='node.dating')
 plot(r,show.tip.label=F)
 print(r)
 ```

@@ -7,7 +7,7 @@ Work on the confounding effect of genetic structure on molecular dating.
 
 # Done so far
 
-- Dating via regression, BactDating, treedater and LSD2
+- Dating via node.dating, BactDating, treedater and LSD2
 - Reproduce confounding effect described by Murray2016 on similar
   coalescent simulation, cf `confounding.Rmd`
 - Ruled out possible problem in phylogenetics since working directly

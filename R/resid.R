@@ -9,8 +9,8 @@ plotProbBranches = function(x) {
   xs=x$tree$edge.length
   ys=x$tree$subs
   ma=max(xs)*1.05
-  rate=mean(x$record[(nrow(x$record)/2):nrow(x$record),'mu'])
-  sigma=mean(x$record[(nrow(x$record)/2):nrow(x$record),'sigma'])
+  rate=x$rate
+  #sigma=mean(x$record[(nrow(x$record)/2):nrow(x$record),'sigma'])
   par(mfrow=c(1,2))
   plot(c(0,ma),c(0,rate*ma),type='l',xlab='Branch duration',ylab='Substitutions',xaxs='i',yaxs='i',xlim=c(0,ma),ylim=c(0,max(ys)*1.05))
   par(xpd=F)
@@ -45,8 +45,8 @@ plotResid = function(x) {
   if (x$model!='poisson') stop('Only Poisson model at the moment.')
   xs=x$tree$edge.length
   ys=x$tree$subs
-  rate=mean(x$record[(nrow(x$record)/2):nrow(x$record),'mu'])
-  sigma=mean(x$record[(nrow(x$record)/2):nrow(x$record),'sigma'])
+  rate=x$rate
+  #sigma=mean(x$record[(nrow(x$record)/2):nrow(x$record),'sigma'])
   p=ppois(round(ys),xs*rate)#uniform pseudo-residual
   if (any(p==1)) {
     p=p[which(p!=1)]
@@ -83,8 +83,8 @@ testResid=function(x) {
   if (x$model!='poisson') stop('Only Poisson model at the moment.')
   xs=x$tree$edge.length
   ys=x$tree$subs
-  rate=mean(x$record[(nrow(x$record)/2):nrow(x$record),'mu'])
-  sigma=mean(x$record[(nrow(x$record)/2):nrow(x$record),'sigma'])
+  rate=x$rate
+  #sigma=mean(x$record[(nrow(x$record)/2):nrow(x$record),'sigma'])
   p=ppois(round(ys),xs*rate)#uniform pseudo-residual
   if (any(p==1)) {
     p=p[which(p!=1)]

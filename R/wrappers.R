@@ -1,17 +1,17 @@
-#' Run root-to-tip analysis
-#'
+#' Run a dating analysis
 #' @param tree Tree to date
 #' @param dates Dates of leaves in the tree
-#' @param ... Passed on to BactDating::roottotip
+#' @param algo Algorithm to use, can be one of: LSD, node.dating, BactDating,treedater
+#' @param ... Passed on to dating algorithm
 #'
-#' @return resDating object containing results of root-to-tip analysis
+#' @return resDating object containing results of dating analysis
 #' @export
 #'
-runRTT=function(tree,dates,...) {
-  suppressWarnings(r<-BactDating::roottotip(tree,dates,...))
-  r$algo='RTT'
-  r$rootdate=r$ori
-  class(r)<-'resDating'
+runDating=function(tree,dates,algo='regression',...) {
+  if (algo=='1' || algo=='LSD') r=runLSD(tree,dates,...)
+  if (algo=='2' || algo=='node.dating') r=runNodeDating(tree,dates,...)
+  if (algo=='3' || algo=='BactDating') r=runBactDating(tree,dates,...)
+  if (algo=='4' || algo=='treedater') r=runTreeDater(tree,dates,...)
   return(r)
 }
 
@@ -22,11 +22,11 @@ runRTT=function(tree,dates,...) {
 #' @param ... Passed on to BactDating::bactdate
 #'
 #' @return resDating object containing results of BactDating analysis
-#' @export
 #'
 runBactDating=function(tree,dates,...) {
-  r=BactDating::bactdate(tree,dates,...)
+  r=BactDating::bactdate(tree,dates,model='poisson',updateRoot = F,...)
   r$algo='BactDating'
+  r$model='poisson'
   v=r$record[,'mu']
   v=v[(1+length(v)/2):length(v)]
   r$rate=mean(v)
@@ -41,7 +41,6 @@ runBactDating=function(tree,dates,...) {
 #' @param ... Passed on to treedater::dater
 #'
 #' @return resDating object containing results of treedater analysis
-#' @export
 #'
 runTreeDater=function(tree,dates,...) {
   tre=tree
@@ -80,7 +79,6 @@ runTreeDater=function(tree,dates,...) {
 #' @param ... Passed on to Rlsd2::lsd2
 #'
 #' @return resDating object containing results of LSD analysis
-#' @export
 #'
 runLSD=function(tree,dates,...) {
   tag=round(runif(1,1,1e8))
@@ -114,6 +112,32 @@ runLSD=function(tree,dates,...) {
   return(res)
 }
 
+#' Date a tree using node.dating
+#'
+#' @param tree Tree to date
+#' @param dates Dates of leaves in the tree
+#' @param ... Passed on to ape::node.dating
+#'
+#' @return resDating object containing results of node.dating analysis
+#'
+runNodeDating=function(tree,dates,...) {
+  mu=ape::estimate.mu(tree,dates)
+  d=ape::estimate.dates(tree,dates,mu=mu)
+  res=list()
+  res$algo='node.dating'
+  res$model='poisson'
+  res$rate=mu
+  res$rootdate=min(d)
+  dt=tree
+  dt$subs=dt$edge.length
+  dt$root.time=res$rootdate
+  for (i in 1:nrow(dt$edge)) dt$edge.length[i]=d[dt$edge[i,2]]-d[dt$edge[i,1]]
+  res$inputtree=tree
+  res$tree=dt
+  class(res)<-'resDating'
+  return(res)
+}
+
 #' Print function for resDating objects
 #' @param x output from bactdate
 #' @param ... Passed on to cat
@@ -122,7 +146,7 @@ runLSD=function(tree,dates,...) {
 print.resDating <- function(x, ...)
 {
   stopifnot(inherits(x, "resDating"))
-  cat( 'Result of analysis using',x$algo,'- clock rate is',x$rate, 'and root date is',x$rootdate,...)
+  cat( 'Result of analysis using',x$algo,'- clock rate is',x$rate, 'and root date is',x$rootdate,'\n',...)
   invisible(x)
 }
 
@@ -132,7 +156,6 @@ print.resDating <- function(x, ...)
 #' @return Plot of results
 #' @export
 plot.resDating = function(x, ...) {
-  if (x$algo=='RTT') stop('Plotting not available.')
   class(x)<-'resBactDating'
   plot(x,...)
 }

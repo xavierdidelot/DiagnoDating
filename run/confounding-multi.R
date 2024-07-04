@@ -15,10 +15,10 @@ allres <- foreach (rep = 1:100,.packages = c('ape','BactDating','confounding')) 
   dates=unname(dist.nodes(dt)[Ntip(dt)+1,1:Ntip(dt)])+dt$root.time
 
   tree=simobsphy(dt,mu=10,model='poisson')
-  r1=runRTT(tree,dates,showFig = F)
-  r2=runBactDating(tree,dates,model='poisson',updateRoot = F)
-  r3=runLSD(tree,dates)
-  r4=runTreeDater(tree,dates)
+  r1=runDating(tree,dates,algo=1)
+  r2=runDating(tree,dates,algo=2)
+  r3=runDating(tree,dates,algo=3)
+  r4=runDating(tree,dates,algo=4)
   return(list(seed=rep,dt=dt,r1,r2,r3,r4))
 }
 parallel::stopCluster(cl)
