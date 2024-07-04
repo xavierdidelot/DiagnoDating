@@ -4,7 +4,7 @@
 \alias{simMaster}
 \title{Simulation with structure using Master}
 \usage{
-simMaster(demes = 3, coalrate = 1, migrate = 0.1, NeFunImp, samplingDates)
+simMaster(demes = 3, coalrate = 1, migrate = 0.1, samplingDates)
 }
 \arguments{
 \item{demes}{Number of demes}

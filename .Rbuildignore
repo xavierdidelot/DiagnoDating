@@ -1,2 +1,5 @@
 ^.*\.Rproj$
 ^\.Rproj\.user$
+^.*\.Rdata$
+^run$
+^README\.Rmd$

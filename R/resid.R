@@ -4,8 +4,8 @@
 #' @export
 #'
 plotProbBranches = function(x) {
-  if (class(x)!='resBactDating') error('Not a resBactDating object.')
-  if (x$model!='poisson') error('Only Poisson model at the moment.')
+  if (!inherits(x,'resBactDating')) stop('Not a resBactDating object.')
+  if (x$model!='poisson') stop('Only Poisson model at the moment.')
   xs=x$tree$edge.length
   ys=x$tree$subs
   ma=max(xs)*1.05
@@ -41,8 +41,8 @@ plotProbBranches = function(x) {
 #' @export
 #'
 plotResid = function(x) {
-  if (class(x)!='resBactDating') error('Not a resBactDating object.')
-  if (x$model!='poisson') error('Only Poisson model at the moment.')
+  if (!inherits(x,'resBactDating')) stop('Not a resBactDating object.')
+  if (x$model!='poisson') stop('Only Poisson model at the moment.')
   xs=x$tree$edge.length
   ys=x$tree$subs
   rate=mean(x$record[(nrow(x$record)/2):nrow(x$record),'mu'])
@@ -79,8 +79,8 @@ plotResid = function(x) {
 #' @export
 #'
 testResid=function(x) {
-  if (class(x)!='resBactDating') error('Not a resBactDating object.')
-  if (x$model!='poisson') error('Only Poisson model at the moment.')
+  if (!inherits(x,'resBactDating')) stop('Not a resBactDating object.')
+  if (x$model!='poisson') stop('Only Poisson model at the moment.')
   xs=x$tree$edge.length
   ys=x$tree$subs
   rate=mean(x$record[(nrow(x$record)/2):nrow(x$record),'mu'])

@@ -5,7 +5,7 @@
 #' @param samplingDates A list containing for each population a vector of sampling dates
 #' @return A simulated dated phylogeny
 #' @export
-simMaster = function(demes=3,coalrate=1,migrate=0.1,NeFunImp,samplingDates)
+simMaster = function(demes=3,coalrate=1,migrate=0.1,samplingDates)
 {
   #Generate XML file for Master
   f=file('/tmp/master2.xml',open='w')
@@ -44,6 +44,6 @@ simMaster = function(demes=3,coalrate=1,migrate=0.1,NeFunImp,samplingDates)
   t=treeio::read.beast('/tmp/simu_master.tree')
   phy=as.phylo(t)
   phy=collapse.singles(phy)#remove migration nodes
-  phy$root.time=max(unlist(s))-max(unname(dist.nodes(phy)[Ntip(phy)+1,1:Ntip(phy)]))
+  phy$root.time=max(unlist(samplingDates))-max(unname(dist.nodes(phy)[Ntip(phy)+1,1:Ntip(phy)]))
   return(phy)
 }
