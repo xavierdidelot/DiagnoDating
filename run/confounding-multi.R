@@ -26,15 +26,15 @@ save.image('confounding-multi.RData')
 
 rm(list=ls())
 load('confounding-multi.RData')
-v=matrix(NA,length(allres),8)
+v=matrix(NA,length(allres),10)
 for (i in 1:length(allres)) {
-    for (j in 1:4) {
+    for (j in 1:5) {
       res=allres[[i]][[j+2]]
       v[i,1+(j-1)*2  ]=res$rate
       v[i,1+(j-1)*2+1]=res$rootdate-allres[[i]]$dt$root.time
     }
 }
-par(mfrow=c(4,2))
+par(mfrow=c(5,2))
 for (i in 1:8) {
   hist(v[,i],breaks=20)
 }

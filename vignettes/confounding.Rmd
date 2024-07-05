@@ -3,7 +3,7 @@ title: "Confounding effect on joined rcoal trees"
 author: "Xavier Didelot"
 date: '`r Sys.Date()`'
 output:
-  pdf_document: default
+  html_document: default
 vignette: >
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteIndexEntry{Confounding effect on joined rcoal trees}
@@ -24,14 +24,14 @@ library(confounding)
 library(BactDating)
 library(ape)
 set.seed(5)#cherry-picked a nice example
-t1=rcoal(30)
+t1=rcoal(30,1:30)
 s=2
 h1=dist.nodes(t1)[1,Ntip(t1)+1]
 t1$root.edge=10-h1-s
-t2=rcoal(30)
+t2=rcoal(30,31:60)
 h2=dist.nodes(t2)[1,Ntip(t2)+1]
 t2$root.edge=10.1-h2-s
-t3=rcoal(30)
+t3=rcoal(30,61:90)
 h3=dist.nodes(t3)[1,Ntip(t3)+1]
 t3$root.edge=10.2-h3
 dt=bind.tree(t1,t2,position=t1$root.edge)
@@ -57,7 +57,7 @@ r=roottotip(tree,dates)
 
 Run all dating analysis methods:
 ```{r}
-for (a in 1:4) {
+for (a in 1:5) {
   r=runDating(tree,dates,algo=a)
   plot(r,show.tip.label=F)
   print(r)

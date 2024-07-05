@@ -11,6 +11,7 @@ plotProbBranches = function(x) {
   ma=max(xs)*1.05
   rate=x$rate
   #sigma=mean(x$record[(nrow(x$record)/2):nrow(x$record),'sigma'])
+  old.par=par(no.readonly = T)
   par(mfrow=c(1,2))
   plot(c(0,ma),c(0,rate*ma),type='l',xlab='Branch duration',ylab='Substitutions',xaxs='i',yaxs='i',xlim=c(0,ma),ylim=c(0,max(ys)*1.05))
   par(xpd=F)
@@ -33,6 +34,7 @@ plotProbBranches = function(x) {
 
   plot(x$tree,show.tip.label = F,edge.color=cols)
   axisPhylo(1,backward = F)
+  par(old.par)
 }
 
 #' Plot pseudo-residuals
@@ -58,6 +60,7 @@ plotResid = function(x) {
   n=(n-mean(n))/sd(n);p=pnorm(n)#weird normalize
   mi=min(min(n),-3)
   ma=max(max(n),3)
+  old.par=par(no.readonly = T)
   par(mfrow=c(2,2))
   hist(p,xlab='',main='Uniform pseudo-residuals',freq=F)
   lines(c(0,1),c(1,1))
@@ -71,6 +74,7 @@ plotResid = function(x) {
 
   qqnorm(n,xlim=c(mi,ma),ylim=c(mi,ma))
   abline(0,1)
+  par(old.par)
 }
 
 #' Test on pseudo-residuals

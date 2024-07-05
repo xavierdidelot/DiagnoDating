@@ -3,7 +3,7 @@ title: "Confounding effect on Master simulation"
 author: "Xavier Didelot"
 date: '`r Sys.Date()`'
 output:
-  pdf_document: default
+  html_document: default
 vignette: >
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteIndexEntry{Confounding effect on Master simulation}
@@ -38,7 +38,7 @@ r=roottotip(tree,dates)
 
 Run all analysis methods:
 ```{r}
-for (a in 1:4) {
+for (a in 1:5) {
   r=runDating(tree,dates,algo=a)
   plot(r,show.tip.label=F)
   print(r)

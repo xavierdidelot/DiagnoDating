@@ -3,7 +3,7 @@ title: "Run on dataset with no temporal signal"
 author: "Xavier Didelot"
 date: '`r Sys.Date()`'
 output:
-  pdf_document: default
+  html_document: default
 vignette: >
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteIndexEntry{Run on dataset with no temporal signal}

@@ -3,7 +3,7 @@ title: "Pseudo-residual analysis"
 author: "Xavier Didelot"
 date: '`r Sys.Date()`'
 output:
-  pdf_document: default
+  html_document: default
 vignette: >
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteIndexEntry{Pseudo-residual analysis}
@@ -39,12 +39,12 @@ res=roottotip(tree,dates)
 
 Run all dating methods with pseudo-residual analysis:
 ```{r}
-for (a in 1:4) {
+for (a in 1:5) {
   r=runDating(tree,dates,algo=a)
-  plot(r,show.tip.label=F)
   print(r)
+  plot(r,show.tip.label=F)
   plotProbBranches(r)
   plotResid(r)
-  testResid(r)
+  print(testResid(r))
 }
 ```

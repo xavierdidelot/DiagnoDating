@@ -3,7 +3,7 @@ title: "Simulation with no structure"
 author: "Xavier Didelot"
 date: '`r Sys.Date()`'
 output:
-  pdf_document: default
+  html_document: default
 vignette: >
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteIndexEntry{Simulation with no structure}

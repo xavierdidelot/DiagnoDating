@@ -4,14 +4,14 @@
 \alias{runDating}
 \title{Run a dating analysis}
 \usage{
-runDating(tree, dates, algo = "regression", ...)
+runDating(tree, dates, algo = "BactDating", ...)
 }
 \arguments{
 \item{tree}{Tree to date}
 
 \item{dates}{Dates of leaves in the tree}
 
-\item{algo}{Algorithm to use, can be one of: LSD, node.dating, BactDating,treedater}
+\item{algo}{Algorithm to use, can be one of: LSD, node.dating, BactDating, treedater, TreeTime}
 
 \item{...}{Passed on to dating algorithm}
 }
