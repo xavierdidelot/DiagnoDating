@@ -18,7 +18,7 @@ library(BactDating)
 library(ape)
 library(confounding)
 set.seed(3)
-dates=runif(1000,2010,2020)
+dates=runif(100,2010,2020)
 dt=simcoaltree(dates,alpha=1)
 plot(dt,show.tip.label = F)
 axisPhylo(backward = F)
@@ -34,7 +34,7 @@ axisPhylo(1,backward=F)
 A root-to-tip regression analysis works perfectly:
 
 ```{r}
-res=roottotip(tree,dates)
+res=roottotip(tree,dates,rate=10,permTest = 0)
 ```
 
 Make up analysis with true parameters:
