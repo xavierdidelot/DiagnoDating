@@ -1,0 +1,58 @@
+---
+title: "Pseudo-residual analysis with perfect data"
+author: "Xavier Didelot"
+date: '`r Sys.Date()`'
+output:
+  html_document: default
+vignette: >
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteIndexEntry{Pseudo-residual analysis with perfect data}
+  %\usepackage[utf8]{inputenc}
+---
+
+We start by generating a dated tree with no structure and a small effective population size 
+$N_e g=1$ year relative to the sampling frame of 10 years between 2010 and 2020:
+
+```{r}
+library(BactDating)
+library(ape)
+library(confounding)
+set.seed(3)
+dates=runif(1000,2010,2020)
+dt=simcoaltree(dates,alpha=1)
+plot(dt,show.tip.label = F)
+axisPhylo(backward = F)
+```
+
+Next we generate a phylogenetic tree using a Poisson(10) mutation model:
+```{r}
+tree=simobsphy(dt,mu=10,model='poisson')
+plot(tree,show.tip.label = F)
+axisPhylo(1,backward=F)
+```
+
+A root-to-tip regression analysis works perfectly:
+
+```{r}
+res=roottotip(tree,dates)
+```
+
+Make up analysis with true parameters:
+```{r}
+r=list()
+r$rate=10
+r$tree=dt
+r$rootdate=dt$root.time
+r$model='poisson'
+r$algo='TRUTH'
+r$tree$subs=tree$edge.length
+class(r) <- 'resDating'
+print(r)
+```
+
+Pseudo-residual analysis:
+```{r}
+plotProbBranches(r)
+plotResid(r)
+print(testResid(r))
+```

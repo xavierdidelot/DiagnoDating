@@ -1,16 +1,39 @@
+#' Calculate probability of branches
+#'
+#' @param x object of class resDating
+#' @param cumul whether to return the cumulative probability
+#' @param log whether to return the log of the probability
+#'
+calcProbBranches = function(x,cumul=FALSE,log=FALSE) {
+  if (!inherits(x,'resDating')) stop('Not a resDating object.')
+  if (x$model!='poisson') stop('Only Poisson model at the moment.')
+  xs=x$tree$edge.length
+  ys=x$tree$subs
+  rate=x$rate
+  #sigma=mean(x$record[(nrow(x$record)/2):nrow(x$record),'sigma'])
+  if (cumul==FALSE) {
+    probs=dpois(round(ys),xs*rate,log=log)
+  } else {
+    #probs=ppois(round(ys),xs*rate,log.p=log)
+    probs=runif(length(ys),ppois(round(ys-1),xs*rate),ppois(round(ys),xs*rate))
+    if (log) probs=log(probs)
+  }
+  return(probs)
+}
+
 #' Plot probability of branches
 #'
 #' @param x object of class resDating
 #' @export
 #'
 plotProbBranches = function(x) {
-  if (!inherits(x,'resDating')) stop('Not a resDating object.')
-  if (x$model!='poisson') stop('Only Poisson model at the moment.')
+  ll=calcProbBranches(x,log=T)
+  ll[is.infinite(ll)]=NA
+
   xs=x$tree$edge.length
   ys=x$tree$subs
   ma=max(xs)*1.05
   rate=x$rate
-  #sigma=mean(x$record[(nrow(x$record)/2):nrow(x$record),'sigma'])
   old.par=par(no.readonly = T)
   par(mfrow=c(1,2))
   plot(c(0,ma),c(0,rate*ma),type='l',xlab='Branch duration',ylab='Substitutions',xaxs='i',yaxs='i',xlim=c(0,ma),ylim=c(0,max(ys)*1.05))
@@ -20,8 +43,6 @@ plotProbBranches = function(x) {
 
   lines(xss,qpois(  plim/2,xss*rate),lty='dashed')
   lines(xss,qpois(1-plim/2,xss*rate),lty='dashed')
-  ll=dpois(round(ys),xs*rate,log=T)
-  ll[is.infinite(ll)]=NA
 
   normed=(ll-min(ll,na.rm=T))/(max(ll,na.rm=T)-min(ll,na.rm=T))
   normed2=normed;normed2[is.na(normed2)]=1
@@ -43,21 +64,12 @@ plotProbBranches = function(x) {
 #' @export
 #'
 plotResid = function(x) {
-  if (!inherits(x,'resDating')) stop('Not a resDating object.')
-  if (x$model!='poisson') stop('Only Poisson model at the moment.')
-  xs=x$tree$edge.length
-  ys=x$tree$subs
-  rate=x$rate
-  #sigma=mean(x$record[(nrow(x$record)/2):nrow(x$record),'sigma'])
-  p=ppois(round(ys),xs*rate)#uniform pseudo-residual
+  p=calcProbBranches(x,cumul=T)#uniform pseudo-residual
   if (any(p==1)) {
     p=p[which(p!=1)]
-    warning('Removing p=1')
+    warning('Ignoring branches with zero probability.')
   }
-  #p=(ppois(round(ys-1),xs*rate)+ppois(round(ys),xs*rate))/2
-  #p=runif(length(ys),ppois(round(ys-1),xs*rate),ppois(round(ys),xs*rate))
   n=qnorm(p)#normal pseudo-residual
-  n=(n-mean(n))/sd(n);p=pnorm(n)#weird normalize
   mi=min(min(n),-3)
   ma=max(max(n),3)
   old.par=par(no.readonly = T)
@@ -70,7 +82,9 @@ plotResid = function(x) {
 
   hist(n,xlab='',main='Normal pseudo-residuals',freq=F,xlim=c(mi,ma))
   xs=seq(mi,ma,(ma-mi)/1000)
+  par(xpd=NA)
   lines(xs,dnorm(xs))
+  par(xpd=F)
 
   qqnorm(n,xlim=c(mi,ma),ylim=c(mi,ma))
   abline(0,1)
@@ -83,16 +97,10 @@ plotResid = function(x) {
 #' @export
 #'
 testResid=function(x) {
-  if (!inherits(x,'resDating')) stop('Not a resDating object.')
-  if (x$model!='poisson') stop('Only Poisson model at the moment.')
-  xs=x$tree$edge.length
-  ys=x$tree$subs
-  rate=x$rate
-  #sigma=mean(x$record[(nrow(x$record)/2):nrow(x$record),'sigma'])
-  p=ppois(round(ys),xs*rate)#uniform pseudo-residual
+  p=calcProbBranches(x,cumul=T)#uniform pseudo-residual
   if (any(p==1)) {
     p=p[which(p!=1)]
-    warning('Removing p=1')
+    warning('Ignoring branches with zero probability.')
   }
   n=qnorm(p)#normal pseudo-residual
   r=shapiro.test(n)
