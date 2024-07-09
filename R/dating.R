@@ -164,7 +164,7 @@ runTreeTime=function(tree,dates,...) {
   names(sts)=tree$tip.label
   write.tree(tre,sprintf('/tmp/tree%d.nwk',tag))
   write.table(sts,sprintf('/tmp/dates%d.tsv',tag),quote = F,col.names='strain\tdate',sep='\t')
-  system(sprintf("treetime --tree /tmp/tree%d.nwk --dates /tmp/dates%d.tsv --sequence-length %d --keep-root --outdir /tmp/%d",tag,tag,l,tag))
+  system(sprintf("treetime --tree /tmp/tree%d.nwk --dates /tmp/dates%d.tsv --sequence-length %d --keep-root --outdir /tmp/%d > /dev/null",tag,tag,l,tag))
   res=list()
   res$inputtree=tree
   res$model='poisson'
