@@ -33,7 +33,6 @@ A root-to-tip regression analysis works perfectly:
 
 ```{r}
 res=roottotip(tree,dates)
-print(res)
 ```
 
 The bactdate analysis also works perfectly:

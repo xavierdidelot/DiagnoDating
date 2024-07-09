@@ -83,11 +83,54 @@ runTreeDater=function(tree,dates,...) {
 #'
 #' @param tree Tree to date
 #' @param dates Dates of leaves in the tree
-#' @param ... Passed on to Rlsd2::lsd2
+#' @param ... Ignored for the time being
 #'
 #' @return resDating object containing results of LSD analysis
 #'
 runLSD=function(tree,dates,...) {
+  tag=round(runif(1,1,1e8))
+  tre=tree
+  l=round(max(tree$edge.length)*1000)
+  tre$edge.length=tre$edge.length/l
+  sts=dates
+  names(sts)=tre$tip.label
+  write.tree(tre,sprintf('/tmp/tree%d.nwk',tag))
+  write.table(sts,sprintf('/tmp/dates%d.csv',tag),quote = F,col.names=length(sts))
+  system(sprintf("lsd2 -i /tmp/tree%d.nwk -d /tmp/dates%d.csv -s %d -l -1> /dev/null",tag,tag,l))
+  lines=readLines(sprintf('/tmp/tree%d.nwk.result',tag))
+  lines=lines[grep('tMRCA',lines)]
+  lines=as.numeric(unlist(strsplit(lines, "[ ,]"))[c(3,6)])
+  res=list()
+  res$inputtree=tree
+  res$model='poisson'
+  res$rate=lines[1]*l
+  res$relax=0
+  res$rootdate=lines[2]
+  nrowtab=Ntip(tree)+Nnode(tree)
+  record = matrix(NA, 10, nrowtab*3 + 6)
+  colnames(record)<-c(rep(NA,nrowtab*3),'likelihood','mu','sigma','alpha','prior','root')
+  record[,'mu']=res$rate
+  record[,Ntip(tree)+1]=res$rootdate
+  res$record=record
+  res$tree=read.nexus(sprintf('/tmp/tree%d.nwk.result.date.nexus',tag))
+#  res$tree=multi2di(res$tree)
+  tree=reorderEdges(tree,res$tree)
+  res$tree$subs=tree$edge.length
+  res$tree$root.time=res$rootdate
+  res$algo='LSD'
+  class(res)<-'resDating'
+  return(res)
+}
+
+#' Date a tree using Rlsd2
+#'
+#' @param tree Tree to date
+#' @param dates Dates of leaves in the tree
+#' @param ... Passed on to Rlsd2::lsd2
+#'
+#' @return resDating object containing results of LSD analysis
+#'
+runRlsd2=function(tree,dates,...) {
   tag=round(runif(1,1,1e8))
   tre=tree
   l=round(max(tree$edge.length)*1000)
@@ -106,8 +149,8 @@ runLSD=function(tree,dates,...) {
   nrowtab=Ntip(tree)+Nnode(tree)
   record = matrix(NA, 10, nrowtab*3 + 6)
   colnames(record)<-c(rep(NA,nrowtab*3),'likelihood','mu','sigma','alpha','prior','root')
-  record[,'mu']=result$rate*l
-  record[,Ntip(tree)+1]=result$tMRCA
+  record[,'mu']=res$rate
+  record[,Ntip(tree)+1]=res$rootdate
   res$record=record
   res$tree=read.nexus(sprintf('/tmp/result%d.date.nexus',tag))
 #  res$tree=multi2di(res$tree)
@@ -195,7 +238,7 @@ runTreeTime=function(tree,dates,...) {
 print.resDating <- function(x, ...)
 {
   stopifnot(inherits(x, "resDating"))
-  cat(sprintf('Result of analysis using %s - model %s, clock rate %.2f, relaxation parameter %.2f, root date %.2f\n',x$algo,x$model,x$rate,x$relax,x$rootdate),...)
+  cat(sprintf('Result from %s, model %s, clock rate %.2f, relaxation parameter %.2f, root date %.2f\n',x$algo,x$model,x$rate,x$relax,x$rootdate),...)
   invisible(x)
 }
 

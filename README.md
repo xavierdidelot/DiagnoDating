@@ -3,11 +3,16 @@
 
 # Introduction
 
-Work on the confounding effect of genetic structure on molecular dating.
+The aim of this package is to check if a dated phylogeny is valid. Many
+tools exist to produce dated phylogenies, but there are several factors
+that can invalidate the results. This includes the confounding effect
+that population structure can have on dating. But it also include
+incorrect assumptions made when running a dating analysis, for example
+using an inappropriate clock model.
 
 # Done so far
 
-- Dating via node.dating, BactDating, treedater and LSD2
+- Dating via node.dating, BactDating, treedater, TreeTime and LSD2
 - Reproduce confounding effect described by Murray2016 on similar
   coalescent simulation, cf `confounding.Rmd`
 - Ruled out possible problem in phylogenetics since working directly
@@ -25,8 +30,9 @@ Work on the confounding effect of genetic structure on molecular dating.
   `confounding-detectimports.Rmd`. May be because confusion only happens
   when sampling dates are biased, whereas DetectImports assumes sampling
   according to relative prevalence of populations
-- Mendel test will flag an issue even if there is no structure and no
-  problem with dating, cf `struture-test.Rmd`
+- A Mendel test has been proposed to detect when confounding mighy
+  happen, but this will flag an issue even if there is no structure and
+  no problem with dating, cf `struture-test.Rmd`
 - When there is no confounding issue but the temporal signal is weak, eg
   because all sampling dates are the same or very similar, see
   `run-nosignal.Rmd`. Estimate incorrectly high clock rate. But the

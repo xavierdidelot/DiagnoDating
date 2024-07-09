@@ -1,7 +1,5 @@
-library(BactDating)
-library(ape)
-library(foreach)
 library(confounding)
+library(foreach)
 
 rm(list=ls())
 
@@ -19,7 +17,8 @@ allres <- foreach (rep = 1:100,.packages = c('ape','BactDating','confounding')) 
   r2=runDating(tree,dates,algo=2)
   r3=runDating(tree,dates,algo=3)
   r4=runDating(tree,dates,algo=4)
-  return(list(seed=rep,dt=dt,r1,r2,r3,r4))
+  r5=runDating(tree,dates,algo=5)
+  return(list(seed=rep,dt=dt,r1,r2,r3,r4,r5))
 }
 parallel::stopCluster(cl)
 save.image('confounding-multi.RData')
@@ -35,7 +34,7 @@ for (i in 1:length(allres)) {
     }
 }
 par(mfrow=c(5,2))
-for (i in 1:8) {
+for (i in 1:10) {
   hist(v[,i],breaks=20)
 }
 
