@@ -1,12 +1,12 @@
 ---
-title: "Pseudo-residual analysis for relaxed clock"
+title: "Pseudo-residual analysis for continuous relaxed clock"
 author: "Xavier Didelot"
 date: '`r Sys.Date()`'
 output:
   html_document: default
 vignette: >
   %\VignetteEngine{knitr::rmarkdown}
-  %\VignetteIndexEntry{Pseudo-residual analysis for relaxed clock}
+  %\VignetteIndexEntry{Pseudo-residual analysis for continuous relaxed clock}
   %\usepackage[utf8]{inputenc}
 ---
 
@@ -17,16 +17,16 @@ $N_e g=1$ year relative to the sampling frame of 10 years between 2010 and 2020:
 library(BactDating)
 library(ape)
 library(confounding)
-set.seed(1)
+set.seed(3)
 dates=runif(100,2010,2020)
 dt=simcoaltree(dates,alpha=1)
 plot(dt,show.tip.label = F)
 axisPhylo(backward = F)
 ```
 
-Next we generate a phylogenetic tree using a ARC(10,5) mutation model:
+Next we generate a phylogenetic tree using a cARC(20,5) mutation model:
 ```{r}
-tree=simobsphy(dt,mu=10,sigma=5,model='arc')
+tree=simobsphy(dt,mu=20,sigma=5,model='carc')
 plot(tree,show.tip.label = F)
 axisPhylo(1,backward=F)
 ```
@@ -34,12 +34,20 @@ axisPhylo(1,backward=F)
 A root-to-tip regression analysis works not so well:
 
 ```{r}
-res=roottotip(tree,dates)
+res=roottotip(tree,dates,rate=20,permTest = 0)
 ```
 
-Run analysis with incorrect model:
+Make up analysis with true parameters but incorrect model:
 ```{r}
-r=runDating(tree,dates,algo='BactDating',model='poisson')
+r=list()
+r$rate=20
+r$tree=dt
+r$relax=0
+r$rootdate=dt$root.time
+r$model='strictgamma'
+r$algo='TRUTH'
+r$tree$subs=tree$edge.length
+class(r) <- 'resDating'
 print(r)
 ```
 
@@ -50,9 +58,10 @@ plotResid(r)
 print(testResid(r))
 ```
 
-Run analysis with correct model:
+Make up analysis with true parameters and correct model:
 ```{r}
-r=runDating(tree,dates,algo='BactDating',model='arc')
+r$model='carc'
+r$relax=5
 print(r)
 ```
 

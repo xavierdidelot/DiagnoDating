@@ -25,9 +25,12 @@ runDating=function(tree,dates,algo='BactDating',...) {
 #' @return resDating object containing results of BactDating analysis
 #'
 runBactDating=function(tree,dates,...) {
-  r=BactDating::bactdate(tree,dates,model='poisson',updateRoot = F,...)
+  def_args=list(tree=tree,date=dates,model='poisson',updateRoot=F)
+  cl=as.list(match.call())[-(1:3)]
+  args=c(cl,def_args[!names(def_args) %in% names(cl)])
+  r=do.call("bactdate",args)
   r$algo='BactDating'
-  r$model=model
+  r$model=args$model
   v=r$record[,'mu']
   v=v[(1+length(v)/2):length(v)]
   r$rate=mean(v)
