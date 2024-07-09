@@ -1,0 +1,73 @@
+---
+title: "Pseudo-residual analysis for relaxed clock"
+author: "Xavier Didelot"
+date: '`r Sys.Date()`'
+output:
+  html_document: default
+vignette: >
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteIndexEntry{Pseudo-residual analysis for relaxed clock}
+  %\usepackage[utf8]{inputenc}
+---
+
+We start by generating a dated tree with no structure and a small effective population size 
+$N_e g=1$ year relative to the sampling frame of 10 years between 2010 and 2020:
+
+```{r}
+library(BactDating)
+library(ape)
+library(confounding)
+set.seed(3)
+dates=runif(100,2010,2020)
+dt=simcoaltree(dates,alpha=1)
+plot(dt,show.tip.label = F)
+axisPhylo(backward = F)
+```
+
+Next we generate a phylogenetic tree using a ARC(10,5) mutation model:
+```{r}
+tree=simobsphy(dt,mu=10,sigma=5,model='arc')
+plot(tree,show.tip.label = F)
+axisPhylo(1,backward=F)
+```
+
+A root-to-tip regression analysis works not so well:
+
+```{r}
+res=roottotip(tree,dates,rate=10,permTest = 0)
+```
+
+Make up analysis with true parameters but incorrect model:
+```{r}
+r=list()
+r$rate=10
+r$tree=dt
+r$relax=0
+r$rootdate=dt$root.time
+r$model='poisson'
+r$algo='TRUTH'
+r$tree$subs=tree$edge.length
+class(r) <- 'resDating'
+print(r)
+```
+
+Pseudo-residual analysis:
+```{r}
+plotProbBranches(r)
+plotResid(r)
+print(testResid(r))
+```
+
+Make up analysis with true parameters and correct model:
+```{r}
+r$model='arc'
+r$relax=5
+print(r)
+```
+
+Pseudo-residual analysis:
+```{r}
+plotProbBranches(r)
+plotResid(r)
+print(testResid(r))
+```

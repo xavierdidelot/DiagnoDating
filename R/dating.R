@@ -27,10 +27,13 @@ runDating=function(tree,dates,algo='BactDating',...) {
 runBactDating=function(tree,dates,...) {
   r=BactDating::bactdate(tree,dates,model='poisson',updateRoot = F,...)
   r$algo='BactDating'
-  r$model='poisson'
+  r$model=model
   v=r$record[,'mu']
   v=v[(1+length(v)/2):length(v)]
   r$rate=mean(v)
+  v=r$record[,'sigma']
+  v=v[(1+length(v)/2):length(v)]
+  r$relax=mean(v)
   class(r)<-'resDating'
   return(r)
 }
@@ -55,6 +58,7 @@ runTreeDater=function(tree,dates,...) {
   res$inputtree=tree
   res$model='poisson'
   res$rate=rtd$mean.rate*l
+  res$relax=0
   res$rootdate=rtd$timeOfMRCA
   nrowtab=Ntip(tree)+Nnode(tree)
   record = matrix(NA, 10, nrowtab*3 + 6)
@@ -94,6 +98,7 @@ runLSD=function(tree,dates,...) {
   res$inputtree=tree
   res$model='poisson'
   res$rate=result$rate*l
+  res$relax=0
   res$rootdate=result$tMRCA
   nrowtab=Ntip(tree)+Nnode(tree)
   record = matrix(NA, 10, nrowtab*3 + 6)
@@ -127,6 +132,7 @@ runNodeDating=function(tree,dates,...) {
   res$algo='node.dating'
   res$model='poisson'
   res$rate=mu
+  res$relax=0
   res$rootdate=min(d)
   dt=tree
   dt$subs=dt$edge.length
@@ -160,6 +166,7 @@ runTreeTime=function(tree,dates,...) {
   res$inputtree=tree
   res$model='poisson'
   res$rate=read.table(sprintf('/tmp/%d/molecular_clock.txt',tag))[1,1]*l
+  res$relax=0
   res$tree=read.nexus(sprintf('/tmp/%d/timetree.nexus',tag))
   res$rootdate=max(dates)-max(dist.nodes(res$tree)[Ntip(res$tree)+1,1:Ntip(res$tree)])
   nrowtab=Ntip(tree)+Nnode(tree)
@@ -185,7 +192,7 @@ runTreeTime=function(tree,dates,...) {
 print.resDating <- function(x, ...)
 {
   stopifnot(inherits(x, "resDating"))
-  cat( 'Result of analysis using',x$algo,'- clock rate is',x$rate, 'and root date is',x$rootdate,'\n',...)
+  cat(sprintf('Result of analysis using %s - model %s, clock rate %.2f, relaxation parameter %.2f, root date %.2f\n',x$algo,x$model,x$rate,x$relax,x$rootdate),...)
   invisible(x)
 }
 

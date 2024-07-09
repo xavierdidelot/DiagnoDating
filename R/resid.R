@@ -6,22 +6,49 @@
 #'
 calcProbBranches = function(x,cumul=FALSE,log=FALSE) {
   if (!inherits(x,'resDating')) stop('Not a resDating object.')
-  if (x$model!='poisson') stop('Only Poisson model at the moment.')
   xs=x$tree$edge.length
   ys=x$tree$subs
   rate=x$rate
-  #sigma=mean(x$record[(nrow(x$record)/2):nrow(x$record),'sigma'])
-  if (cumul==FALSE) {
-    probs=dpois(round(ys),xs*rate,log=log)
-  } else {
-    #probs=ppois(round(ys),xs*rate,log.p=log)
-    oldseed <- .Random.seed
-    set.seed(1998)
-    probs=runif(length(ys),ppois(round(ys-1),xs*rate),ppois(round(ys),xs*rate))
-    .Random.seed <- oldseed
-    if (log) probs=log(probs)
+  relax=x$relax
+
+  if (x$model=='poisson') {
+    if (cumul==FALSE) {
+      probs=dpois(round(ys),xs*rate,log=log)
+    } else {
+      #probs=ppois(round(ys),xs*rate,log.p=log)
+      oldseed <- .Random.seed
+      set.seed(1998)
+      probs=runif(length(ys),ppois(round(ys-1),xs*rate),ppois(round(ys),xs*rate))
+      .Random.seed <- oldseed
+      if (log) probs=log(probs)
+    }
+    return(probs)
   }
-  return(probs)
+
+  if (x$model=='arc') {
+    if (cumul==FALSE) {
+      probs=dnbinom(round(ys),size=xs*rate/relax,prob=1/(1+relax),log=log)
+    } else {
+      #probs=pnbinom(round(ys),size=xs*rate/relax,prob=1/(1+relax),log.p=log)
+      oldseed <- .Random.seed
+      set.seed(1998)
+      probs=runif(length(ys),pnbinom(round(ys-1),size=xs*rate/relax,prob=1/(1+relax)),pnbinom(round(ys),size=xs*rate/relax,prob=1/(1+relax)))
+      .Random.seed <- oldseed
+      if (log) probs=log(probs)
+    }
+    return(probs)
+  }
+
+  if (x$model=='strictgamma' || x$model=='carc') {
+    if (cumul==FALSE) {
+      probs=dgamma(ys,shape=xs*rate/(1+relax),scale=1+relax,log=log)
+    } else {
+      probs=pgamma(ys,shape=xs*rate/(1+relax),scale=1+relax,log.p=log)
+    }
+    return(probs)
+  }
+
+  stop(sprintf('Model %s is not yet implemented.',x$model))
 }
 
 #' Plot probability of branches
@@ -32,11 +59,13 @@ calcProbBranches = function(x,cumul=FALSE,log=FALSE) {
 plotProbBranches = function(x) {
   ll=calcProbBranches(x,log=T)
   ll[is.infinite(ll)]=NA
+  ll=pmin(ll,log(1))
 
   xs=x$tree$edge.length
   ys=x$tree$subs
   ma=max(xs)*1.05
   rate=x$rate
+  relax=x$relax
   old.par=par(no.readonly = T)
   par(mfrow=c(1,2))
   plot(c(0,ma),c(0,rate*ma),type='l',xlab='Branch duration',ylab='Substitutions',xaxs='i',yaxs='i',xlim=c(0,ma),ylim=c(0,max(ys)*1.05))
@@ -44,8 +73,20 @@ plotProbBranches = function(x) {
   xss=seq(0,ma,ma/1000)
   plim=0.05
 
-  lines(xss,qpois(  plim/2,xss*rate),lty='dashed')
-  lines(xss,qpois(1-plim/2,xss*rate),lty='dashed')
+  if (x$model=='poisson') {
+    lines(xss,qpois(  plim/2,xss*rate),lty='dashed')
+    lines(xss,qpois(1-plim/2,xss*rate),lty='dashed')
+  }
+
+  if (x$model=='arc') {
+    lines(xss,qnbinom(  plim/2,size=xss*rate/relax,prob=1/(1+relax)),lty='dashed')
+    lines(xss,qnbinom(1-plim/2,size=xss*rate/relax,prob=1/(1+relax)),lty='dashed')
+  }
+
+  if (x$model=='strictgamma' || x$model=='carc') {
+    lines(xss,qgamma(  plim/2,shape=xss*rate/(1+relax),scale=1+relax),lty='dashed')
+    lines(xss,qgamma(1-plim/2,shape=xss*rate/(1+relax),scale=1+relax),lty='dashed')
+  }
 
   normed=(ll-min(ll,na.rm=T))/(max(ll,na.rm=T)-min(ll,na.rm=T))
   normed2=normed;normed2[is.na(normed2)]=1
@@ -68,9 +109,12 @@ plotProbBranches = function(x) {
 #'
 plotResid = function(x) {
   p=calcProbBranches(x,cumul=T)#uniform pseudo-residual
-  if (any(p==1)) {
-    p=p[which(p!=1)]
-    warning('Ignoring branches with zero probability.')
+  xs=x$tree$edge.length
+  if (any(p==0 | p==1)) {
+    w=which(p!=0 & p!=1)
+    p=p[w]
+    xs=xs[w]
+    warning('Ignoring impossible branches.')
   }
   n=qnorm(p)#normal pseudo-residual
   mi=min(min(n),-3)
@@ -80,7 +124,7 @@ plotResid = function(x) {
   hist(p,xlab='',main='Uniform pseudo-residuals',freq=F)
   abline(1,0,lty=3)
 
-  o=order(x$tree$edge.length)
+  o=order(xs)
   plot(n[o],xlab='Branches in increasing order of duration',ylab='',main='Normal pseudo-residuals',ylim=c(mi,ma))
   abline(h=qnorm(c(0.005,0.025,0.5,0.975,0.995)),lty=3)
 
@@ -113,9 +157,9 @@ plotResid = function(x) {
 #'
 testResid=function(x) {
   p=calcProbBranches(x,cumul=T)#uniform pseudo-residual
-  if (any(p==1)) {
-    p=p[which(p!=1)]
-    warning('Ignoring branches with zero probability.')
+  if (any(p==0 | p==1)) {
+    p=p[which(p!=0 & p!=1)]
+    warning('Ignoring impossible branches.')
   }
   n=qnorm(p)#normal pseudo-residual
   r1=shapiro.test(n)#tests if Normal but not if Normal(0,1)
