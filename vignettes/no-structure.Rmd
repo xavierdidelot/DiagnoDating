@@ -14,7 +14,7 @@ We start by generating a dated tree with no structure and a small effective popu
 $N_e g=1$ year relative to the sampling frame of 10 years between 2010 and 2020:
 
 ```{r}
-library(confounding)
+library(ValidateDating)
 library(BactDating)
 library(ape)
 set.seed(0)

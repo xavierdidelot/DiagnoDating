@@ -15,7 +15,7 @@ First we generate a dated tree with three populations. Each population is sample
 ```{r}
 library(BactDating)
 library(ape)
-library(confounding)
+library(ValidateDating)
 set.seed(1)
 s=list(runif(30,2010,2010.1),runif(30,2010.1,2010.2),runif(30,2010.2,2010.3))
 dt=simStructure(popStarts=c(2009,2009,2009),samplingDates=s)

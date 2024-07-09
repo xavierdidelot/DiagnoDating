@@ -15,7 +15,7 @@ We start by generating a dated tree with $N_e g=10$ years and sampling frame of 
 ```{r}
 library(BactDating)
 library(ape)
-library(confounding)
+library(ValidateDating)
 set.seed(0)
 dates=runif(100,0,0.01)
 dt=simcoaltree(dates,alpha=10)

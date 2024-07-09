@@ -7,7 +7,7 @@
 #' @return p-values
 #' @export
 #'
-testConfounding = function(tree,dates) {
+testImbalance = function(tree,dates) {
   children=matrixChildren(tree)
   pvals=rep(NA,Nnode(tree))
   for (node in 1:Nnode(tree)) {

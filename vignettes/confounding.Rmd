@@ -20,7 +20,7 @@ Another difference is that instead of having the three clades exactly equally re
 $s=2$ years, again to show that this is not the cause of the problem.
 
 ```{r}
-library(confounding)
+library(ValidateDating)
 library(BactDating)
 library(ape)
 set.seed(5)#cherry-picked a nice example
