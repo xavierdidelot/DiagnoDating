@@ -1,7 +1,7 @@
-#' @name confounding
-#' @title confounding: TODO
+#' @name ValidateDating
+#' @title ValidateDating: TODO
 #'
-#' @description confounding is TODO
+#' @description ValidateDating is TODO
 #'
 #' The main functions of the package are:
 #' \itemize{

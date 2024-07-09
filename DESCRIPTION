@@ -1,6 +1,6 @@
-Package: confounding
+Package: ValidateDating
 Type: Package
-Title: confounding: TODO
+Title: ValidateDating: TODO
 Version: 0.0.1
 Date: 2024-07-02
 Authors@R: person("Xavier","Didelot",email="xavier.didelot@gmail.com",role=c("aut", "cre"))
@@ -18,11 +18,11 @@ Suggests: knitr,
     treedater,
     treeio,
     BactDating
-Description: confounding is TODO a full sentence.
+Description: ValidateDating is TODO a full sentence.
 VignetteBuilder: knitr
 License: MIT + file LICENSE
-URL: https://github.com/xavierdidelot/confounding
-BugReports: https://github.com/xavierdidelot/confounding/issues
+URL: https://github.com/xavierdidelot/ValidateDating
+BugReports: https://github.com/xavierdidelot/ValidateDating/issues
 RoxygenNote: 7.3.1
 Encoding: UTF-8
 LazyData: true
