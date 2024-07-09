@@ -2,7 +2,6 @@
 context("Test running without error")
 
 test_that("Simulate with simStructure and inference with all methods", {
-  library(BactDating)
   set.seed(0)
   samplingDates=list(2023:2025,2023:2025,2023:2025)
   t=simStructure(samplingDates = samplingDates)
@@ -29,7 +28,6 @@ test_that("Simulate with simStructure and inference with all methods", {
 })
 
 test_that("Simulate with simMaster.", {
-  library(BactDating)
   set.seed(0)
   samplingDates=list(2023:2025,2023:2025,2023:2025)
   t=simMaster(samplingDates = samplingDates)

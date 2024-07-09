@@ -13,9 +13,7 @@ vignette: >
 First we generate a dated tree with three populations existing for only 1 year each and separated by 1 years.
 
 ```{r}
-library(BactDating)
-library(ape)
-library(ValidateDating)
+library(ValidateDating,quietly=T)
 set.seed(0)
 s=list(runif(30,2010,2010.1),runif(30,2010.1,2010.2),runif(30,2010.2,2010.3))
 dt=simMaster(samplingDates=s,demes=3,coalrate = 5,migrate = 0.1)

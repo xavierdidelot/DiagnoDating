@@ -1,12 +1,12 @@
 Package: ValidateDating
 Type: Package
-Title: ValidateDating: TODO
+Title: ValidateDating: validating dated phylogenies
 Version: 0.0.1
 Date: 2024-07-02
 Authors@R: person("Xavier","Didelot",email="xavier.didelot@gmail.com",role=c("aut", "cre"))
 Maintainer: Xavier Didelot <xavier.didelot@gmail.com>
-Depends: R (>= 3.5.0)
-Imports: ape, stats, graphics
+Depends: R (>= 3.5.0), ape, BactDating
+Imports: stats, graphics
 Suggests: knitr,
     testthat,
     covr,
@@ -16,9 +16,8 @@ Suggests: knitr,
     Rlsd2,
     mlesky,
     treedater,
-    treeio,
-    BactDating
-Description: ValidateDating is TODO a full sentence.
+    treeio
+Description: ValidateDating is a R package to test the validity of dated phylogenies.
 VignetteBuilder: knitr
 License: MIT + file LICENSE
 URL: https://github.com/xavierdidelot/ValidateDating

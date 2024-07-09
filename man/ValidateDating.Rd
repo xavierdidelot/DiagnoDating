@@ -2,9 +2,9 @@
 % Please edit documentation in R/package.R
 \name{ValidateDating}
 \alias{ValidateDating}
-\title{ValidateDating: TODO}
+\title{ValidateDating:  validating dated phylogenies}
 \description{
-ValidateDating is TODO
+ValidateDating is a R package to test the validity of dated phylogenies.
 
 The main functions of the package are:
 \itemize{

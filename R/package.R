@@ -1,7 +1,7 @@
 #' @name ValidateDating
-#' @title ValidateDating: TODO
+#' @title ValidateDating:  validating dated phylogenies
 #'
-#' @description ValidateDating is TODO
+#' @description ValidateDating is a R package to test the validity of dated phylogenies.
 #'
 #' The main functions of the package are:
 #' \itemize{
@@ -15,6 +15,7 @@
 #' @import graphics
 #' @import utils
 #' @import ape
+#' @import BactDating
 #'
 
 NULL

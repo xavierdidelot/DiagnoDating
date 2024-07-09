@@ -2,7 +2,6 @@
 context("Test probabilities")
 
 test_that("Probabilities agree with simulation.", {
-  library(BactDating)
   set.seed(0)
   samplingDates=list(2023:2025,2023:2025,2023:2025)
   t=simStructure(samplingDates = samplingDates)

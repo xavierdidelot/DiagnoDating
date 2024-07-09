@@ -14,9 +14,7 @@ We start by generating a dated tree with no structure and a small effective popu
 $N_e g=1$ year relative to the sampling frame of 10 years between 2010 and 2020:
 
 ```{r}
-library(BactDating)
-library(ape)
-library(ValidateDating)
+library(ValidateDating,quietly=T)
 set.seed(1)
 dates=runif(100,2010,2020)
 dt=simcoaltree(dates,alpha=1)

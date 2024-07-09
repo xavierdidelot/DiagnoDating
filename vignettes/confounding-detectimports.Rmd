@@ -13,10 +13,8 @@ vignette: >
 First we generate a dated tree with three populations existing for only 1 year each and separated by 1 years.
 
 ```{r}
-library(BactDating)
-library(ape)
+library(ValidateDating,quietly=T)
 library(DetectImports)
-library(ValidateDating)
 set.seed(180)
 NeFunImp=function(t,texp) {return(pmax(0,(t-texp)-(t-texp)^2))}
 xs=seq(0,2,0.01);plot(xs,NeFunImp(xs,0),type='l',xlab='Time since pop start',ylab='Pop size')
