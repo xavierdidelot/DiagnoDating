@@ -94,6 +94,6 @@ ade4::mantel.rtest(as.dist(gen),as.dist(tim))
 
 Kruskal-Wallis test of sampling dates imbalance:
 ```{r}
-pvals=testConfounding(tree,dates)
+pvals=testImbalance(tree,dates)
 min(p.adjust(pvals,"bonferroni"))
 ```
