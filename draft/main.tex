@@ -52,9 +52,13 @@ $^*$ Corresponding author. Tel: 0044 (0)2476 572827. Email: \verb+xavier.didelot
 \newpage
 \section*{INTRODUCTION}
 
-Dated phylogenies: definition and uses.
-Many tools exist to produce dated phylogenies, either from a sequence alignment such as BEAST \citep{Suchard2018} or BEAST2 \citep{Bouckaert2019}, or by
-dating the nodes of a standard phylogeny, for example LSD \citep{To2016}, node.dating \citep{Jones2017}, treedater \citep{Volz2017}, BactDating \citep{Didelot2018} and TreeTime \citep{Sagulenko2018}.
+Dated phylogenies, also known as tip-calibrated, time-stamped or time-calibrated phylogenies, have become a ubiquitous tool in the study of microbiological populations 
+\citep{Drummond2003,Biek2015,rieuxInferencesTipcalibratedPhylogenies2016}. In a dated phylogeny, the branch lengths are measured in a unit of time, for example years or days,
+rather than a unit of evolution as in a standard phylogeny. Consequently, the tips of a dated phylogeny are aligned with the (typically known) dates of sampled genomes and
+the internal nodes are aligned with the (typically inferred) dates of common ancestors between the genomes.
+Many tools exist to build dated phylogenies, either from a sequence alignment using for example BEAST \citep{Suchard2018} or BEAST2 \citep{Bouckaert2019}, or by
+dating the nodes of a standard phylogeny, using for example 
+LSD \citep{To2016}, node.dating \citep{Jones2017}, treedater \citep{Volz2017}, BactDating \citep{Didelot2018} and TreeTime \citep{Sagulenko2018}.
 
 There are several factors that can invalidate the results.
 This includes the confounding effect that population structure can have on dating \citep{Murray2016}.
@@ -113,8 +117,8 @@ We acknowledge funding from the National Institute for Health Research (NIHR) He
 
 \newpage
 \bibliographystyle{mbe}
-%\bibliography{/Users/u1775021/all.bib}
-\bibliography{biblio}
+\bibliography{/Users/u1775021/all.bib}
+%\bibliography{biblio}
 
 \pagenumbering{gobble}
 \newpage
