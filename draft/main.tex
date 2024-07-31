@@ -76,7 +76,12 @@ But it also includes incorrect assumptions made when running a dating analysis, 
 %- A Mendel test has been proposed to detect when confounding might happen, but this will flag an issue even if there is no structure and no problem with dating, cf `struture-test.Rmd`
 %- When there is no confounding issue but the temporal signal is weak, eg because all sampling dates are the same or very similar, see `run-nosignal.Rmd`. Estimate incorrectly high clock rate. But the permutation test shows this is not to be trusted.
 %
-%# Still to do
+
+%Urgent TODO list
+%Function for making a resDating object from a dated tree and a standard phylogeny
+%Allow root inference
+
+%# Old to do
 %
 %- Propose new test to detect when the confounding problem happens
 %- Implemented first naive idea of doing a Krukal-Wallis test comparing the dates on the left and right for each node, cf testConfounding.R. Get false positive in structure-test.Rmd. Need better test, accounting for branch lengths. Maybe idea of using pseudo-residuals.
