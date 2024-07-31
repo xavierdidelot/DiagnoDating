@@ -7,3 +7,10 @@
 /doc/
 /Meta/
 *.html
+draft/main.aux
+draft/main.bbl
+draft/main.blg
+draft/main.log
+draft/main.out
+draft/main.synctex.gz
+draft/scr.sh

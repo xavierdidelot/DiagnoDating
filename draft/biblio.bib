@@ -1,0 +1,311 @@
+
+
+@article{Suchard2018,
+  author =        {Suchard, Marc A and Lemey, Philippe and Baele, Guy and
+                   Ayres, Daniel L and Drummond, Alexei J and
+                   Rambaut, Andrew},
+  journal =       {Virus Evolution},
+  number =        {1},
+  pages =         {vey016},
+  title =         {Bayesian Phylogenetic and Phylodynamic Data
+                   Integration Using {{BEAST}} 1.10},
+  volume =        {4},
+  year =          {2018},
+  abstract =      {The Bayesian Evolutionary Analysis by Sampling Trees
+                   (BEAST) software package has become a primary tool
+                   for Bayesian phylogenetic and phylodynamic inference
+                   from genetic sequence data. BEAST unifies molecular
+                   phylogenetic reconstruction with complex discrete and
+                   continuous trait evolution, divergence-time dating,
+                   and coalescent demographic models in an efficient
+                   statistical inference engine using Markov chain Monte
+                   Carlo integration. A convenient, cross-platform,
+                   graphical user interface allows the flexible
+                   construction of complex evolutionary analyses.},
+  doi =           {10.1093/ve/vey016},
+  isbn =          {0000000328265},
+  issn =          {2057-1577},
+}
+
+@article{Bouckaert2019,
+  author =        {Bouckaert, Remco and Vaughan, Timothy G and
+                   Fourment, Mathieu and Gavryushkina, Alexandra and
+                   Heled, Joseph and Denise, K and Maio, Nicola De and
+                   Matschiner, Michael and Ogilvie, Huw and
+                   Plessis, Louis and Popinga, Alex},
+  journal =       {PLoS computational biology},
+  number =        {4},
+  pages =         {e1006650},
+  title =         {{{BEAST}} 2.5 : {{An Advanced Software Platform}} for
+                   {{Bayesian Evolutionary Analysis}}},
+  volume =        {15},
+  year =          {2019},
+  abstract =      {Elaboration of Bayesian phylogenetic inference
+                   methods has continued at pace in recent years with
+                   major new advances in nearly all aspects of the joint
+                   modelling of evolutionary data. It is increasingly
+                   appreciated that some evolutionary questions can only
+                   be adequately answered by combining evidence from
+                   multiple independent sources of data, including
+                   genome sequences, sampling dates, phenotypic data,
+                   radiocarbon dates, fossil occurrences, and
+                   biogeographic range information among others.
+                   Including all relevant data into a single joint model
+                   is very challenging both conceptually and
+                   computationally. Advanced computational software
+                   packages that allow robust development of compatible
+                   (sub-)models which can be composed into a full model
+                   hierarchy have played a key role in these
+                   developments. Developing such software frameworks is
+                   increasingly a major scientific activity in its own
+                   right, and comes with specific challenges, from
+                   practical software design, development and
+                   engineering challenges to statistical and conceptual
+                   modelling challenges. BEAST 2 is one such
+                   computational software platform, and was first
+                   announced over 4 years ago. Here we describe a series
+                   of major new developments in the BEAST 2 core
+                   platform and model hierarchy that have occurred since
+                   the first release of the software, culminating in the
+                   recent 2.5 release.},
+  isbn =          {1111111111},
+}
+
+@article{To2016,
+  author =        {To, Thu-Hien and Jung, Matthieu and Lycett, Samantha and
+                   Gascuel, Olivier},
+  journal =       {Systematic Biology},
+  number =        {1},
+  pages =         {82--97},
+  title =         {Fast Dating Using Least-Squares Criteria and
+                   Algorithms.},
+  volume =        {65},
+  year =          {2016},
+  abstract =      {Phylogenies provide a usefulway to understand the
+                   evolutionary history of genetic samples, and data
+                   sets with more than a thousand taxa are becoming
+                   increasingly common, notably with viruses (e.g.,
+                   human immunodeficiency virus (HIV)). Dating ancestral
+                   events is one of the first, essential goals with such
+                   data.However, current sophisticated probabilistic
+                   approaches struggle to handle data sets of this size.
+                   Here,we present very fast dating algorithms, based on
+                   a Gaussian model closely related to the
+                   Langley--Fitchmolecular-clockmodel.We showthat this
+                   model is robust to uncorrelated violations of
+                   themolecular clock. Our algorithms apply to serial
+                   data, where the tips of the tree have been sampled
+                   through times. They estimate the substitution rate
+                   and the dates of all ancestral nodes. When the input
+                   tree is unrooted, they can provide an estimate for
+                   the root position, thus representing a new, practical
+                   alternative to the standard rooting methods (e.g.,
+                   midpoint). Our algorithms exploit the tree
+                   (recursive) structure of the problem at hand, and the
+                   close relationships between least- squares and linear
+                   algebra.We distinguish between an unconstrained
+                   setting and the case where the temporal precedence
+                   constraint (i.e., an ancestral node must be older
+                   that its daughter nodes) is accounted for. With
+                   rooted trees, the former is solved using linear
+                   algebra in linear computing time (i.e., proportional
+                   to the number of taxa), while the resolution of the
+                   latter, constrained setting, is based on an
+                   active-set method that runs in nearly linear time.
+                   With unrooted trees the computing time becomes
+                   (nearly) quadratic (i.e., proportional to the square
+                   of the number of taxa). In all cases, very large
+                   input trees ({$>$}10,000 taxa) can easily be
+                   processed and transformed into time-scaled trees.We
+                   compare these algorithms to standardmethods
+                   (root-to-tip, r8s version of Langley--Fitchmethod,
+                   and BEAST). Using simulated data,we showthat their
+                   estimation accuracy is similar to that of themost
+                   sophisticated methods, while theircomputing time
+                   ismuch faster.We apply these algorithms on a large
+                   data set comprising 1194 strains of Influenza virus
+                   from the pdm09 H1N1 Human pandemic. Again the results
+                   showthat these algorithms provide a very fast
+                   alternative with results similar to those of other
+                   computer programs. These algorithms are implemented
+                   in the LSD software (least-squares dating), which can
+                   be downloaded from
+                   http://www.atgc-montpellier.fr/LSD/, along with all
+                   our data sets and detailed results. An Online
+                   Appendix, providing additional algorithm
+                   descriptions, tables, and figures can be found in the
+                   Supplementary Material available on Dryad at
+                   http://dx.doi.org/10.5061/dryad.968t3.},
+  doi =           {10.1093/sysbio/syv068},
+  issn =          {1063-5157},
+}
+
+@article{Jones2017,
+  author =        {Jones, Bradley R. and Poon, Art F.Y.},
+  journal =       {Bioinformatics},
+  number =        {6},
+  pages =         {932--934},
+  title =         {Node.Dating: {{Dating}} Ancestors in Phylogenetic
+                   Trees in {{R}}},
+  volume =        {33},
+  year =          {2017},
+  doi =           {10.1093/bioinformatics/btw744},
+  issn =          {14602059},
+}
+
+@article{Volz2017,
+  author =        {Volz, E M and Frost, Simon D W},
+  journal =       {Virus Evolution},
+  number =        {2},
+  pages =         {vex025},
+  title =         {Scalable Relaxed Clock Phylogenetic Dating},
+  volume =        {3},
+  year =          {2017},
+}
+
+@article{Didelot2018,
+  author =        {Didelot, Xavier and Croucher, Nicholas J and
+                   Bentley, Stephen D and Harris, Simon R and
+                   Wilson, Daniel J},
+  journal =       {Nucleic Acids Research},
+  number =        {22},
+  pages =         {e134-e134},
+  title =         {Bayesian Inference of Ancestral Dates on Bacterial
+                   Phylogenetic Trees},
+  volume =        {46},
+  year =          {2018},
+  abstract =      {The sequencing and comparative analysis of a
+                   collection of bacterial genomes from a single species
+                   or lineage of interest can lead to key insights into
+                   its evolution, ecology or epidemiology. The tool of
+                   choice for such a study is often to build a
+                   phylogenetic tree, and more specifically when
+                   possible a dated phylogeny, in which the dates of all
+                   common ancestors are estimated. Here we propose a new
+                   Bayesian methodology to construct dated phylogenies
+                   which is specifically designed for bacterial
+                   genomics. Unlike previous Bayesian methods aimed at
+                   building dated phylogenies, we consider that the
+                   phylogenetic relationships between the genomes have
+                   been previously evaluated using a standard
+                   phylogenetic method, which makes our methodology much
+                   faster and scalable. This two-steps approach also
+                   allows us to directly exploit existing phylogenetic
+                   methods that detect bacterial recombination, and
+                   therefore to account for the effect of recombination
+                   in the construction of a dated phylogeny. We analysed
+                   many simulated datasets in order to benchmark the
+                   performance of our approach in a wide range of
+                   situations. Furthermore, we present applications to
+                   three different real datasets from recent bacterial
+                   genomic studies. Our methodology is implemented in a
+                   R package called BactDating which is freely available
+                   for download at
+                   https://github.com/xavierdidelot/BactDating.},
+  doi =           {10.1093/nar/gky783},
+  issn =          {0305-1048},
+}
+
+@article{Sagulenko2018,
+  author =        {Sagulenko, Pavel and Puller, Vadim and
+                   Neher, Richard A},
+  journal =       {Virus Evolution},
+  pages =         {vex042},
+  title =         {{{TreeTime}}: {{Maximum}} Likelihood Phylodynamic
+                   Analysis},
+  volume =        {4},
+  year =          {2018},
+  abstract =      {Mutations that accumulate in the genome of
+                   replicating biological organisms can be used to infer
+                   their evolu-tionary history. In case of measurably
+                   evolving organisms genomes often reveal their
+                   detailed spatio-temporal spread. Such phylodynamic
+                   analyses are particularly useful to understand the
+                   epidemiology of rapidly evolving viral pathogens. The
+                   number of genome sequences available for different
+                   pathogens, however, has increased dramatically over
+                   the last couple of years and traditional methods for
+                   phylodynamic analysis scale poorly with growing data
+                   sets. Here, we present TreeTime, a python based
+                   framework for phylodynamic analysis using an
+                   approximate Maximum Likelihood approach. TreeTime can
+                   estimate ancestral states, infer evolution models,
+                   reroot trees to maximize temporal signals, estimate
+                   molecular clock phylogenies and population size
+                   histories. The run time of TreeTime scales linearly
+                   with data set size. Phylogenetics uses differences
+                   between homologous se-quences to infer the history of
+                   the sample and learn about the evolutionary processes
+                   that gave rise to the observed diversity. In absence
+                   of recombination, this history is a tree along which
+                   sequences descend from ancestors with modification.
+                   In gen-eral, the reconstruction of phylogenetic trees
+                   is a computation-ally difficult problem but efficient
+                   heuristics often produce re-liable reconstructions in
+                   polynomial time (Felsenstein, 2004; Price et al.,
+                   2010; Stamatakis, 2014). Such heuristics become
+                   indispensible for large data sets of hundreds or
+                   thousands of sequences. In addition to tree building,
+                   many research questions re-quire parameter inference
+                   and hypothesis testing (Drummond et al., 2012; Pond
+                   and Muse, 2005). Again, exact inference and testing
+                   with large data sets is computationally expensive
+                   since it requires high-dimensional optimization of
+                   complex likelihood functions or extensive sampling of
+                   the posterior. Efficient heuristics are needed to
+                   cope with the growing data sets available today.},
+  doi =           {10.1101/153494},
+}
+
+@article{Murray2016,
+  author =        {Murray, Gemma G R and Wang, Fang and
+                   Harrison, Ewan M. and Paterson, Gavin K. and
+                   Mather, Alison E. and Harris, Simon R. and
+                   Holmes, Mark A. and Rambaut, Andrew and
+                   Welch, John J.},
+  journal =       {Methods in Ecology and Evolution},
+  pages =         {80--89},
+  title =         {The Effect of Genetic Structure on Molecular Dating
+                   and Tests for Temporal Signal},
+  volume =        {7},
+  year =          {2016},
+  abstract =      {``Dated-tip'' methods of molecular dating use DNA
+                   sequences sampled at different times, to estimate the
+                   age of their most recent common ancestor. Several
+                   tests of ``temporal signal'' are available to
+                   determine whether datasets are suitable for such
+                   analysis. However, it remains unclear whether these
+                   tests are reliable. We investigate the performance of
+                   several tests of temporal signal, including some
+                   recently suggested modifications. We use simulated
+                   data (where the true evolutionary history is known),
+                   and whole-genomes of methicillin-resistant
+                   Staphylococcus aureus (to show how particular
+                   problems arise with real-world data sets). We show
+                   that all of the standard tests of temporal signal are
+                   seriously misleading for data where temporal and
+                   genetic structure are confounded (i.e. where
+                   closely-related sequences are more likely to have
+                   been sampled at similar times). This is not an
+                   artefact of genetic structure or tree shape per se,
+                   and can arise even when sequences have measurably
+                   evolved during the sampling period. More positively,
+                   we show that a ``clustered permutation'' approach
+                   introduced by Duch{\^e}ne et al. (2015a) can
+                   successfully correct for this artefact in all cases,
+                   and introduce techniques for implementing this method
+                   with real data sets. The confounding of temporal and
+                   genetic structure may be difficult to avoid in
+                   practice, particularly for outbreaks of infectious
+                   disease, or when using ancient DNA. Therefore, we
+                   recommend the use of ``clustered permutation'' for
+                   all analyses. The failure of the standard tests may
+                   explain why different methods of dating pathogen
+                   origins have reached such wildly different
+                   conclusions. This article is protected by copyright.
+                   All rights reserved.},
+  doi =           {10.1111/2041-210X.12466},
+  isbn =          {2041-210X},
+  issn =          {2041210X},
+}
+
