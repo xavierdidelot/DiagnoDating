@@ -10,7 +10,7 @@ resDating(
   algo = "Unknown",
   model = "poisson",
   rate = 10,
-  relax = NA,
+  relax = 0,
   rootdate = NA
 )
 }

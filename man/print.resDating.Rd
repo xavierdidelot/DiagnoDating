@@ -7,7 +7,7 @@
 \method{print}{resDating}(x, ...)
 }
 \arguments{
-\item{x}{output from bactdate}
+\item{x}{output from dating}
 
 \item{...}{Passed on to cat}
 }
