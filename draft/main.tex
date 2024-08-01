@@ -33,7 +33,7 @@
 \renewcommand\footnote[2][]{\relax}
 
 \begin{document}
-{\Large Validation of dated phylogenies}
+{\Large Validation of dated phylogenies in microbial population genetics}
 
 
 \vspace*{2cm}
@@ -52,7 +52,7 @@ $^*$ Corresponding author. Tel: 0044 (0)2476 572827. Email: \verb+xavier.didelot
 \newpage
 \section*{INTRODUCTION}
 
-Dated phylogenies, also known as tip-calibrated, time-stamped or time-calibrated phylogenies, have become a ubiquitous tool in the study of microbiological populations 
+Dated phylogenies, also known as tip-calibrated, time-stamped or time-calibrated phylogenies, have become a ubiquitous tool in the study of microbial population genetics 
 \citep{Drummond2003,Biek2015,rieuxInferencesTipcalibratedPhylogenies2016}. In a dated phylogeny, the branch lengths are measured in a unit of time, for example years or days,
 rather than a unit of evolution as in a standard phylogeny. Consequently, the tips of a dated phylogeny are aligned with the (typically known) dates of sampled genomes and
 the internal nodes are aligned with the (typically inferred) dates of common ancestors between the genomes.
@@ -60,53 +60,19 @@ Many tools exist to build dated phylogenies, either from a sequence alignment us
 dating the nodes of a standard phylogeny, using for example 
 LSD \citep{To2016}, node.dating \citep{Jones2017}, treedater \citep{Volz2017}, BactDating \citep{Didelot2018} and TreeTime \citep{Sagulenko2018}.
 
-There are several factors that can invalidate the results.
+There are several factors that can invalidate the results. 
+See \citep{tongComparisonMethodsEstimating2018} for a list.
 This includes the confounding effect that population structure can have on dating \citep{Murray2016}.
-But it also includes incorrect assumptions made when running a dating analysis, for example using an inappropriate clock model. 
+It also includes any incorrect assumptions made when running a dating analysis, for example using an inappropriate clock model. 
 
-%# Done so far
-%
-%- Dating via node.dating, BactDating, treedater, TreeTime and LSD2
-%- Reproduce confounding effect described by Murray2016 on similar coalescent simulation, cf `confounding.Rmd`
-%- Ruled out possible problem in phylogenetics since working directly with trees, not genetic data
-%- Ruled out possible problem with root identification (ie consider root known)
-%- Ruled out possible problem with multifurcation at the root (relaxed this in simulation)
-%- More general version in `confounding-simstructure.Rmd` in which sampling dates do not have to be identical, and population sizes do not have to be constant. Simulation code is in `simStructure.R`, uses some of mlesky code for simulation of non-homogeneous Poisson coalescent process.
-%- Difficult to get confusion using DetectImports simulations, cf `confounding-detectimports.Rmd`. May be because confusion only happens when sampling dates are biased, whereas DetectImports assumes sampling according to relative prevalence of populations
-%- A Mendel test has been proposed to detect when confounding might happen, but this will flag an issue even if there is no structure and no problem with dating, cf `struture-test.Rmd`
-%- When there is no confounding issue but the temporal signal is weak, eg because all sampling dates are the same or very similar, see `run-nosignal.Rmd`. Estimate incorrectly high clock rate. But the permutation test shows this is not to be trusted.
-%
-
-%Urgent TODO list
-%Function for making a resDating object from a dated tree and a standard phylogeny
-%Allow root inference
-
-%# Old to do
-%
-%- Propose new test to detect when the confounding problem happens
-%- Implemented first naive idea of doing a Krukal-Wallis test comparing the dates on the left and right for each node, cf testConfounding.R. Get false positive in structure-test.Rmd. Need better test, accounting for branch lengths. Maybe idea of using pseudo-residuals.
-%- Propose a solution to when the confounding problem happens, maybe via removal of some leaves until test satisfied
-%- Is permutation test useful?
-%- Is clustered permutation test useful?
-%- Comparison with run in which all leaves have same date. Attractive as only need to run once. Use DIC or something else?
-%- Use better Bayesian model comparison methods?
-%- Use Bayesian model criticism approach? Maybe using posterior predictive p-values?
-%- Effect of relaxed clock models, especially ARC.
-%- Effect of priors, especially on tree (constant effective population size as in Murray2016) but also others.
-%- Apply to real data. May be able to reuse data from Holden2013, cf Fig S4 in Murray2016.
-%
-%# Some ideas
-%
-%- Fit with all dates equal using modified BactDating. Need to add move to scale up tree and down rate simultaneously, and vice versa. Consider prior effect. Given this fit, do posterior predictive test to see if there is a temporal signal. 
-%- Joint model with and without temporal signal, to estimate Bayes Factor directly with rjMCMC. Current moves on sampling times could be starting point. 
-%- Show confounding only happens when we have structure plus uneven sampling between structure component. Develop test for this based on undated phylgeny plus sampling dates. Bit like treeBreaker with continuous phenotype representing sampling dates.
-%- Can a relaxed clock with high relaxation parameter equate a lack of temporal signal? What happens in ARC if omega is very high?
-%- Alternate method to simulate confounding tree: generate very large phylogeny and subsample from large clusters within in
-%- Shiny app
+Validation is not the same as model comparison \citep{Baele2012,Li2012,bouckaertBModelTestBayesianPhylogenetic2017}. 
+Also validation is not the same as testing significance of temporal signal \citep{Duchene2015a,Duchene2020}.
 
 \section*{MATERIALS AND METHODS}
 
-TODO
+\subsection*{General approach}
+
+Comparison of dated phylogeny with undated phylogeny. Especially makes sense when dated phylogeny is built from the undated phylogeny (Figure 1A). But can also be used for methods that build a dated phylogeny directly from the alignment (Figure 1B).
 
 \section*{RESULTS}
 
@@ -136,4 +102,48 @@ We acknowledge funding from the National Institute for Health Research (NIHR) He
 \makeatother
 
 \end{document}
+
+%# Done so far
+%
+%- Dating via node.dating, BactDating, treedater, TreeTime and LSD2
+%- Reproduce confounding effect described by Murray2016 on similar coalescent simulation, cf `confounding.Rmd`
+%- Ruled out possible problem in phylogenetics since working directly with trees, not genetic data
+%- Ruled out possible problem with root identification (ie consider root known)
+%- Ruled out possible problem with multifurcation at the root (relaxed this in simulation)
+%- More general version in `confounding-simstructure.Rmd` in which sampling dates do not have to be identical, and population sizes do not have to be constant. Simulation code is in `simStructure.R`, uses some of mlesky code for simulation of non-homogeneous Poisson coalescent process.
+%- Difficult to get confusion using DetectImports simulations, cf `confounding-detectimports.Rmd`. May be because confusion only happens when sampling dates are biased, whereas DetectImports assumes sampling according to relative prevalence of populations
+%- A Mendel test has been proposed to detect when confounding might happen, but this will flag an issue even if there is no structure and no problem with dating, cf `struture-test.Rmd`
+%- When there is no confounding issue but the temporal signal is weak, eg because all sampling dates are the same or very similar, see `run-nosignal.Rmd`. Estimate incorrectly high clock rate. But the permutation test shows this is not to be trusted.
+%
+
+%Urgent TODO list
+%Function for making a resDating object from a dated tree and a standard phylogeny which could be unrooted
+%Use this eg in perfect residuals vignette and also the runDating subfunctions
+%Also use in readme?
+%Allow root inference
+%Clock relaxation only works in BactDating currently
+%Investigate false positives
+
+%# Old to do
+%
+%- Propose new test to detect when the confounding problem happens
+%- Implemented first naive idea of doing a Krukal-Wallis test comparing the dates on the left and right for each node, cf testConfounding.R. Get false positive in structure-test.Rmd. Need better test, accounting for branch lengths. Maybe idea of using pseudo-residuals.
+%- Propose a solution to when the confounding problem happens, maybe via removal of some leaves until test satisfied
+%- Is permutation test useful?
+%- Is clustered permutation test useful?
+%- Comparison with run in which all leaves have same date. Attractive as only need to run once. Use DIC or something else?
+%- Use better Bayesian model comparison methods?
+%- Use Bayesian model criticism approach? Maybe using posterior predictive p-values?
+%- Effect of relaxed clock models, especially ARC.
+%- Effect of priors, especially on tree (constant effective population size as in Murray2016) but also others.
+%- Apply to real data. May be able to reuse data from Holden2013, cf Fig S4 in Murray2016.
+%
+%# Some ideas
+%
+%- Fit with all dates equal using modified BactDating. Need to add move to scale up tree and down rate simultaneously, and vice versa. Consider prior effect. Given this fit, do posterior predictive test to see if there is a temporal signal. 
+%- Joint model with and without temporal signal, to estimate Bayes Factor directly with rjMCMC. Current moves on sampling times could be starting point. 
+%- Show confounding only happens when we have structure plus uneven sampling between structure component. Develop test for this based on undated phylgeny plus sampling dates. Bit like treeBreaker with continuous phenotype representing sampling dates.
+%- Can a relaxed clock with high relaxation parameter equate a lack of temporal signal? What happens in ARC if omega is very high?
+%- Alternate method to simulate confounding tree: generate very large phylogeny and subsample from large clusters within in
+%- Shiny app
 

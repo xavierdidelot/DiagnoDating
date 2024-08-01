@@ -228,26 +228,3 @@ runTreeTime=function(tree,dates,...) {
   class(res)<-'resDating'
   return(res)
 }
-
-
-#' Print function for resDating objects
-#' @param x output from bactdate
-#' @param ... Passed on to cat
-#' @return Print out details of dating results
-#' @export
-print.resDating <- function(x, ...)
-{
-  stopifnot(inherits(x, "resDating"))
-  cat(sprintf('Result from %s, model %s, clock rate %.2f, relaxation parameter %.2f, root date %.2f\n',x$algo,x$model,x$rate,x$relax,x$rootdate),...)
-  invisible(x)
-}
-
-#' Plotting methods
-#' @param x Output from dating
-#' @param ... Additional parameters are passed on
-#' @return Plot of results
-#' @export
-plot.resDating = function(x, ...) {
-  class(x)<-'resBactDating'
-  plot(x,...)
-}

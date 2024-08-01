@@ -349,6 +349,54 @@
   doi =           {10.1101/153494},
 }
 
+@article{tongComparisonMethodsEstimating2018,
+  author =        {Tong, K. Jun and Duch{\^e}ne, David A. and
+                   Duch{\^e}ne, Sebasti{\'a}n and Geoghegan, Jemma L. and
+                   Ho, Simon Y. W.},
+  journal =       {BMC Evolutionary Biology},
+  month =         dec,
+  number =        {1},
+  pages =         {70},
+  title =         {A Comparison of Methods for Estimating Substitution
+                   Rates from Ancient {{DNA}} Sequence Data},
+  volume =        {18},
+  year =          {2018},
+  abstract =      {Background: Phylogenetic analysis of DNA from modern
+                   and ancient samples allows the reconstruction of
+                   important demographic and evolutionary processes. A
+                   critical component of these analyses is the
+                   estimation of evolutionary rates, which can be
+                   calibrated using information about the ages of the
+                   samples. However, the reliability of these rate
+                   estimates can be negatively affected by among-lineage
+                   rate variation and non-random sampling. Using a
+                   simulation study, we compared the performance of
+                   three phylogenetic methods for inferring evolutionary
+                   rates from time-structured data sets: regression of
+                   root-to-tip distances, least-squares dating, and
+                   Bayesian inference. We also applied these three
+                   methods to time-structured mitogenomic data sets from
+                   six vertebrate species. Results: Our results from 12
+                   simulation scenarios show that the three methods
+                   produce reliable estimates when the substitution rate
+                   is high, rate variation is low, and samples of
+                   similar ages are not all grouped together in the tree
+                   (i.e., low phylo-temporal clustering). The
+                   interaction of these factors is particularly
+                   important for least-squares dating and Bayesian
+                   estimation of evolutionary rates. The three
+                   estimation methods produced consistent estimates of
+                   rates across most of the six mitogenomic data sets,
+                   with sequence data from horses being an exception.
+                   Conclusions: We recommend that phylogenetic studies
+                   of ancient DNA sequences should use multiple methods
+                   of inference and test for the presence of temporal
+                   signal, among-lineage rate variation, and
+                   phylo-temporal clustering in the data.},
+  doi =           {10.1186/s12862-018-1192-3},
+  issn =          {1471-2148},
+}
+
 @article{Murray2016,
   author =        {Murray, Gemma G R and Wang, Fang and
                    Harrison, Ewan M. and Paterson, Gavin K. and
@@ -399,5 +447,246 @@
   doi =           {10.1111/2041-210X.12466},
   isbn =          {2041-210X},
   issn =          {2041210X},
+}
+
+@article{Baele2012,
+  author =        {Baele, Guy and Lemey, Philippe and
+                   Bedford, Trevor B C and Rambaut, Andrew and
+                   a. Suchard, Marc and Alekseyenko, Alexander V.},
+  journal =       {Molecular Biology and Evolution},
+  month =         sep,
+  number =        {9},
+  pages =         {2157--2167},
+  title =         {Improving the Accuracy of Demographic and Molecular
+                   Clock Model Comparison While Accommodating
+                   Phylogenetic Uncertainty},
+  volume =        {29},
+  year =          {2012},
+  abstract =      {Recent developments in marginal likelihood estimation
+                   for model selection in the field of Bayesian
+                   phylogenetics and molecular evolution have emphasized
+                   the poor performance of the harmonic mean estimator
+                   (HME). Although these studies have shown the merits
+                   of new approaches applied to standard normally
+                   distributed examples and small real-world data sets,
+                   not much is currently known concerning the
+                   performance and computational issues of these methods
+                   when fitting complex evolutionary and population
+                   genetic models to empirical real-world data sets.
+                   Further, these approaches have not yet seen
+                   widespread application in the field due to the lack
+                   of implementations of these computationally demanding
+                   techniques in commonly used phylogenetic packages. We
+                   here investigate the performance of some of these new
+                   marginal likelihood estimators, specifically, path
+                   sampling (PS) and stepping-stone (SS) sampling for
+                   comparing models of demographic change and relaxed
+                   molecular clocks, using synthetic data and real-world
+                   examples for which unexpected inferences were made
+                   using the HME. Given the drastically increased
+                   computational demands of PS and SS sampling, we also
+                   investigate a posterior simulation-based analogue of
+                   Akaike's information criterion (AIC) through Markov
+                   chain Monte Carlo (MCMC), a model comparison approach
+                   that shares with the HME the appealing feature of
+                   having a low computational overhead over the original
+                   MCMC analysis. We confirm that the HME systematically
+                   overestimates the marginal likelihood and fails to
+                   yield reliable model classification and show that the
+                   AICM performs better and may be a useful initial
+                   evaluation of model choice but that it is also, to a
+                   lesser degree, unreliable. We show that PS and SS
+                   sampling substantially outperform these estimators
+                   and adjust the conclusions made concerning previous
+                   analyses for the three real-world data sets that we
+                   reanalyzed. The methods used in this article are now
+                   available in BEAST, a powerful user-friendly software
+                   package to perform Bayesian evolutionary analyses.},
+  doi =           {10.1093/molbev/mss084},
+  isbn =          {1537-1719 (Electronic){\textbackslash}r0737-4038
+                   (Linking)},
+  issn =          {07374038},
+}
+
+@article{Li2012,
+  author =        {Li, Wai Lok Sibon and Drummond, Alexei J},
+  journal =       {Molecular biology and evolution},
+  month =         feb,
+  number =        {2},
+  pages =         {751--61},
+  title =         {Model Averaging and {{Bayes}} Factor Calculation of
+                   Relaxed Molecular Clocks in {{Bayesian}}
+                   Phylogenetics.},
+  volume =        {29},
+  year =          {2012},
+  abstract =      {We describe a procedure for model averaging of
+                   relaxed molecular clock models in Bayesian
+                   phylogenetics. Our approach allows us to model the
+                   distribution of rates of substitution across
+                   branches, averaged over a set of models, rather than
+                   conditioned on a single model. We implement this
+                   procedure and test it on simulated data to show that
+                   our method can accurately recover the true underlying
+                   distribution of rates. We applied the method to a set
+                   of alignments taken from a data set of 12 mammalian
+                   species and uncovered evidence that lognormally
+                   distributed rates better describe this data set than
+                   do exponentially distributed rates. Additionally, our
+                   implementation of model averaging permits accurate
+                   calculation of the Bayes factor(s) between two or
+                   more relaxed molecular clock models. Finally, we
+                   introduce a new computational approach for sampling
+                   rates of substitution across branches that improves
+                   the convergence of our Markov chain Monte Carlo
+                   algorithms in this context. Our methods are
+                   implemented under the BEAST 1.6 software package,
+                   available at http://beast-mcmc.googlecode.com.},
+  doi =           {10.1093/molbev/msr232},
+  issn =          {1537-1719},
+}
+
+@article{bouckaertBModelTestBayesianPhylogenetic2017,
+  author =        {Bouckaert, Remco R. and Drummond, Alexei J.},
+  journal =       {BMC Evolutionary Biology},
+  month =         dec,
+  number =        {1},
+  pages =         {42},
+  title =         {{{bModelTest}}: {{Bayesian}} Phylogenetic Site Model
+                   Averaging and Model Comparison},
+  volume =        {17},
+  year =          {2017},
+  abstract =      {Background: Reconstructing phylogenies through
+                   Bayesian methods has many benefits, which include
+                   providing a mathematically sound framework, providing
+                   realistic estimates of uncertainty and being able to
+                   incorporate different sources of information based on
+                   formal principles. Bayesian phylogenetic analyses are
+                   popular for interpreting nucleotide sequence data,
+                   however for such studies one needs to specify a site
+                   model and associated substitution model. Often, the
+                   parameters of the site model is of no interest and an
+                   ad-hoc or additional likelihood based analysis is
+                   used to select a single site model. Results:
+                   bModelTest allows for a Bayesian approach to
+                   inferring and marginalizing site models in a
+                   phylogenetic analysis. It is based on
+                   trans-dimensional Markov chain Monte Carlo (MCMC)
+                   proposals that allow switching between substitution
+                   models as well as estimating the posterior
+                   probability for gamma-distributed rate heterogeneity,
+                   a proportion of invariable sites and unequal base
+                   frequencies. The model can be used with the full set
+                   of time-reversible models on nucleotides, but we also
+                   introduce and demonstrate the use of two subsets of
+                   time-reversible substitution models. Conclusion: With
+                   the new method the site model can be inferred (and
+                   marginalized) during the MCMC analysis and does not
+                   need to be pre-determined, as is now often the case
+                   in practice, by likelihood-based methods. The method
+                   is implemented in the bModelTest package of the
+                   popular BEAST 2 software, which is open source,
+                   licensed under the GNU Lesser General Public License
+                   and allows joint site model and tree inference under
+                   a wide range of models.},
+  doi =           {10.1186/s12862-017-0890-6},
+  issn =          {1471-2148},
+}
+
+@article{Duchene2015a,
+  author =        {Duchene, Sebasti{\'a}n and Duch{\^e}ne, David and
+                   Holmes, Edward C. and Ho, Simon Y.W.},
+  journal =       {Molecular Biology and Evolution},
+  number =        {7},
+  pages =         {1895--1906},
+  title =         {The Performance of the Date-Randomization Test in
+                   Phylogenetic Analyses of Time-Structured Virus Data},
+  volume =        {32},
+  year =          {2015},
+  abstract =      {{\copyright} The Author 2015. Published by Oxford
+                   University Press on behalf of the Society for
+                   Molecular Biology and Evolution. Rates and timescales
+                   of viral evolution can be estimated using
+                   phylogenetic analyses of time-structured molecular
+                   sequences. This involves the use of molecular-clock
+                   methods, calibrated by the sampling times of the
+                   viral sequences. However, the spread of these
+                   sampling times is not always sufficient to allow the
+                   substitution rate to be estimated accurately. We
+                   conducted Bayesian phylogenetic analyses of simulated
+                   virus data to evaluate the performance of the
+                   date-randomization test, which is sometimes used to
+                   investigate whether time-structured data sets have
+                   temporal signal. An estimate of the substitution rate
+                   passes this test if its mean does not fall within the
+                   95\% credible intervals of rate estimates obtained
+                   using replicate data sets in which the sampling
+                   stimes have been randomized. We find that the test
+                   sometimes fails to detect rate estimates from data
+                   with no temporal signal. This error can be minimized
+                   by using a more conservative criterion, whereby the
+                   95\% credible interval of the estimate with correct
+                   sampling times should not overlap with those obtained
+                   with randomized sampling times. We also investigated
+                   the behavior of the test when the sampling times are
+                   not uniformly distributed throughout the tree, which
+                   sometimes occurs in empirical data sets. The test
+                   performs poorly in these circumstances, such that a
+                   modification to the randomization scheme is needed.
+                   Finally, we illustrate the behavior of the test in
+                   analyses of nucleotide sequences of cereal yellow
+                   dwarf virus. Our results validate the use of the
+                   date-randomization test and allow us to propose
+                   guidelines for interpretation of its results.},
+  doi =           {10.1093/molbev/msv056},
+  issn =          {15371719},
+}
+
+@article{Duchene2020,
+  author =        {Duchene, Sebastian and Lemey, Philippe and
+                   Stadler, Tanja and Ho, Simon Y.W. and
+                   Duchene, David A. and Dhanasekaran, Vijaykrishna and
+                   Baele, Guy},
+  journal =       {Molecular Biology and Evolution},
+  number =        {11},
+  pages =         {3363--3379},
+  title =         {Bayesian Evaluation of Temporal Signal in Measurably
+                   Evolving Populations},
+  volume =        {37},
+  year =          {2020},
+  abstract =      {Phylogenetic methods can use the sampling times of
+                   molecular sequence data to calibrate the molecular
+                   clock, enabling the estimation of evolutionary rates
+                   and timescales for rapidly evolving pathogens and
+                   data sets containing ancient DNA samples. A key
+                   aspect of such calibrations is whether a sufficient
+                   amount of molecular evolution has occurred over the
+                   sampling time window, that is, whether the data can
+                   be treated as having come from a measurably evolving
+                   population. Here, we investigate the performance of a
+                   fully Bayesian evaluation of temporal signal (BETS)
+                   in sequence data. The method involves comparing the
+                   fit to the data of two models: a model in which the
+                   data are accompanied by the actual (heterochronous)
+                   sampling times, and a model in which the samples are
+                   constrained to be contemporaneous (isochronous). We
+                   conducted simulations under a wide range of
+                   conditions to demonstrate that BETS accurately
+                   classifies data sets according to whether they
+                   contain temporal signal or not, even when there is
+                   substantial among-lineage rate variation. We explore
+                   the behavior of this classification in analyses of
+                   five empirical data sets: modern samples of A/H1N1
+                   influenza virus, the bacterium Bordetella pertussis,
+                   coronaviruses from mammalian hosts, ancient DNA from
+                   Hepatitis B virus, and mitochondrial genomes of dog
+                   species. Our results indicate that BETS is an
+                   effective alternative to other tests of temporal
+                   signal. In particular, this method has the key
+                   advantage of allowing a coherent assessment of the
+                   entire model, including the molecular clock and tree
+                   prior which are essential aspects of Bayesian
+                   phylodynamic analyses.},
+  doi =           {10.1093/molbev/msaa163},
+  issn =          {15371719},
 }
 
