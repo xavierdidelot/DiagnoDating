@@ -39,16 +39,16 @@ BactDating analysis:
 
 ```{r}
 r=runDating(tree,dates,algo='BactDating')
-plot(r,'trace')
-plot(r,'treeCI',show.tip.label=F)
+BactDating:::plot.resBactDating(r,'trace')
+plot(r,show.tip.label=F)
 print(r)
 ```
 BactDating analysis with all dates set equal:
 
 ```{r}
 r2=runDating(tree,rep(mean(dates),length(dates)),algo='BactDating',initMu=100)
-plot(r2,'trace')
-plot(r2,'treeCI',show.tip.label=F)
+BactDating:::plot.resBactDating(r2,'trace')
+plot(r2,show.tip.label=F)
 print(r2)
 ```
 

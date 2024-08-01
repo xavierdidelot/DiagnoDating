@@ -35,8 +35,15 @@ A root-to-tip regression analysis works perfectly:
 res=roottotip(tree,dates)
 ```
 
+Mess up the root and repeat root-to-tip regression:
+```{r}
+tree=root(tree,50)
+res=roottotip(tree,dates)
+```
+
 Run all dating methods with pseudo-residual analysis:
 ```{r}
+tree=unroot(tree)
 for (a in 1:5) {
   r=runDating(tree,dates,algo=a)
   print(r)

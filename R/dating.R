@@ -25,7 +25,7 @@ runDating=function(tree,dates,algo='BactDating',...) {
 #' @return resDating object containing results of BactDating analysis
 #'
 runBactDating=function(tree,dates,...) {
-  def_args=list(tree=tree,date=dates,model='poisson',updateRoot=F)
+  def_args=list(tree=tree,date=dates,model='poisson')
   cl=as.list(match.call())[-(1:3)]
   args=c(cl,def_args[!names(def_args) %in% names(cl)])
   r=do.call("bactdate",args)
@@ -50,32 +50,13 @@ runBactDating=function(tree,dates,...) {
 #' @return resDating object containing results of treedater analysis
 #'
 runTreeDater=function(tree,dates,...) {
-  tre=tree
+  tre=unroot(tree)
   l=max(tree$edge.length)*1000
   tre$edge.length=tre$edge.length/l
   sts=dates
   names(sts)=tree$tip.label
   o=capture.output(rtd<-suppressWarnings(treedater::dater(tre,sts,s=l,...)))
-  res=list()
-  res$algo='treedater'
-  res$inputtree=tree
-  res$model='poisson'
-  res$rate=rtd$mean.rate*l
-  res$relax=0
-  res$rootdate=rtd$timeOfMRCA
-  nrowtab=Ntip(tree)+Nnode(tree)
-  record = matrix(NA, 10, nrowtab*3 + 6)
-  colnames(record)<-c(rep(NA,nrowtab*3),'likelihood','mu','sigma','alpha','prior','root')
-  record[,'likelihood']=rtd$loglik
-  record[,'mu']=res$rate
-  record[,Ntip(tree)+1]=rtd$timeOfMRCA
-  res$record=record
-  res$tree=list(edge=rtd$edge,Nnode=rtd$Nnode,tip.label=rtd$tip.label,edge.length=rtd$edge.length,root.time=rtd$timeOfMRCA)
-  class(res$tree)<-'phylo'
-  tree=reorderEdges(tree,res$tree)
-  res$tree$subs=tree$edge.length
-  res$algo='treeedater'
-  class(res)<-'resDating'
+  res=resDating(rtd,tree,algo='treedater',model='poisson',rate=rtd$mean.rate*l,relax=0,rootdate=rtd$timeOfMRCA)
   return(res)
 }
 
@@ -89,76 +70,19 @@ runTreeDater=function(tree,dates,...) {
 #'
 runLSD=function(tree,dates,...) {
   tag=round(runif(1,1,1e8))
-  tre=tree
+  tre=unroot(tree)
   l=round(max(tree$edge.length)*1000)
   tre$edge.length=tre$edge.length/l
   sts=dates
   names(sts)=tre$tip.label
   write.tree(tre,sprintf('/tmp/tree%d.nwk',tag))
   write.table(sts,sprintf('/tmp/dates%d.csv',tag),quote = F,col.names=length(sts))
-  system(sprintf("lsd2 -i /tmp/tree%d.nwk -d /tmp/dates%d.csv -s %d -l -1> /dev/null",tag,tag,l))
+  system(sprintf("lsd2 -i /tmp/tree%d.nwk -d /tmp/dates%d.csv -s %d -l -1 -r a> /dev/null",tag,tag,l))
   lines=readLines(sprintf('/tmp/tree%d.nwk.result',tag))
   lines=lines[grep('tMRCA',lines)]
   lines=as.numeric(unlist(strsplit(lines, "[ ,]"))[c(3,6)])
-  res=list()
-  res$inputtree=tree
-  res$model='poisson'
-  res$rate=lines[1]*l
-  res$relax=0
-  res$rootdate=lines[2]
-  nrowtab=Ntip(tree)+Nnode(tree)
-  record = matrix(NA, 10, nrowtab*3 + 6)
-  colnames(record)<-c(rep(NA,nrowtab*3),'likelihood','mu','sigma','alpha','prior','root')
-  record[,'mu']=res$rate
-  record[,Ntip(tree)+1]=res$rootdate
-  res$record=record
-  res$tree=read.nexus(sprintf('/tmp/tree%d.nwk.result.date.nexus',tag))
-#  res$tree=multi2di(res$tree)
-  tree=reorderEdges(tree,res$tree)
-  res$tree$subs=tree$edge.length
-  res$tree$root.time=res$rootdate
-  res$algo='LSD'
-  class(res)<-'resDating'
-  return(res)
-}
-
-#' Date a tree using Rlsd2
-#'
-#' @param tree Tree to date
-#' @param dates Dates of leaves in the tree
-#' @param ... Passed on to Rlsd2::lsd2
-#'
-#' @return resDating object containing results of LSD analysis
-#'
-runRlsd2=function(tree,dates,...) {
-  tag=round(runif(1,1,1e8))
-  tre=tree
-  l=round(max(tree$edge.length)*1000)
-  tre$edge.length=tre$edge.length/l
-  sts=dates
-  names(sts)=tre$tip.label
-  write.tree(tre,sprintf('/tmp/tree%d.nwk',tag))
-  write.table(sts,sprintf('/tmp/dates%d.csv',tag),quote = F,col.names=length(sts))
-  o=capture.output(result <- Rlsd2::lsd2(inputTree=sprintf('/tmp/tree%d.nwk',tag), inputDate=sprintf('/tmp/dates%d.csv',tag),outFile = sprintf('/tmp/result%d',tag), seqLen=l,nullblen=-1,...))
-  res=list()
-  res$inputtree=tree
-  res$model='poisson'
-  res$rate=result$rate*l
-  res$relax=0
-  res$rootdate=result$tMRCA
-  nrowtab=Ntip(tree)+Nnode(tree)
-  record = matrix(NA, 10, nrowtab*3 + 6)
-  colnames(record)<-c(rep(NA,nrowtab*3),'likelihood','mu','sigma','alpha','prior','root')
-  record[,'mu']=res$rate
-  record[,Ntip(tree)+1]=res$rootdate
-  res$record=record
-  res$tree=read.nexus(sprintf('/tmp/result%d.date.nexus',tag))
-#  res$tree=multi2di(res$tree)
-  tree=reorderEdges(tree,res$tree)
-  res$tree$subs=tree$edge.length
-  res$tree$root.time=res$rootdate
-  res$algo='LSD'
-  class(res)<-'resDating'
+  rtd=read.nexus(sprintf('/tmp/tree%d.nwk.result.date.nexus',tag))
+  res=resDating(rtd,tree,algo='LSD',model='poisson',rate=lines[1]*l,relax=0,rootdate=lines[2])
   return(res)
 }
 
@@ -171,22 +95,15 @@ runRlsd2=function(tree,dates,...) {
 #' @return resDating object containing results of node.dating analysis
 #'
 runNodeDating=function(tree,dates,...) {
-  try(suppressWarnings(mu<-ape::estimate.mu(tree,dates)),silent=T)
+  try(suppressWarnings(tre<-rtt(unroot(tree),dates)),silent=T)
+  try(suppressWarnings(mu<-ape::estimate.mu(tre,dates)),silent=T)
   if (mu<=0) mu=0.01
-  suppressWarnings(d<-ape::estimate.dates(tree,dates,mu=mu))
-  res=list()
-  res$algo='node.dating'
-  res$model='poisson'
-  res$rate=mu
-  res$relax=0
-  res$rootdate=min(d)
-  dt=tree
+  suppressWarnings(d<-ape::estimate.dates(tre,dates,mu=mu))
+  dt=tre
   dt$subs=dt$edge.length
-  dt$root.time=res$rootdate
   for (i in 1:nrow(dt$edge)) dt$edge.length[i]=d[dt$edge[i,2]]-d[dt$edge[i,1]]
-  res$inputtree=tree
-  res$tree=dt
-  class(res)<-'resDating'
+  dt$root.time=min(d)
+  res=resDating(dt,tree,algo='node.dating',model='poisson',rate=mu,relax=0,rootdate=min(d))
   return(res)
 }
 
@@ -200,31 +117,17 @@ runNodeDating=function(tree,dates,...) {
 #'
 runTreeTime=function(tree,dates,...) {
   tag=round(runif(1,1,1e8))
-  tre=tree
+  tre=unroot(tree)
   l=round(max(tree$edge.length)*1000)
   tre$edge.length=tre$edge.length/l
   sts=dates
   names(sts)=tree$tip.label
   write.tree(tre,sprintf('/tmp/tree%d.nwk',tag))
   write.table(sts,sprintf('/tmp/dates%d.tsv',tag),quote = F,col.names='strain\tdate',sep='\t')
-  system(sprintf("treetime --tree /tmp/tree%d.nwk --dates /tmp/dates%d.tsv --sequence-length %d --keep-root --outdir /tmp/%d > /dev/null",tag,tag,l,tag))
-  res=list()
-  res$inputtree=tree
-  res$model='poisson'
-  res$rate=read.table(sprintf('/tmp/%d/molecular_clock.txt',tag))[1,1]*l
-  res$relax=0
-  res$tree=read.nexus(sprintf('/tmp/%d/timetree.nexus',tag))
-  res$rootdate=max(dates)-max(dist.nodes(res$tree)[Ntip(res$tree)+1,1:Ntip(res$tree)])
-  nrowtab=Ntip(tree)+Nnode(tree)
-  record = matrix(NA, 10, nrowtab*3 + 6)
-  colnames(record)<-c(rep(NA,nrowtab*3),'likelihood','mu','sigma','alpha','prior','root')
-  record[,'mu']=res$rate
-  record[,Ntip(tree)+1]=res$rootdate
-  res$record=record
-  tree=reorderEdges(tree,res$tree)
-  res$tree$subs=tree$edge.length
-  res$tree$root.time=res$rootdate
-  res$algo='TreeTime'
-  class(res)<-'resDating'
+  system(sprintf("treetime --tree /tmp/tree%d.nwk --dates /tmp/dates%d.tsv --sequence-length %d --outdir /tmp/%d > /dev/null",tag,tag,l,tag))
+  resrate=read.table(sprintf('/tmp/%d/molecular_clock.txt',tag))[1,1]*l
+  restree=read.nexus(sprintf('/tmp/%d/timetree.nexus',tag))
+  resrootdate=max(dates)-max(dist.nodes(restree)[Ntip(restree)+1,1:Ntip(restree)])
+  res=resDating(restree,tree,algo='TreeTime',model='poisson',rate=resrate,relax=0,rootdate=resrootdate)
   return(res)
 }

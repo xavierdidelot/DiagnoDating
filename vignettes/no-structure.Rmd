@@ -35,18 +35,19 @@ A root-to-tip regression analysis works perfectly:
 res=roottotip(tree,dates)
 ```
 
-The bactdate analysis also works perfectly:
+The BactDating analysis also works perfectly:
 
 ```{r}
+tree=unroot(tree)
 r=runDating(tree,dates,algo='BactDating')
-plot(r,'trace')
-plot(r,'treeCI',show.tip.label=F)
+BactDating:::plot.resBactDating(r,'trace')
+plot(r,show.tip.label=F)
 print(r)
 ```
 
 Analysis using LSD:
 ```{r}
-r=runDating(tree,dates,algo='LSD')
+r=runDating(unroot(tree),dates,algo='LSD')
 plot(r,show.tip.label=F)
 print(r)
 ```

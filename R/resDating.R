@@ -39,7 +39,7 @@ resDating = function(dt, phy, algo='Unknown', model='poisson', rate=10, relax=0,
     }
   }
   r$tree$subs=subs
-  if (sum(r$tree$subs)!=sum(phy$edge.length)) warning('Incorrect number of subs.')
+  if (abs(sum(r$tree$subs)-sum(phy$edge.length))>0.01) warning('Incorrect number of subs.')
   if (any(is.na(r$tree$subs))) warning('NAs in subs, maybe change in topology.')
   return(r)
 }
