@@ -61,13 +61,34 @@ over time, but it is also often used as the foundation for further analysis \cit
 of demographics \citep{Baele2016}, phylogeography \citep{Lemey2009} 
 or transmission between hosts \citep{Didelot2017}.
 
-There are several factors that can invalidate the results. 
-See \citep{tongComparisonMethodsEstimating2018} for a list.
-This includes the confounding effect that population structure can have on dating \citep{Murray2016}.
-It also includes any incorrect assumptions made when running a dating analysis, for example using an inappropriate clock model. 
+There are many factors that can invalidate the results of a dated phylogenetics analysis.
+This includes in particular the confounding effect that population structure can have on dating 
+\citep{Duchene2015a,Murray2016}. This is especially true when the substructures are 
+imbalanced \citep{ducheneTreeImbalanceCauses2015}, are sampled
+at different dates \citep{tongComparisonMethodsEstimating2018}, have different clock rates
+\citep{wertheimInconsistenciesEstimatingAge2012}  and when the population structure is strong 
+\citep{navascuesElevatedSubstitutionRate2009}. 
+More generally, any incorrect assumptions made by the model under which the dating analysis is performed
+can invalidate the results.
 
-Validation is not the same as model comparison \citep{Baele2012,Li2012,bouckaertBModelTestBayesianPhylogenetic2017}. 
-Also validation is not the same as testing significance of temporal signal \citep{Duchene2015a,Duchene2020}.
+One approach that has been used to ensure that there are no incorrect assumptions being made in the 
+model is to perform inference under multiple models and perform model comparison,
+typically by computing a Bayes Factor \citep{Baele2012,Li2012,bouckaertBModelTestBayesianPhylogenetic2017}. 
+However, this requires multiple runs under different models, and only provides a relative measure
+of model appropriateness, with no indication of how good the best model actually is in absolute terms.
+Another related line of research involves testing the significance of the temporal signal 
+\citep{Duchene2015a,Duchene2020}. This can be done for example by 
+comparing results with and without dates \citep{Rambaut2000} or by 
+randomizing the leaf dates \citep{Duchene2015a}. 
+
+Here we present an alternative approach, in which we seek to evaluate
+the correctness of an inference and detect if there are any reasons to believe that the inference is not valid.
+This approach is sometimes referred to as model checking, model diagnostics or model validation, 
+and it is complementary with the model comparison methodology mentioned above. 
+We use simulated datasets to demonstrate that this approach can detect a wide range of problems
+in the inference, including the aforementioned confounding effect of population structure
+\citep{Murray2016}. 
+We also demonstrate the usefulness of this approach in practice on real datasets.
 
 \section*{RESULTS}
 
