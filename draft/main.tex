@@ -22,9 +22,6 @@
 \usepackage{lineno}
 \linenumbers
 
-\def\packagename{ValidateDating}
-\def\packageurl{\texttt{https://github.com/xavierdidelot/ValidateDating}}
-
 \makeatletter
 \newcommand{\customlabel}[2]{
 \protected@write \@auxout {}{\string \newlabel {#1}{{#2}{}}}}
@@ -59,6 +56,10 @@ the internal nodes are aligned with the (typically inferred) dates of common anc
 Many tools exist to build dated phylogenies, either from a sequence alignment using for example BEAST \citep{Suchard2018} or BEAST2 \citep{Bouckaert2019}, or by
 dating the nodes of a standard phylogeny, using for example 
 LSD \citep{To2016}, node.dating \citep{Jones2017}, treedater \citep{Volz2017}, BactDating \citep{Didelot2018} and TreeTime \citep{Sagulenko2018}.
+The dated phylogeny is interesting in itself since it depicts the ancestral relationships of sampled genomes
+over time, but it is also often used as the foundation for further analysis \citep{Didelot2022}, such as inference
+of demographics \citep{Baele2016}, phylogeography \citep{Lemey2009} 
+or transmission between hosts \citep{Didelot2017}.
 
 There are several factors that can invalidate the results. 
 See \citep{tongComparisonMethodsEstimating2018} for a list.
@@ -68,7 +69,7 @@ It also includes any incorrect assumptions made when running a dating analysis, 
 Validation is not the same as model comparison \citep{Baele2012,Li2012,bouckaertBModelTestBayesianPhylogenetic2017}. 
 Also validation is not the same as testing significance of temporal signal \citep{Duchene2015a,Duchene2020}.
 
-\section*{MATERIALS AND METHODS}
+\section*{RESULTS}
 
 \subsection*{General approach}
 
@@ -81,8 +82,38 @@ A\hspace*{6cm}B\hspace*{6cm}~\\
 \label{fig:approach}}
 \end{figure}
 
-Comparison of dated phylogeny $\mathcal{D}$ with undated phylogeny $\mathcal{L}$. Especially makes sense when dated phylogeny is built from the undated phylogeny (Figure \ref{fig:approach}A) and so we focus on this here. But can also be used for methods that build a dated phylogeny directly from the alignment (Figure \ref{fig:approach}B).
+We want to validate a dated phylogeny $\mathcal{D}$, previously constructed using
+any method. We propose to do so by comparing the dated phylogeny $\mathcal{D}$ with 
+an undated phylogeny $\mathcal{L}$. 
+If the method used to construct $\mathcal{D}$ involved dating the nodes of an undated
+phylogeny, for example TreeTime \citep{Sagulenko2018} or treedater \citep{Volz2017}, 
+then this is readily available for validation and we therefore focus here on this case
+(Figure \ref{fig:approach}A). However, the validation methodology
+below can also be applied to methods that build a dated phylogeny directly from the alignment
+such as BEAST \citep{Suchard2018},
+simply by constructing a separate undated phylogeny from the same alignment using
+for example PhyML \citep{Guindon2010} or RAxML \citep{Stamatakis2015} 
+(Figure \ref{fig:approach}B). For each branch in the dated phylogeny $\mathcal{D}$ we can
+consider its inferred length, the number of substitutions happening on that branch in the standard phylogeny
+$\mathcal{L}$, and the model and parameters used when building the dated phylogeny $\mathcal{D}$,
+in order to compute a residual for that branch (see Methods). If the inference is valid,
+these residuals will follow their theoretical distribution
+\citep{coxGeneralDefinitionResiduals1968,dunnRandomizedQuantileResiduals1996}. 
+We use this property as a way to test the validity of the dated phylogeny $\mathcal{D}$.
 
+\subsection*{Motivating example}
+
+TODO. Maybe using simulation with relaxed clock model and inference with strict clock model.
+
+\section*{DISCUSSION}
+
+TODO
+
+\section*{MATERIALS AND METHODS}
+
+\subsection*{Computation of residuals}
+
+We want to validate a dated phylogeny $\mathcal{D}$ by comparison with an undated phylogeny $\mathcal{L}$. 
 Let $d_i$ be the duration of a given branch in $\mathcal{D}$ and $l_i$ be the number of substitutions on the corresponding branch of $\mathcal{L}$, that is the branch that separates the leaves in the same way. There is a unique corresponding branch in $\mathcal{L}$ for all branches in $\mathcal{D}$ except for the two branches $a$ and $b$ connected to the root of $\mathcal{D}$ for which there is only a single corresponding branch $x$. We therefore split the substitutions on $x$ proportionally between the two branches $a$ and $b$ by defining:
 
 \begin{equation}
@@ -90,17 +121,24 @@ l_a = \frac{l_x d_a}{d_a+d_b}\mathrm{~and~}l_b = \frac{l_x d_b}{d_a+d_b}
 \end{equation}
 
 The distribution of $l_i$ given $d_i$ is given by the molecular clock model. For example, if we consider a discrete strict clock model \citep{Zuckerkandl1962} with rate $\mu$ then we have that 
-substitutions occur on the branch as a Poisson process with rate $\mu$ and therefore:
+substitutions occur on the branches as a Poisson process with rate $\mu$ and therefore:
 
 \begin{equation}
 l_i \sim \mathrm{Poisson}(d_i \mu)
-\label{eq:strict}
+\label{eq:sc}
 \end{equation}
 
-In this case the distribution of $l_i$ is discrete, but let us for know consider that the distribution
+In this case the distribution of $l_i$ is discrete, but let us for now consider that the distribution
 is continuous and we will return later to the discrete case. 
 Several examples of continuous clock models have been previously described \citep{Didelot2021},
-but here we consider the general case where
+including a continuous version of the strict clock model based on a Gamma process:
+
+\begin{equation}
+l_i \sim \mathrm{Gamma}(d_i \mu,1)
+\label{eq:csc}
+\end{equation}
+
+Let us consider the general case where
 $F_i(l_i)$ is the cumulative distribution function of $l_i$ given $d_i$.
 Let $u_i$ denote the uniform residual for the observation $l_i$, defined as:
 
@@ -109,10 +147,12 @@ u_i=F_i(l_i)=p(L_i\leq l_i|d_i)
 \label{eq:unif-resid}
 \end{equation}
 
-If the model is valid, then the uniform residual $u_i$ 
+If the inference is valid, then the uniform residual $u_i$ 
 should be distributed as Unif(0,1), because for any random variable $X$ with cumulative distribution function $F$ we have that $U=F(X)$ is Unif(0,1). 
-We can also define normal residuals $n_i$, analogous to the residuals commonly used in 
-regression models, by transforming with the inverse of the cumulative distribution function $\Phi$ 
+We can also define the normal residuals $n_i$, analogous to the residuals commonly used in 
+regression models \citep{coxGeneralDefinitionResiduals1968,dunnRandomizedQuantileResiduals1996}. 
+The normal residuals are obtained 
+by transforming the uniform residuals with the inverse of the cumulative distribution function $\Phi$ 
 of a Normal(0,1) random variable:
 
 \begin{equation}
@@ -120,18 +160,49 @@ n_i=\Phi^{-1}(u_i)
 \label{eq:norm-resid}
 \end{equation}
 
-If the model is valid, then the normal residual $n_i$ should be distribution
-as Norm(0,1). 
+If the inference is valid, then the normal residual $n_i$ should be distributed
+as Norm(0,1). The uniform and normal residuals above can be computed directly
+when the clock model is continuous (for example Equation \ref{eq:csc}) but when
+the clock model is discrete (for example Equation \ref{eq:sc}) we need to make the following
+adjustment \citep{brockwellUniversalResidualsMultivariate2007,lauNewModelDiagnostics2014}:
 
-TODO DISCRETE CASE
+\begin{equation}
+u_i \sim \mathrm{Unif}(F_i(l_i),F_i(l_i+1))
+\end{equation}
 
-\section*{RESULTS}
+\subsection*{Analysis of residuals}
+
+After computation of the uniform residuals $u_i$ and normal residuals $n_i$,
+we use several methods to assess the validity of the dated phylogeny inference.
+The uniform residuals $u_i$ can be plotted as a histogram to compare their
+distribution with the theoretical Unif(0,1). The normal residuals $n_i$ can be plotted
+as a histogram to compare their distribution with the theoretical Norm(0,1).
+A quantile-quantile plot (qq-plot) can be used to compare the distribution of the residuals
+to their theoretical distribution.
+
+Currently using Shapiro-Wilk test for normality combined with Kolmogorov-Smirnov Test.
+The former is more powerful to test Normality, but only tests if Normal, not if Normal(0,1),
+hence combination with latter.
+
+Note that in \citep{lauNewModelDiagnostics2014} they use an Anderson-Darling test and cite
+Lewis PAW. 1961 Distribution of the AndersonDarling statistic. Ann. Math. Stat. 32, 1118 –1124.
+
+Use of residuals in Hidden Markov Models \citep{zucchini2009hidden,buckbyModelCheckingHidden2020}.
+
+\subsection*{Data simulation}
 
 TODO
 
-\section*{DISCUSSION}
+\subsection*{Real data}
 
 TODO
+
+\subsection*{Implementation}
+
+We implemented the analytical methods described in this paper in a 
+new R package entitled \emph{ValidateDating} which is available
+at \url{https://github.com/xavierdidelot/ValidateDating} for R version 3.5 or later. 
+All code and data needed to replicate the results are included in the ``run'' directory of the \emph{ValidateDating} repository.
 
 \section*{ACKNOWLEDGEMENTS}
 
