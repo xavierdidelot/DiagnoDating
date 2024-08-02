@@ -77,7 +77,7 @@ print(testResid(r))
 #>  Exact one-sample Kolmogorov-Smirnov test
 #> 
 #> data:  p
-#> D = 0.17949, p-value = 0.5486
+#> D = 0.19288, p-value = 0.4581
 #> alternative hypothesis: two-sided
 ```
 

@@ -1,4 +1,4 @@
-\documentclass{article}
+ \documentclass{article}
 \usepackage[utf8]{inputenc}
 \usepackage[top=3cm, bottom=3cm, left=3cm,right=3cm]{geometry}
 %\usepackage[numbers,round]{natbib}
@@ -72,8 +72,6 @@ Also validation is not the same as testing significance of temporal signal \cite
 
 \subsection*{General approach}
 
-Comparison of dated phylogeny with undated phylogeny. Especially makes sense when dated phylogeny is built from the undated phylogeny (Figure \ref{fig:approach}A) and so we focus on this here. But can also be used for methods that build a dated phylogeny directly from the alignment (Figure \ref{fig:approach}B).
-
 \begin{figure}[t!]
 \begin{center}
 A\hspace*{6cm}B\hspace*{6cm}~\\
@@ -82,6 +80,50 @@ A\hspace*{6cm}B\hspace*{6cm}~\\
 \caption{(A) General approach for validation of a dated phylogeny built by dating the nodes of a standard phylogeny. (B) General approach for validation of a dated phylogeny built directly from a sequence alignment.
 \label{fig:approach}}
 \end{figure}
+
+Comparison of dated phylogeny $\mathcal{D}$ with undated phylogeny $\mathcal{L}$. Especially makes sense when dated phylogeny is built from the undated phylogeny (Figure \ref{fig:approach}A) and so we focus on this here. But can also be used for methods that build a dated phylogeny directly from the alignment (Figure \ref{fig:approach}B).
+
+Let $d_i$ be the duration of a given branch in $\mathcal{D}$ and $l_i$ be the number of substitutions on the corresponding branch of $\mathcal{L}$, that is the branch that separates the leaves in the same way. There is a unique corresponding branch in $\mathcal{L}$ for all branches in $\mathcal{D}$ except for the two branches $a$ and $b$ connected to the root of $\mathcal{D}$ for which there is only a single corresponding branch $x$. We therefore split the substitutions on $x$ proportionally between the two branches $a$ and $b$ by defining:
+
+\begin{equation}
+l_a = \frac{l_x d_a}{d_a+d_b}\mathrm{~and~}l_b = \frac{l_x d_b}{d_a+d_b}
+\end{equation}
+
+The distribution of $l_i$ given $d_i$ is given by the molecular clock model. For example, if we consider a discrete strict clock model \citep{Zuckerkandl1962} with rate $\mu$ then we have that 
+substitutions occur on the branch as a Poisson process with rate $\mu$ and therefore:
+
+\begin{equation}
+l_i \sim \mathrm{Poisson}(d_i \mu)
+\label{eq:strict}
+\end{equation}
+
+In this case the distribution of $l_i$ is discrete, but let us for know consider that the distribution
+is continuous and we will return later to the discrete case. 
+Several examples of continuous clock models have been previously described \citep{Didelot2021},
+but here we consider the general case where
+$F_i(l_i)$ is the cumulative distribution function of $l_i$ given $d_i$.
+Let $u_i$ denote the uniform residual for the observation $l_i$, defined as:
+
+\begin{equation}
+u_i=F_i(l_i)=p(L_i\leq l_i|d_i)
+\label{eq:unif-resid}
+\end{equation}
+
+If the model is valid, then the uniform residual $u_i$ 
+should be distributed as Unif(0,1), because for any random variable $X$ with cumulative distribution function $F$ we have that $U=F(X)$ is Unif(0,1). 
+We can also define normal residuals $n_i$, analogous to the residuals commonly used in 
+regression models, by transforming with the inverse of the cumulative distribution function $\Phi$ 
+of a Normal(0,1) random variable:
+
+\begin{equation}
+n_i=\Phi^{-1}(u_i)
+\label{eq:norm-resid}
+\end{equation}
+
+If the model is valid, then the normal residual $n_i$ should be distribution
+as Norm(0,1). 
+
+TODO DISCRETE CASE
 
 \section*{RESULTS}
 
