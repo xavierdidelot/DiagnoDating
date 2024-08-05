@@ -85,6 +85,13 @@ Here we present an alternative approach, in which we seek to evaluate
 the correctness of an inference and detect if there are any reasons to believe that the inference is not valid.
 This approach is sometimes referred to as model checking, model diagnostics or model validation, 
 and it is complementary with the model comparison methodology mentioned above. 
+We study the distribution of residuals after fitting a model, following methodology
+reminiscent of regression models
+\citep{coxGeneralDefinitionResiduals1968,dunnRandomizedQuantileResiduals1996},
+but also previously applied more generally for example to
+epidemic models \citep{lauNewModelDiagnostics2014} or 
+ Hidden Markov Models \citep{zucchini2009hidden,buckbyModelCheckingHidden2020}.
+
 We use simulated datasets to demonstrate that this approach can detect a wide range of problems
 in the inference, including the aforementioned confounding effect of population structure
 \citep{Murray2016}. 
@@ -108,7 +115,7 @@ any method. We propose to do so by comparing the dated phylogeny $\mathcal{D}$ w
 an undated phylogeny $\mathcal{L}$. 
 If the method used to construct $\mathcal{D}$ involved dating the nodes of an undated
 phylogeny, for example TreeTime \citep{Sagulenko2018} or treedater \citep{Volz2017}, 
-then this is readily available for validation and we therefore focus here on this case
+then this is readily available for validation and we therefore focus on this case throughout this article
 (Figure \ref{fig:approach}A). However, the validation methodology
 below can also be applied to methods that build a dated phylogeny directly from the alignment
 such as BEAST \citep{Suchard2018},
@@ -124,7 +131,17 @@ We use this property as a way to test the validity of the dated phylogeny $\math
 
 \subsection*{Motivating example}
 
-TODO. Maybe using simulation with relaxed clock model and inference with strict clock model.
+\begin{figure}[t!]
+\begin{center}
+A\hspace*{6cm}B\hspace*{6cm}~\\
+\includegraphics[width=10cm]{example.pdf}
+\end{center}
+\caption{(A) TODO.
+\label{fig:example}}
+\end{figure}
+
+Using simulation with relaxed clock model and inference with strict clock model.
+
 
 \section*{DISCUSSION}
 
@@ -170,7 +187,9 @@ u_i=F_i(l_i)=p(L_i\leq l_i|d_i)
 
 If the inference is valid, then the uniform residual $u_i$ 
 should be distributed as Unif(0,1), because for any random variable $X$ with cumulative distribution function $F$ we have that $U=F(X)$ is Unif(0,1). 
-We can also define the normal residuals $n_i$, analogous to the residuals commonly used in 
+However, it is difficult to assess how close to zero or one a value needs to be in order to be 
+an outlier. 
+We therefore define the normal residuals $n_i$, analogous to the residuals commonly used in 
 regression models \citep{coxGeneralDefinitionResiduals1968,dunnRandomizedQuantileResiduals1996}. 
 The normal residuals are obtained 
 by transforming the uniform residuals with the inverse of the cumulative distribution function $\Phi$ 
@@ -182,7 +201,8 @@ n_i=\Phi^{-1}(u_i)
 \end{equation}
 
 If the inference is valid, then the normal residual $n_i$ should be distributed
-as Norm(0,1). The uniform and normal residuals above can be computed directly
+as Norm(0,1) which is more convenient to work with than the Unif(0,1) for uniform residuals.
+The uniform and normal residuals above can be computed directly
 when the clock model is continuous (for example Equation \ref{eq:csc}) but when
 the clock model is discrete (for example Equation \ref{eq:sc}) we need to make the following
 adjustment \citep{brockwellUniversalResidualsMultivariate2007,lauNewModelDiagnostics2014}:
@@ -196,23 +216,40 @@ u_i \sim \mathrm{Unif}(F_i(l_i),F_i(l_i+1))
 After computation of the uniform residuals $u_i$ and normal residuals $n_i$,
 we use several methods to assess the validity of the dated phylogeny inference.
 The uniform residuals $u_i$ can be plotted as a histogram to compare their
-distribution with the theoretical Unif(0,1). The normal residuals $n_i$ can be plotted
+distribution with the theoretical Unif(0,1) distribution, but as previously noted this can
+be difficult to interpret. We therefore prefer to use the normal residuals $n_i$ which can be plotted
 as a histogram to compare their distribution with the theoretical Norm(0,1).
 A quantile-quantile plot (qq-plot) can be used to compare the distribution of the residuals
 to their theoretical distribution.
 
-Currently using Shapiro-Wilk test for normality combined with Kolmogorov-Smirnov Test.
-The former is more powerful to test Normality, but only tests if Normal, not if Normal(0,1),
-hence combination with latter.
-
-Note that in \citep{lauNewModelDiagnostics2014} they use an Anderson-Darling test and cite
-Lewis PAW. 1961 Distribution of the AndersonDarling statistic. Ann. Math. Stat. 32, 1118 –1124.
-
-Use of residuals in Hidden Markov Models \citep{zucchini2009hidden,buckbyModelCheckingHidden2020}.
+For testing not sure yet what do use. Options include:
+\begin{itemize}
+\item Shapiro-Wilk test for normality. Usually found to be most powerful test of normality.
+But performs composite testing only (ie tests if Normal, not if standard Normal)
+\item Kolmogorov-Smirnov test, specific against standard Normal but not very powerful.
+\item Anderson-Darling test \citep{lewis1961distribution} in package nortest is composite.
+\item Anderson-Darling test in DescTools is simple hypothesis testing, ie specifically
+against standard normal.   
+\item Note that Anderson-Darling was used in \citep{lauNewModelDiagnostics2014} but not
+sure which one.
+\end{itemize}
 
 \subsection*{Data simulation}
 
 TODO
+
+Some simulations using DetectImports \citep{Didelot2022detectimports}.
+
+Some simulations using Master \citep{Vaughan2013} to simulate under the structured coalescent model \citep{Nordborg1997}.
+
+Some simulations using mlesky \citep{Didelot2023mlesky} to simulate each population with non-constant population size. The size of the $j$-th population follows a previously studied model of clonal expansion \citep{Helekal2021}:
+
+\begin{equation}
+N_j(t)=\frac{M_j(t-s_j)^2}{h_j^2+(t-s_j)^2}[t \geq s_j]
+\end{equation}
+
+Note that the square brackets are Iverson brackets. Each population starts at time $s_j$ with size $N(s_j)=0$ and grows logistically up to its maximum $N_j(\infty)=M_j$, with $h_j$ being the time taken to reach half of this since $N_j(s_j+h_j)=M_j/2$. 
+
 
 \subsection*{Real data}
 
