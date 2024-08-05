@@ -4,10 +4,18 @@
 \alias{plotProbBranches}
 \title{Plot probability of branches}
 \usage{
-plotProbBranches(x)
+plotProbBranches(x, sub = NA, color = T, minProb = NA, ...)
 }
 \arguments{
 \item{x}{object of class resDating}
+
+\item{sub}{Plot only one of the four subplots}
+
+\item{color}{Whether to use colors to show probabilities}
+
+\item{minProb}{Minimum probability to show as red}
+
+\item{...}{Passed on}
 }
 \description{
 Plot probability of branches

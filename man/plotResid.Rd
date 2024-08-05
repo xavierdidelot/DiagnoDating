@@ -4,10 +4,14 @@
 \alias{plotResid}
 \title{Plot pseudo-residuals}
 \usage{
-plotResid(x)
+plotResid(x, sub = NA, ...)
 }
 \arguments{
 \item{x}{object of class resDating}
+
+\item{sub}{Plot only one of the four subplots}
+
+\item{...}{Passed on}
 }
 \description{
 Plot pseudo-residuals

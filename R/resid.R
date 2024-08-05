@@ -54,60 +54,83 @@ calcProbBranches = function(x,cumul=FALSE,log=FALSE) {
 #' Plot probability of branches
 #'
 #' @param x object of class resDating
+#' @param sub Plot only one of the four subplots
+#' @param color Whether to use colors to show probabilities
+#' @param minProb Minimum probability to show as red
+#' @param ... Passed on
 #' @export
 #'
-plotProbBranches = function(x) {
+plotProbBranches = function(x,sub=NA,color=T,minProb=NA,...) {
   ll=calcProbBranches(x,log=T)
   ll[is.infinite(ll)]=NA
   ll=pmin(ll,log(1))
+  if (!is.na(minProb)) ll=pmax(ll,log(minProb))
 
   xs=x$tree$edge.length
   ys=x$tree$subs
   ma=max(xs)*1.05
   rate=x$rate
   relax=x$relax
-  old.par=par(no.readonly = T)
-  par(mfrow=c(1,2))
-  plot(c(0,ma),c(0,rate*ma),type='l',xlab='Branch duration',ylab='Substitutions',xaxs='i',yaxs='i',xlim=c(0,ma),ylim=c(0,max(ys)*1.05))
-  par(xpd=F)
-  xss=seq(0,ma,ma/1000)
-  plim=0.05
+  if (is.na(sub)) old.par=par(no.readonly = T)
+  if (is.na(sub)) par(mfrow=c(1,2))
+  if ((is.na(sub)) || sub==1) {
+    def_args=list(x=c(0,ma),y=c(0,rate*ma),type='l',xlab='Branch duration',ylab='Substitutions',xaxs='i',yaxs='i',xlim=c(0,ma),ylim=c(0,max(ys)*1.05))
+    cl=as.list(match.call())[-1]
+    cl=cl[setdiff(names(cl),c('x','sub','color','minProb'))]
+    args=c(cl,def_args[!names(def_args) %in% names(cl)])
+    do.call("plot",args)
+    par(xpd=F)
+    xss=seq(0,ma,ma/1000)
+    plim=0.05
 
-  if (x$model=='poisson') {
-    lines(xss,qpois(  plim/2,xss*rate),lty='dashed')
-    lines(xss,qpois(1-plim/2,xss*rate),lty='dashed')
-  }
+    if (x$model=='poisson') {
+      lines(xss,qpois(  plim/2,xss*rate),lty='dashed')
+      lines(xss,qpois(1-plim/2,xss*rate),lty='dashed')
+    }
 
-  if (x$model=='arc') {
-    lines(xss,qnbinom(  plim/2,size=xss*rate/relax,prob=1/(1+relax)),lty='dashed')
-    lines(xss,qnbinom(1-plim/2,size=xss*rate/relax,prob=1/(1+relax)),lty='dashed')
-  }
+    if (x$model=='arc') {
+      lines(xss,qnbinom(  plim/2,size=xss*rate/relax,prob=1/(1+relax)),lty='dashed')
+      lines(xss,qnbinom(1-plim/2,size=xss*rate/relax,prob=1/(1+relax)),lty='dashed')
+    }
 
-  if (x$model=='strictgamma' || x$model=='carc') {
-    lines(xss,qgamma(  plim/2,shape=xss*rate/(1+relax),scale=1+relax),lty='dashed')
-    lines(xss,qgamma(1-plim/2,shape=xss*rate/(1+relax),scale=1+relax),lty='dashed')
+    if (x$model=='strictgamma' || x$model=='carc') {
+      lines(xss,qgamma(  plim/2,shape=xss*rate/(1+relax),scale=1+relax),lty='dashed')
+      lines(xss,qgamma(1-plim/2,shape=xss*rate/(1+relax),scale=1+relax),lty='dashed')
+    }
   }
 
   normed=(ll-min(ll,na.rm=T))/(max(ll,na.rm=T)-min(ll,na.rm=T))
   normed2=normed;normed2[is.na(normed2)]=1
   cols=ifelse(is.na(normed),grDevices::rgb(0,1,0),grDevices::rgb(1-normed2,0,normed2))
   base=seq(1,0,-0.1)
-  legend("topleft",cex=0.5,legend=sprintf('%.3f',exp(base*(max(ll,na.rm=T)-min(ll,na.rm=T))+min(ll,na.rm=T))),pch=19,col=grDevices::rgb(1-base,0,base))
-  par(xpd=NA)
-  points(xs,ys,pch=19,col=cols)
-  par(xpd=F)
+  if (color==F) cols=rep('black',length(cols))
 
-  plot(x$tree,show.tip.label = F,edge.color=cols)
-  axisPhylo(1,backward = F)
-  par(old.par)
+  if ((is.na(sub)) || sub==1) {
+    if (color) legend("topleft",cex=0.5,legend=sprintf('%.3f',exp(base*(max(ll,na.rm=T)-min(ll,na.rm=T))+min(ll,na.rm=T))),pch=19,col=grDevices::rgb(1-base,0,base))
+    par(xpd=NA)
+    points(xs,ys,pch=19,col=cols)
+    par(xpd=F)
+  }
+
+  if (is.na(sub) || sub==2) {
+    def_args=list(x=x$tree,show.tip.label = F,edge.color=cols)
+    cl=as.list(match.call())[-1]
+    cl=cl[setdiff(names(cl),c('x','sub','color','minProb'))]
+    args=c(cl,def_args[!names(def_args) %in% names(cl)])
+    do.call("plot",args)
+    axisPhylo(1,backward = F)
+  }
+  if (is.na(sub)) par(old.par)
 }
 
 #' Plot pseudo-residuals
 #'
 #' @param x object of class resDating
+#' @param sub Plot only one of the four subplots
+#' @param ... Passed on
 #' @export
 #'
-plotResid = function(x) {
+plotResid = function(x,sub=NA,...) {
   p=calcProbBranches(x,cumul=T)#uniform pseudo-residual
   xs=x$tree$edge.length
   if (any(p==0 | p==1)) {
@@ -119,35 +142,58 @@ plotResid = function(x) {
   n=qnorm(p)#normal pseudo-residual
   mi=min(min(n),-3)
   ma=max(max(n),3)
-  old.par=par(no.readonly = T)
-  par(mfrow=c(2,2))
-  hist(p,xlab='',main='Uniform pseudo-residuals',freq=F)
-  abline(1,0,lty=3)
-
+  if (is.na(sub)) old.par=par(no.readonly = T)
+  if (is.na(sub)) par(mfrow=c(2,2))
+  if (is.na(sub) || sub==1) {
+    def_args=list(x=p,xlab='',main='Uniform pseudo-residuals',freq=F)
+    cl=as.list(match.call())[-1]
+    cl=cl[setdiff(names(cl),c('x','sub'))]
+    args=c(cl,def_args[!names(def_args) %in% names(cl)])
+    do.call("hist",args)
+    abline(1,0,lty=3)
+  }
   o=order(xs)
-  plot(n[o],xlab='Branches in increasing order of duration',ylab='',main='Normal pseudo-residuals',ylim=c(mi,ma))
-  abline(h=qnorm(c(0.005,0.025,0.5,0.975,0.995)),lty=3)
 
-  hist(n,xlab='',main='Normal pseudo-residuals',freq=F,xlim=c(mi,ma))
-  xs=seq(mi,ma,(ma-mi)/1000)
-  par(xpd=NA)
-  lines(xs,dnorm(xs),lty=3)
-  par(xpd=F)
+  if (is.na(sub) || sub==2) {
+    def_args=list(x=n[o],xlab='Branches in increasing order of duration',ylab='',main='Normal pseudo-residuals',ylim=c(mi,ma))
+    cl=as.list(match.call())[-1]
+    cl=cl[setdiff(names(cl),c('x','sub'))]
+    args=c(cl,def_args[!names(def_args) %in% names(cl)])
+    do.call("plot",args)
+    abline(h=qnorm(c(0.005,0.025,0.5,0.975,0.995)),lty=3)
+  }
 
-  P <- ppoints(length(n))
-  z=qnorm(P)
-  plot(z, sort(n),xlab='Theoretical quantiles',ylab='Sample quantiles', main = "Normal Q-Q Plot",xlim=c(mi,ma),ylim=c(mi,ma))
-  P1000 = ppoints(1000)
-  z=qnorm(P1000)
-  grid(lty=1)
-  abline(0,1,lty=3)
-  SE <- (1/dnorm(z))*sqrt(P1000*(1 - P1000)/length(n))
-  upper <- z+SE*1.959964
-  lower <- z-SE*1.959964
-  lines(z, upper, lty=3)
-  lines(z, lower, lty=3)
+  if (is.na(sub) || sub==3) {
+    def_args=list(x=n,xlab='',main='Normal pseudo-residuals',freq=F,xlim=c(mi,ma))
+    cl=as.list(match.call())[-1]
+    cl=cl[setdiff(names(cl),c('x','sub'))]
+    args=c(cl,def_args[!names(def_args) %in% names(cl)])
+    do.call("hist",args)
+    xs=seq(mi,ma,(ma-mi)/1000)
+    par(xpd=NA)
+    lines(xs,dnorm(xs),lty=3)
+    par(xpd=F)
+  }
 
-  par(old.par)
+  if (is.na(sub) || sub==4) {
+    P <- ppoints(length(n))
+    z=qnorm(P)
+    def_args=list(x=z,y=sort(n),xlab='Theoretical quantiles',ylab='Sample quantiles', main = "Normal Q-Q Plot",xlim=c(mi,ma),ylim=c(mi,ma))
+    cl=as.list(match.call())[-1]
+    cl=cl[setdiff(names(cl),c('x','sub'))]
+    args=c(cl,def_args[!names(def_args) %in% names(cl)])
+    do.call("plot",args)
+    P1000 = ppoints(1000)
+    z=qnorm(P1000)
+    grid(lty=1)
+    abline(0,1,lty=3)
+    SE <- (1/dnorm(z))*sqrt(P1000*(1 - P1000)/length(n))
+    upper <- z+SE*1.959964
+    lower <- z-SE*1.959964
+    lines(z, upper, lty=3)
+    lines(z, lower, lty=3)
+  }
+  if (is.na(sub)) par(old.par)
 }
 
 #' Test on pseudo-residuals
