@@ -7,6 +7,12 @@ dates=runif(100,2010,2020)
 dt=simcoaltree(dates,alpha=1)
 
 tree=simobsphy(dt,mu=10,sigma=5,model='arc')
+
+pdf('exampleS1.pdf',12,8)
+roottotip(initRoot(tree,dates),dates)
+dev.off()
+system('open exampleS1.pdf')
+
 tree=unroot(midpoint(tree))
 r0=resDating(dt,tree,rate=10,model = 'poisson')
 r=runDating(tree,dates,algo='BactDating',model='poisson',showProgress=T)
@@ -29,3 +35,6 @@ plotResid(r2,4,main='',xlim=c(-3,3),ylim=c(-4,4))
 fig_label('F',cex=2)
 dev.off()
 system('open example.pdf')
+
+class(r)<-'resBactDating';print(r)
+class(r2)<-'resBactDating';print(r2)
