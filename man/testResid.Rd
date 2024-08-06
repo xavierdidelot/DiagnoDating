@@ -4,10 +4,12 @@
 \alias{testResid}
 \title{Test on pseudo-residuals}
 \usage{
-testResid(x)
+testResid(x, test = 1)
 }
 \arguments{
 \item{x}{object of class resDating}
+
+\item{test}{which test to use: 1 for Anderson-Darling simple test (default), 2 for Kolmogorov-Smirnov simple test, 3 for Shapiro-Wilk composite test}
 }
 \description{
 Test on pseudo-residuals

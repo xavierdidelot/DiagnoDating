@@ -199,16 +199,21 @@ plotResid = function(x,sub=NA,...) {
 #' Test on pseudo-residuals
 #'
 #' @param x object of class resDating
+#' @param test which test to use: 1 for Anderson-Darling simple test (default), 2 for Kolmogorov-Smirnov simple test, 3 for Shapiro-Wilk composite test
 #' @export
 #'
-testResid=function(x) {
+testResid=function(x,test=1) {
   p=calcProbBranches(x,cumul=T)#uniform pseudo-residual
   if (any(p==0 | p==1)) {
     p=p[which(p!=0 & p!=1)]
     warning('Ignoring impossible branches.')
   }
   n=qnorm(p)#normal pseudo-residual
-  r1=shapiro.test(n)#tests if Normal but not if Normal(0,1)
-  r2=ks.test(p,punif,min=0,max=1)#this is same as ks.test(n,pnorm,mean=0,sd=1)
-  if (r1$p.value<r2$p.value) return(r1) else return(r2)
+  if (test==1) r=DescTools::AndersonDarlingTest(n,null='pnorm',mean=0,sd=1)
+  #the above is same as DescTools::AndersonDarlingTest(p,null='punif',min=0,max=1)
+  #and also same as ADGofTest::ad.test(n,pnorm)
+  if (test==2) r=ks.test(n,pnorm,mean=0,sd=1)
+  #the above is same as ks.test(p,punif,min=0,max=1)
+  if (test==3) r=shapiro.test(n)
+  return(r)
 }
