@@ -1,5 +1,5 @@
 
-*.pdf
+run/*.pdf
 .Rproj.user
 .Rhistory
 .DS_Store
@@ -12,5 +12,7 @@ draft/main.bbl
 draft/main.blg
 draft/main.log
 draft/main.out
+draft/main.pdf
 draft/main.synctex.gz
 draft/scr.sh
+tests/testthat/Rplots.pdf

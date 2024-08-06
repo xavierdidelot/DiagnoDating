@@ -13,7 +13,7 @@ Suggests: knitr,
     coda,
     vegan,
     rmarkdown,
-    Rlsd2,
+    DescTools,
     mlesky,
     treedater,
     treeio
