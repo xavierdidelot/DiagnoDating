@@ -161,7 +161,7 @@ We applied BactDating \citep{Didelot2018} to reconstruct the dated tree,
 incorrectly assuming a strict clock model (Equation \ref{eq:sc}).
 The clock rate was estimated to be $\mu=10.5$ [9.4;11.6] and the root date 
 2008.6 [2008.1;2009.1] which is approximately correct.
-However, the residuals for the branches were not distributed as Norm(0,1) (Figure \ref{fig:example}C)
+However, the residuals for the branches were not distributed as Normal(0,1) (Figure \ref{fig:example}C)
 and a QQ plot revealed significant deviation (Figure \ref{fig:example}D). 
 The Anderson-Darling test rejects the hypothesis of standard normality of the residuals ($p=3.03\times10^{-6}$).
 We repeated the same analysis incorrectly assuming a strict clock model using 
@@ -252,7 +252,7 @@ u_i=F_i(l_i)=p(L_i\leq l_i|d_i)
 \end{equation}
 
 If the inference is valid, then the uniform residual $u_i$ 
-should be distributed as Unif(0,1), because for any random variable $X$ with cumulative distribution function $F$ we have that $U=F(X)$ is Unif(0,1). 
+should be distributed as Uniform(0,1), because for any random variable $X$ with cumulative distribution function $F$ we have that $U=F(X)$ is Uniform(0,1). 
 However, it is difficult to assess how close to zero or one a value needs to be in order to be 
 an outlier. 
 We therefore define the normal residuals $n_i$, analogous to the residuals commonly used in 
@@ -267,11 +267,11 @@ n_i=\Phi^{-1}(u_i)
 \end{equation}
 
 If the inference is valid, then the normal residual $n_i$ should be distributed
-as Norm(0,1) which is more convenient to work with than the Unif(0,1) for uniform residuals.
+as Normal(0,1) which is more convenient to work with than the Uniform(0,1) for uniform residuals.
 The uniform and normal residuals above can be computed directly
 when the clock model is continuous (Equations \ref{eq:csc} and \ref{eq:carc}) but when
 the clock model is discrete (Equations \ref{eq:sc} and \ref{eq:arc}) we need to make the following
-adjustment \citep{brockwellUniversalResidualsMultivariate2007,lauNewModelDiagnostics2014}:
+adjustment \citep{dunnRandomizedQuantileResiduals1996,brockwellUniversalResidualsMultivariate2007,lauNewModelDiagnostics2014}:
 
 \begin{equation}
 u_i \sim \mathrm{Unif}(F_i(l_i),F_i(l_i+1))
@@ -282,9 +282,9 @@ u_i \sim \mathrm{Unif}(F_i(l_i),F_i(l_i+1))
 After computation of the uniform residuals $u_i$ and normal residuals $n_i$,
 we use several methods to assess the validity of the dated phylogeny inference.
 The uniform residuals $u_i$ can be plotted as a histogram to compare their
-distribution with the theoretical Unif(0,1) distribution, but as previously noted this can
+distribution with the theoretical Uniform(0,1) distribution, but as previously noted this can
 be difficult to interpret. We therefore prefer to use the normal residuals $n_i$ which can be plotted
-as a histogram to compare their distribution with the theoretical Norm(0,1).
+as a histogram to compare their distribution with the theoretical Normal(0,1).
 A quantile-quantile plot (QQ plot) can be used to compare the distribution of the residuals
 to their theoretical distribution.
 
