@@ -1,4 +1,4 @@
-library(confounding)
+library(ValidateDating)
 library(foreach)
 
 rm(list=ls())
@@ -6,7 +6,7 @@ rm(list=ls())
 cl <- parallel::makeCluster(parallel::detectCores() - 1, type = "PSOCK")
 doParallel::registerDoParallel(cl)
 
-allres <- foreach (rep = 1:100,.packages = c('ape','BactDating','confounding')) %dopar% {
+allres <- foreach (rep = 1:100,.packages = c('ape','BactDating','ValidateDating')) %dopar% {
   set.seed(rep)
   s=list(runif(30,2010,2010.1),runif(30,2010.1,2010.2),runif(30,2010.2,2010.3))
   dt=simStructure(popStarts=c(2009,2009,2009),samplingDates=s)
