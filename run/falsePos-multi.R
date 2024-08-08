@@ -25,3 +25,7 @@ allres <- foreach (rep = 1:100,.packages = c('ape','BactDating','ValidateDating'
 }
 parallel::stopCluster(cl)
 save.image('falsePos-multi.RData')
+
+rm(list=ls())
+load('falsePos-multi.RData')
+allres=t(matrix(unlist(allres),nrow=6))
