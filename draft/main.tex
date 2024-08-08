@@ -27,7 +27,7 @@
 \protected@write \@auxout {}{\string \newlabel {#1}{{#2}{}}}}
 \makeatother
 
-\renewcommand\footnote[2][]{\relax}
+%\renewcommand\footnote[2][]{\relax}
 
 \begin{document}
 {\Large Validation of dated phylogenies in microbial population genetics}
@@ -173,7 +173,7 @@ The clock rate estimated to be $\mu=11.3$ [8.8;14.1], the root date was 2008.9 [
 and the relaxation parameter was $\omega=6.4$ [4.2;8.9], all of which is approximately correct.
 The residuals looked approximately distributed as they should be both when plotting them against
 their theoretical distribution (Figure \ref{fig:example}E) and when constructing a QQ plot (Figure \ref{fig:example}F).
-The Anderson-Darling test did not reject the hypothesis of standard normality of the residuals ($p=0.632$).
+The Anderson-Darling test did not reject the hypothesis of standard normality of the residuals ($p=0.658$).
 
 \subsection*{Confounding effect of population structure}
 
@@ -229,9 +229,44 @@ by number of successes and probability of success. In the four models we have th
 $d_i \mu$. The variance of $l_i$ is equal to its mean in the two strict clock models, and equal to its mean 
 times $(1+\omega)$ in the two relaxed clock models.
 
+\subsection*{Sampling a dated phylogeny given its estimate}
+
+We want to validate a dated phylogeny $\mathcal{D}$ by comparison with an undated phylogeny $\mathcal{L}$. If the dated phylogeny $\mathcal{D}$ was sampled from its posterior distribution 
+for example using BactDating \citep{Didelot2018}, 
+then residuals can be calculated directly as described in the
+next subsection.
+\footnote{May be better to consider more than one sample and generate a distribution of p-values. But then could not show single residual value for each branch anymore.}
+If on the other hand $\mathcal{D}$ is the result of a maximum likelihood estimation,
+or a summary tree from the posterior distribution \citep{heledLookingTreesForest2013}, then 
+we need to generate a sample from the posterior before residuals can be computed.
+\footnote{Need to explain why, cf script resampling.R.}
+\footnote{Will assume below that the input dated phylogeny is maximum likelihood estimate, not a summary of the posterior sample, in which case it would be something like a maximum a-posteriori estimate and may need adjusting.}
+Let $\hat{d_i}$ be a branch length in $\mathcal{D}$, on which there are $l_i$ substitutions in the undated phylogeny $\mathcal{L}$. If $\hat{d_i}$ is a maximum likelihood estimate of $d_i$ then
+$\hat{d_i}=l_i/\mu$.
+Consider the discrete strict clock model (Equation \ref{eq:sc}) and that the prior of $d_i$ is:
+\begin{equation}
+d_i \sim \mathrm{Gamma}(k,\theta)
+\end{equation}
+We can ``guess'' the parameters of this prior using the 
+mean $m$ and variance $v$ of the $\hat{d_i}$ for all $i$
+and applying $k=m^2/v$ and $\theta=v/m$. 
+\footnote{Would need justification.}
+The posterior of $d_i$ is then:
+\begin{equation}
+d_i \sim \mathrm{Gamma}\left(k+\hat{d_i} \mu,\frac{\theta}{1+\theta \mu}\right)
+\end{equation}
+We simulate from this distribution to get $d_i$.
+\footnote{This procedure is assuming that the $d_i$ are iid which is not true.}
+\footnote{In practice this procedure works well for iid case (cf script resampling.R) but not well for non-iid case. Dividing the variance in the posterior by 4 helps (cf line 49 of resid.R) but is a temporary ad hoc fix. }
+\footnote{Need to do other models than strict clock model. Conjugacy of priors and posteriors is not as readily available as for Poisson case. May need a Monte-Carlo method (short run of MH algorithm?) to get sample.}
+\footnote{Maybe a better way to generate a sampled $\mathcal{D}$ is to run BactDating 
+constrained somehow to the input dated tree.}
+\footnote{Ok to be a bit approximate if we show good sensitivity and specificity on simulated datasets, but would still be good to be as close to correct as possible.}
+
 \subsection*{Computation of residuals}
 
-We want to validate a dated phylogeny $\mathcal{D}$ by comparison with an undated phylogeny $\mathcal{L}$. 
+\footnote{Notations are not consistent. $\mathcal{D}$ sometimes refer to input dated phylogeny and sometimes to sampled dated phylogeny.}
+
 Let $d_i$ be the duration of a given branch in $\mathcal{D}$ and $l_i$ be the number of substitutions on the corresponding branch of $\mathcal{L}$, that is the branch that separates the leaves in the same way. There is a unique corresponding branch in $\mathcal{L}$ for all branches in $\mathcal{D}$ except for the two branches $a$ and $b$ connected to the root of $\mathcal{D}$ for which there is only a single corresponding branch $x$. We therefore split the substitutions on $x$ proportionally between the two branches $a$ and $b$ by defining:
 
 \begin{equation}
@@ -287,24 +322,19 @@ be difficult to interpret. We therefore prefer to use the normal residuals $n_i$
 as a histogram to compare their distribution with the theoretical Normal(0,1).
 A quantile-quantile plot (QQ plot) can be used to compare the distribution of the residuals
 to their theoretical distribution.
-
-For testing not sure yet what do use. Options include:
-\begin{itemize}
-\item Shapiro-Wilk test for normality. Usually found to be most powerful test of normality.
-But performs composite testing only (ie tests if Normal, not if standard Normal)
-\item Kolmogorov-Smirnov test, specific against standard Normal but not very powerful.
-\item Anderson-Darling test \citep{lewis1961distribution} in package nortest is composite.
-\item Anderson-Darling test in DescTools is simple hypothesis testing, ie specifically
-against standard normal.   
-\item Anderson-Darling simple hypothesis testing was used in \citep{lauNewModelDiagnostics2014} via implementation in package ADGofTest, returns same results as DescTools. Both use the same C code from \citep{marsagliaEvaluatingAndersonDarlingDistribution2004}. I think this is best but need testing a bit to check there is not too much loss of power compared to Shapiro-Wilk or even composite Anderson-Darling which can apparently be more powerful, cf 
-\verb+https://en.wikipedia.org/wiki/Anderson-Darling_test+ quote :
-Note 3: Stephens[1] notes that the test becomes better when the parameters are computed from the data, even if they are known.
-
-\end{itemize}
+Anderson-Darling test \citep{lewis1961distribution} 
+in DescTools R package implements simple hypothesis testing
+(unlike nortest package which is composite test). Use this to test that normal residuals
+are standard normal.   
+Note this is exactly equivalent to testing the uniform residuals against Uniform(0,1).
+Anderson-Darling simple hypothesis testing was used in \citep{lauNewModelDiagnostics2014} via implementation in package ADGofTest, returns same results as DescTools. Both use the same C code from \citep{marsagliaEvaluatingAndersonDarlingDistribution2004}. 
+\footnote{Other option: Shapiro-Wilk test for normality. Usually found to be most powerful test of normality. But performs composite testing only (ie tests if Normal, not if standard Normal)}
+\footnote{Other option: Kolmogorov-Smirnov test, specific against standard Normal but not very powerful. Note this is exactly equivalent to testing the uniform residuals against Uniform(0,1).}
+\footnote{Need to check there is not too much loss of power compared to Shapiro-Wilk or even composite Anderson-Darling which can apparently be more powerful, cf 
+https://en.wikipedia.org/wiki/Anderson-Darling\_test quote :
+Stephens[1] notes that the test becomes better when the parameters are computed from the data, even if they are known.}
 
 \subsection*{Data simulation}
-
-TODO
 
 Some simulations using DetectImports \citep{Didelot2022detectimports}.
 

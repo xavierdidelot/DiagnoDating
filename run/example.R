@@ -14,7 +14,7 @@ dev.off()
 system('open exampleS1.pdf')
 
 tree=unroot(midpoint(tree))
-r0=resDating(dt,tree,rate=10,model = 'poisson')
+r0=resDating(dt,tree,rate=10,model = 'poisson',resample = F)
 r=runDating(tree,dates,algo='BactDating',model='poisson',showProgress=T)
 r2=runDating(tree,dates,algo='BactDating',model='arc',showProgress=T)
 
