@@ -61,7 +61,7 @@ calcResiduals = function(x,resample=TRUE) {
   }
 
   if (x$model=='strictgamma' || x$model=='carc') {
-    probs=pgamma(ys,shape=xs*rate/(1+relax),scale=1+relax,log.p=log)
+    probs=pgamma(ys,shape=xs*rate/(1+relax),scale=1+relax)
     return(probs)
   }
 

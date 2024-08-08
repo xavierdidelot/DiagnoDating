@@ -7,11 +7,12 @@
 #' @param rate Clock rate used for dating
 #' @param relax Relaxation parameter used for dating
 #' @param rootdate Date of the root inferred by dating
+#' @param resample Whether or not to resample
 #'
 #' @return Object of class resDating
 #' @export
 #'
-resDating = function(dt, phy, algo='Unknown', model='poisson', rate=10, relax=0, rootdate=NA)
+resDating = function(dt, phy, algo='Unknown', model='poisson', rate=10, relax=0, rootdate=NA, resample=T)
 {
   phy=unroot(phy)
   r=list()
@@ -41,7 +42,7 @@ resDating = function(dt, phy, algo='Unknown', model='poisson', rate=10, relax=0,
   r$tree$subs=subs
   if (abs(sum(r$tree$subs)-sum(phy$edge.length))>0.01) warning('Incorrect number of subs.')
   if (any(is.na(r$tree$subs))) warning('NAs in subs, maybe change in topology.')
-  r$resid=calcResiduals(r)
+  r$resid=calcResiduals(r,resample)
   return(r)
 }
 

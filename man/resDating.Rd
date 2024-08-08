@@ -11,7 +11,8 @@ resDating(
   model = "poisson",
   rate = 10,
   relax = 0,
-  rootdate = NA
+  rootdate = NA,
+  resample = T
 )
 }
 \arguments{
@@ -28,6 +29,8 @@ resDating(
 \item{relax}{Relaxation parameter used for dating}
 
 \item{rootdate}{Date of the root inferred by dating}
+
+\item{resample}{Whether or not to resample}
 }
 \value{
 Object of class resDating
