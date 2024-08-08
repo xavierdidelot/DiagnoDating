@@ -1,10 +1,9 @@
 #' Calculate probability of branches
 #'
 #' @param x object of class resDating
-#' @param cumul whether to return the cumulative probability
 #' @param log whether to return the log of the probability
 #'
-calcProbBranches = function(x,cumul=FALSE,log=FALSE) {
+calcProbBranches = function(x,log=FALSE) {
   if (!inherits(x,'resDating')) stop('Not a resDating object.')
   xs=x$tree$edge.length
   ys=x$tree$subs
@@ -12,44 +11,63 @@ calcProbBranches = function(x,cumul=FALSE,log=FALSE) {
   relax=x$relax
 
   if (x$model=='poisson') {
-    if (cumul==FALSE) {
-      probs=dpois(round(ys),xs*rate,log=log)
-    } else {
-      #probs=ppois(round(ys),xs*rate,log.p=log)
-      oldseed <- .Random.seed
-      set.seed(1998)
-      probs=runif(length(ys),ppois(round(ys-1),xs*rate),ppois(round(ys),xs*rate))
-      .Random.seed <- oldseed
-      if (log) probs=log(probs)
-    }
+    probs=dpois(round(ys),xs*rate,log=log)
     return(probs)
   }
 
   if (x$model=='arc') {
-    if (cumul==FALSE) {
-      probs=dnbinom(round(ys),size=xs*rate/relax,prob=1/(1+relax),log=log)
-    } else {
-      #probs=pnbinom(round(ys),size=xs*rate/relax,prob=1/(1+relax),log.p=log)
-      oldseed <- .Random.seed
-      set.seed(1998)
-      probs=runif(length(ys),pnbinom(round(ys-1),size=xs*rate/relax,prob=1/(1+relax)),pnbinom(round(ys),size=xs*rate/relax,prob=1/(1+relax)))
-      .Random.seed <- oldseed
-      if (log) probs=log(probs)
-    }
+    probs=dnbinom(round(ys),size=xs*rate/relax,prob=1/(1+relax),log=log)
     return(probs)
   }
 
   if (x$model=='strictgamma' || x$model=='carc') {
-    if (cumul==FALSE) {
-      probs=dgamma(ys,shape=xs*rate/(1+relax),scale=1+relax,log=log)
-    } else {
-      probs=pgamma(ys,shape=xs*rate/(1+relax),scale=1+relax,log.p=log)
-    }
+    probs=dgamma(ys,shape=xs*rate/(1+relax),scale=1+relax,log=log)
     return(probs)
   }
 
   stop(sprintf('Model %s is not yet implemented.',x$model))
 }
+
+#' Calculate residuals of branches
+#'
+#' @param x object of class resDating
+#' @param resample whether to resample or not
+#'
+calcResiduals = function(x,resample=TRUE) {
+  if (!inherits(x,'resDating')) stop('Not a resDating object.')
+  xs=x$tree$edge.length
+  ys=x$tree$subs
+  rate=x$rate
+  relax=x$relax
+
+  if (x$model=='poisson') {
+    if (resample==TRUE) {
+      m=mean(xs);v=var(xs);k=m^2/v;theta=v/m#guessing prior
+      shape=k+xs*rate
+      scale=rep(theta/(1+theta*rate),length(xs))
+      m=shape*scale
+      v=shape*scale*scale/4
+      shape=m*m/v
+      scale=v/m
+      xs=rgamma(length(xs),shape=shape,scale=scale)
+    }
+    probs=runif(length(ys),ppois(round(ys-1),xs*rate),ppois(round(ys),xs*rate))
+    return(probs)
+  }
+
+  if (x$model=='arc') {
+    probs=runif(length(ys),pnbinom(round(ys-1),size=xs*rate/relax,prob=1/(1+relax)),pnbinom(round(ys),size=xs*rate/relax,prob=1/(1+relax)))
+    return(probs)
+  }
+
+  if (x$model=='strictgamma' || x$model=='carc') {
+    probs=pgamma(ys,shape=xs*rate/(1+relax),scale=1+relax,log.p=log)
+    return(probs)
+  }
+
+  stop(sprintf('Model %s is not yet implemented.',x$model))
+}
+
 
 #' Plot probability of branches
 #'
@@ -131,7 +149,7 @@ plotProbBranches = function(x,sub=NA,color=T,minProb=NA,...) {
 #' @export
 #'
 plotResid = function(x,sub=NA,...) {
-  p=calcProbBranches(x,cumul=T)#uniform pseudo-residual
+  p=x$resid#uniform pseudo-residual
   xs=x$tree$edge.length
   if (any(p==0 | p==1)) {
     w=which(p!=0 & p!=1)
@@ -203,7 +221,7 @@ plotResid = function(x,sub=NA,...) {
 #' @export
 #'
 testResid=function(x,test=1) {
-  p=calcProbBranches(x,cumul=T)#uniform pseudo-residual
+  p=x$resid#uniform pseudo-residual
   if (any(p==0 | p==1)) {
     p=p[which(p!=0 & p!=1)]
     warning('Ignoring impossible branches.')

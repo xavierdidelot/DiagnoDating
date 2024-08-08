@@ -4,12 +4,10 @@
 \alias{calcProbBranches}
 \title{Calculate probability of branches}
 \usage{
-calcProbBranches(x, cumul = FALSE, log = FALSE)
+calcProbBranches(x, log = FALSE)
 }
 \arguments{
 \item{x}{object of class resDating}
-
-\item{cumul}{whether to return the cumulative probability}
 
 \item{log}{whether to return the log of the probability}
 }

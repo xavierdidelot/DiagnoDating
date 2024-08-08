@@ -74,11 +74,12 @@ plotResid(r)
 ``` r
 print(testResid(r))
 #> 
-#>  Exact one-sample Kolmogorov-Smirnov test
+#>  Anderson-Darling test of goodness-of-fit
+#>  Null hypothesis: Normal distribution
+#>  with parameters mean = 0.000, sd = 1.000
 #> 
-#> data:  p
-#> D = 0.19288, p-value = 0.4581
-#> alternative hypothesis: two-sided
+#> data:  n
+#> An = 0.36374, p-value = 0.8824
 ```
 
 ## More information and getting help
