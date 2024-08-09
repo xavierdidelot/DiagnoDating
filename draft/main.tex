@@ -249,15 +249,18 @@ d_i \sim \mathrm{Gamma}(k,\theta)
 \end{equation}
 We can ``guess'' the parameters of this prior using the 
 mean $m$ and variance $v$ of the $\hat{d_i}$ for all $i$
-and applying $k=m^2/v$ and $\theta=v/m$. 
-\footnote{Would need justification.}
+and applying 
+$k=m^2\mu/(v\mu-m)$ and $\theta=v/m-1/\mu$.
+\footnote{Would need justification. This is based on the idea that $\hat{d_i}$ is the MLE
+$s_i/\mu$ and applying the laws of total expectation and total variance to get that
+$\hat{d_i}$ has expectation $k\theta$ and variance $k\theta/\mu+k\theta^2$.}
 The posterior of $d_i$ is then:
 \begin{equation}
 d_i \sim \mathrm{Gamma}\left(k+\hat{d_i} \mu,\frac{\theta}{1+\theta \mu}\right)
 \end{equation}
 We simulate from this distribution to get $d_i$.
 \footnote{This procedure is assuming that the $d_i$ are iid which is not true.}
-\footnote{In practice this procedure works well for iid case (cf script resampling.R) but not well for non-iid case. Dividing the variance in the posterior by 4 helps (cf line 49 of resid.R) but is a temporary ad hoc fix. }
+\footnote{In practice this procedure works well for iid case (cf script resampling.R) but not well for non-iid case. Reducing the variance in the posterior helps (cf line 50 of resid.R) but is a temporary ad hoc fix. }
 \footnote{Need to do other models than strict clock model. Conjugacy of priors and posteriors is not as readily available as for Poisson case. May need a Monte-Carlo method (short run of MH algorithm?) to get sample.}
 \footnote{Maybe a better way to generate a sampled $\mathcal{D}$ is to run BactDating 
 constrained somehow to the input dated tree.}

@@ -42,7 +42,8 @@ calcResiduals = function(x,resample=TRUE) {
 
   if (x$model=='poisson') {
     if (resample==TRUE) {
-      m=mean(xs);v=var(xs);k=m^2/v;theta=v/m#guessing prior
+      m=mean(xs);v=var(xs)
+      k=m^2*rate/(v*rate-m);theta=v/m-1/rate#guessing prior using the Law of total expectation and the Law of total variance
       shape=k+xs*rate
       scale=rep(theta/(1+theta*rate),length(xs))
       m=shape*scale
