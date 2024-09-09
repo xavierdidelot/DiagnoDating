@@ -10,7 +10,7 @@ par(mfrow=c(2,2))
 u=runif(n,ppois(s-1,l*mu),ppois(s,l*mu))
 hist(u,breaks=seq(0,1,0.05),freq=F,xlab='',ylab='',main='Exact residuals')
 
-mle=s/mu;v=0.1;l2=rgamma(n,shape=mle^2/v,scale=v/mle)#point estimate of l, centered on MLE
+mle=s/mu;v=0.01;l2=rgamma(n,shape=mle^2/v,scale=v/mle)#point estimate of l, centered on MLE
 u=runif(n,ppois(s-1,l2*mu),ppois(s,l2*mu))
 hist(u,breaks=seq(0,1,0.05),freq=F,xlab='',ylab='',main='Residuals based on a point estimate without resampling')
 

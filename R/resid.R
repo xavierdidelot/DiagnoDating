@@ -45,11 +45,12 @@ calcResiduals = function(x,resample=TRUE) {
       m=mean(xs);v=var(xs)
       k=m^2*rate/(v*rate-m);theta=v/m-1/rate#guessing prior using the Law of total expectation and the Law of total variance
       shape=k+xs*rate
-      scale=rep(theta/(1+theta*rate),length(xs))
-      m=shape*scale
-      v=shape*scale*scale/4
-      shape=m*m/v
-      scale=v/m
+      scale=theta/(1+theta*rate)
+      #scale=rep(theta/(1+theta*rate),length(xs))
+      #m=shape*scale
+      #v=shape*scale*scale/4
+      #shape=m*m/v
+      #scale=v/m
       xs=rgamma(length(xs),shape=shape,scale=scale)
     }
     probs=runif(length(ys),ppois(round(ys-1),xs*rate),ppois(round(ys),xs*rate))
