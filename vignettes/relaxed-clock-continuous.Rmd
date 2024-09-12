@@ -37,7 +37,7 @@ res=roottotip(tree,dates,rate=20,permTest = 0)
 
 Make up analysis with true parameters but incorrect model:
 ```{r}
-r=resDating(dt,tree,algo='BAD',model = 'strictgamma',rate=20,resample = F)
+r=resDating(dt,tree,algo='BAD',model = 'strictgamma',rate=20)
 print(r)
 ```
 
@@ -50,7 +50,7 @@ print(testResid(r))
 
 Make up analysis with true parameters and correct model:
 ```{r}
-r=resDating(dt,tree,algo='GOOD',model = 'carc',rate=20,relax = 5,resample = F)
+r=resDating(dt,tree,algo='GOOD',model = 'carc',rate=20,relax = 5)
 print(r)
 ```
 

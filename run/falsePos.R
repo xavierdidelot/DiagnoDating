@@ -5,11 +5,12 @@ library(ValidateDating,quietly=T)
 dates=runif(200,2000,2020)
 dt=simcoaltree(dates,10)
 phy=simobsphy(dt,mu=10)
-r0=resDating(dt,phy,resample=F)#perfect residuals
+r0=resDating(dt,phy)#perfect residuals
 plotResid(r0);title(testResid(r0)$p.value)
 
 r=runDating(phy,dates,showProgress=T,nbIts=2e4)
 plotResid(r);title(testResid(r)$p.value)
+validate(r)
 
 r2=runDating(phy,dates,algo='treedater')
 plotResid(r2);title(testResid(r2)$p.value)

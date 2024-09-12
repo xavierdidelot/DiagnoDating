@@ -37,7 +37,7 @@ res=roottotip(tree,dates,rate=10,permTest = 0)
 
 Make up analysis with true parameters:
 ```{r}
-r=resDating(dt,tree,algo='TRUTH',model = 'poisson',rate=10,resample = F)
+r=resDating(dt,tree,algo='TRUTH',model = 'poisson',rate=10)
 print(r)
 ```
 

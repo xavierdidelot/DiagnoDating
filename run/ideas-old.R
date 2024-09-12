@@ -7,7 +7,7 @@ dt=simcoaltree(dates,10)
 phy=simobsphy(dt,mu=10)
 
 #perfect residuals
-r0=resDating(dt,phy,resample=F,rate=10)
+r0=resDating(dt,phy,rate=10)
 plotResid(r0);title(testResid(r0)$p.value)
 
 #perform BactDating run
@@ -21,5 +21,5 @@ rtree$edge.length=rtree$edge.length*k
 roottotip(rtree,dates)
 r2=runDating(rtree,dates,minbralen=1e-10,model='strictgamma',showProgress=T,initMu=k,updateMu=F,updateRoot=F,useCoalPrior=T)#,initAlpha=mean(r$record[501:1000,'alpha']),updateAlpha=F
 tmp=r2;class(tmp)='resBactDating';plot(tmp,'trace')
-r3=resDating(takeSample(r2)$tree,phy,model='poisson',rate=r$rate,resample=F)
+r3=resDating(takeSample(r2)$tree,phy,model='poisson',rate=r$rate)
 plotResid(r3);title(testResid(r3)$p.value)

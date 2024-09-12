@@ -11,7 +11,7 @@ allres <- foreach (rep = 1:100,.packages = c('ape','BactDating','ValidateDating'
   dates=runif(200,2000,2020)
   dt=simcoaltree(dates,10)
   phy=simobsphy(dt,mu=10)
-  r0=resDating(dt,phy,resample=F)
+  r0=resDating(dt,phy)
   p0=testResid(r0)$p.value
   r1=runDating(phy,dates)
   p1=testResid(r1)$p.value
