@@ -4,12 +4,10 @@
 \alias{calcResiduals}
 \title{Calculate residuals of branches}
 \usage{
-calcResiduals(x, resample = TRUE)
+calcResiduals(x)
 }
 \arguments{
 \item{x}{object of class resDating}
-
-\item{resample}{whether to resample or not}
 }
 \description{
 Calculate residuals of branches

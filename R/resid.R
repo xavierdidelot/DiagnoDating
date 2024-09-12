@@ -31,9 +31,8 @@ calcProbBranches = function(x,log=FALSE) {
 #' Calculate residuals of branches
 #'
 #' @param x object of class resDating
-#' @param resample whether to resample or not
 #'
-calcResiduals = function(x,resample=TRUE) {
+calcResiduals = function(x) {
   if (!inherits(x,'resDating')) stop('Not a resDating object.')
   xs=x$tree$edge.length
   ys=x$tree$subs
@@ -41,18 +40,6 @@ calcResiduals = function(x,resample=TRUE) {
   relax=x$relax
 
   if (x$model=='poisson') {
-    if (resample==TRUE) {
-      m=mean(xs);v=var(xs)
-      k=m^2*rate/(v*rate-m);theta=v/m-1/rate#guessing prior using the Law of total expectation and the Law of total variance
-      shape=k+xs*rate
-      scale=theta/(1+theta*rate)
-      #scale=rep(theta/(1+theta*rate),length(xs))
-      #m=shape*scale
-      #v=shape*scale*scale/4
-      #shape=m*m/v
-      #scale=v/m
-      xs=rgamma(length(xs),shape=shape,scale=scale)
-    }
     probs=runif(length(ys),ppois(round(ys-1),xs*rate),ppois(round(ys),xs*rate))
     return(probs)
   }

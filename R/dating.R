@@ -38,12 +38,11 @@ runBactDating=function(tree,dates,...) {
   v=v[(1+length(v)/2):length(v)]
   r$relax=mean(v)
   class(r)<-'resDating'
-  rs=takeSample(r)
-  r$resid=calcResiduals(rs,resample=F)
+  r$resid=calcResiduals(r)
   return(r)
 }
 
-# Extract from BactDating output (r) the tree corresponding to iterations in (w)
+# Extract from BactDating output (r) the tree corresponding to a specific iteration in (w)
 takeSample=function(r,w=nrow(r$record)) {
   tree = r$inputtree
   bestroot = as.numeric(names(sort(table(r$record[w,'root']),decreasing=T)[1]))
