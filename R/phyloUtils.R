@@ -36,3 +36,15 @@ reorderEdges=function(t1,t2) {
   t1$edge.length=t1$edge.length[inds]
   return(t1)
 }
+
+sampleAlpha = function(tree) {
+  n=Ntip(tree)
+  dates=dist.nodes(tree)[n+1,]
+  nr=length(dates)
+  s=sort.int(dates, method='quick',decreasing = T, index.return = TRUE)
+  k=cumsum(2*(s$ix<=n)-1)
+  difs=s$x[1:(nr-1)]-s$x[2:nr]
+  su=sum(k[1:(nr-1)]*(k[1:(nr-1)]-1)*difs)
+  alpha=1/rgamma(1,shape=n-1,scale=2/su)#alpha ~ InvGamma(shape=n-1,scale=2/su)
+  return(alpha)
+}
