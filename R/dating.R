@@ -42,7 +42,13 @@ runBactDating=function(tree,dates,...) {
   return(r)
 }
 
-# Extract from BactDating output (r) the tree corresponding to a specific iteration in (w)
+#' Extract from BactDating output (r) the tree corresponding to a specific iteration in (w)
+#' @param r Output from BactDating
+#' @param w Iteration to extract (default is the last iteration)
+#'
+#' @return BactDating object corresponding to specified iteration
+#' @export
+#'
 takeSample=function(r,w=nrow(r$record)) {
   tree = r$inputtree
   bestroot = as.numeric(names(sort(table(r$record[w,'root']),decreasing=T)[1]))

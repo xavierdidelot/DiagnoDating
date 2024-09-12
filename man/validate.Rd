@@ -4,12 +4,14 @@
 \alias{validate}
 \title{Check whether a dating analysis is valid}
 \usage{
-validate(x, nrep = 1000)
+validate(x, nrep = 500, showPlot = T)
 }
 \arguments{
 \item{x}{object of class resDating}
 
 \item{nrep}{number of repeats to perform}
+
+\item{showPlot}{whether or not to show the plot}
 }
 \description{
 Check whether a dating analysis is valid

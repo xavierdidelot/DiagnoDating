@@ -246,7 +246,7 @@ validate=function(x,nrep=500,showPlot=T)
   }
 
   if (showPlot) {
-    hist(ps,breaks=20,xlab='',ylab='',main='Posterior distribution of p-values')
+    hist(ps,breaks=seq(0,1,length.out=21),xlab='',ylab='',main=sprintf('Posterior distribution of p-values, with %.1f%% of p-values below 0.05',100*length(which(ps<0.05))/nrep))
   }
   invisible(ps)
 }

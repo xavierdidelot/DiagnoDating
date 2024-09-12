@@ -14,9 +14,14 @@ dev.off()
 system('open exampleS1.pdf')
 
 tree=unroot(midpoint(tree))
-r0=resDating(dt,tree,rate=10,model = 'poisson',resample = F)
+r0=resDating(dt,tree,rate=10,model = 'poisson')
 r=runDating(tree,dates,algo='BactDating',model='poisson',showProgress=T)
 r2=runDating(tree,dates,algo='BactDating',model='arc',showProgress=T)
+
+modr=r;class(modr)<-'resBactDating';print(modr)
+modr2=r2;class(modr2)<-'resBactDating';print(modr2)
+r=takeSample(r)
+r2=takeSample(r2)
 
 pdf('example.pdf',6,10)
 par(mfrow=c(3,2),mar=c(4,4,2,2))
@@ -39,8 +44,8 @@ system('open example.pdf')
 testResid(r)
 testResid(r2)
 
-class(r)<-'resBactDating';print(r)
-class(r2)<-'resBactDating';print(r2)
+validate(r)
+validate(r2)
 
 set.seed(0)
 a1=runDating(tree,dates,algo='LSD')
