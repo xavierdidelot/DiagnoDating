@@ -224,3 +224,29 @@ testResid=function(x,test=1) {
   if (test==3) r=shapiro.test(n)
   return(r)
 }
+
+#' Check whether a dating analysis is valid
+#'
+#' @param x object of class resDating
+#' @param nrep number of repeats to perform
+#' @param showPlot whether or not to show the plot
+#' @export
+#'
+validate=function(x,nrep=500,showPlot=T)
+{
+  ps=rep(NA,nrep)
+  if (!is.null(x$record)) {
+    inds=round(seq(max(1,floor(nrow(x$record)/2)),nrow(x$record),length.out=nrep))
+    for (i in 1:nrep) {
+      x2=takeSample(x,inds[i])
+      ps[i]=testResid(x2)$p.value
+    }
+  } else {
+    #TODO
+  }
+
+  if (showPlot) {
+    hist(ps,breaks=20,xlab='',ylab='',main='Posterior distribution of p-values')
+  }
+  invisible(ps)
+}

@@ -60,7 +60,11 @@ We can see how this dated phylogeny fits the data:
 ```{r}
 plotProbBranches(r)
 plotResid(r)
-print(testResid(r))
+```
+
+We can perform the validation:
+```{r}
+validate(r)
 ```
 
 ## More information and getting help

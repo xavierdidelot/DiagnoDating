@@ -55,6 +55,10 @@ takeSample=function(r,w=nrow(r$record)) {
   }
   rmod=r
   rmod$tree=tree
+  rmod$rootdate=r$record[w,Ntip(tree)+1]
+  rmod$rate=r$record[w,'mu']
+  rmod$relax=r$record[w,'sigma']
+  rmod$resid=calcResiduals(rmod)
   return(rmod)
 }
 

@@ -71,16 +71,13 @@ plotResid(r)
 
 ![](man/figures/unnamed-chunk-6-2.png)<!-- -->
 
+We can perform the validation:
+
 ``` r
-print(testResid(r))
-#> 
-#>  Anderson-Darling test of goodness-of-fit
-#>  Null hypothesis: Normal distribution
-#>  with parameters mean = 0.000, sd = 1.000
-#> 
-#> data:  n
-#> An = 0.36374, p-value = 0.8824
+validate(r)
 ```
+
+![](man/figures/unnamed-chunk-7-1.png)<!-- -->
 
 ## More information and getting help
 
