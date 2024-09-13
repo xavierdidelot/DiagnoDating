@@ -236,15 +236,47 @@ validate=function(x,nrep=500,showPlot=T)
 {
   ps=rep(NA,nrep)
   if (!is.null(x$record)) {
+
+    #Using existing posterior sample
     inds=round(seq(max(1,floor(nrow(x$record)/2)),nrow(x$record),length.out=nrep))
     for (i in 1:nrep) {
       x2=takeSample(x,inds[i])
       ps[i]=testResid(x2)$p.value
     }
   } else {
-    #TODO
+
+    #Generating approximate posterior sample
+    dates=unname(dist.nodes(x$tree)[Ntip(x$tree)+1,1:Ntip(x$tree)])
+    mu=x$rate
+    l2=unname(x$tree$edge.length)
+    n=length(l2)
+    store=matrix(NA,100,n)
+    for (i in 1:nrow(store)) {
+      t=simcoaltree(dates,alpha=sampleAlpha(x$tree))$edge.length
+      s2=rpois(n,t*mu)
+      ind=order(s2)
+      t=t[ind]
+      s2=s2[ind]
+      store[i,]=t
+    }
+    m=v=k=theta=rep(NA,n)
+    ind=order(l2)
+    ind[ind]=1:n
+    for (j in 1:n) {
+      m[j]=mean(as.vector(store[,ind[j]]))
+      v[j]=var (as.vector(store[,ind[j]]))
+      k[j]=m[j]*m[j]/v[j]
+      theta[j]=v[j]/m[j]
+    }
+    x2=x
+    for (i in 1:nrep) {
+      x2$tree$edge.length=rgamma(n,shape=k+l2*mu,scale=theta/(1+theta*mu))
+      x2$resid=calcResiduals(x2)
+      ps[i]=testResid(x2)$p.value
+    }
   }
 
+  #Plot histogram if requested
   if (showPlot) {
     hist(ps,breaks=seq(0,1,length.out=21),xlab='',ylab='',main=sprintf('Posterior distribution of p-values, with %.1f%% of p-values below 0.05',100*length(which(ps<0.05))/nrep))
   }
