@@ -41,11 +41,9 @@ r=runDating(tree,dates,algo='BactDating',model='poisson')
 print(r)
 ```
 
-Pseudo-residual analysis:
+Validation analysis:
 ```{r}
-plotProbBranches(r)
-plotResid(r)
-print(testResid(r))
+validate(r)
 ```
 
 Run analysis with correct model:
@@ -54,9 +52,7 @@ r=runDating(tree,dates,algo='BactDating',model='arc')
 print(r)
 ```
 
-Pseudo-residual analysis:
+Validation analysis:
 ```{r}
-plotProbBranches(r)
-plotResid(r)
-print(testResid(r))
+validate(r)
 ```

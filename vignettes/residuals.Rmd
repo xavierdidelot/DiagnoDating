@@ -41,15 +41,13 @@ tree=root(tree,50)
 res=roottotip(tree,dates)
 ```
 
-Run all dating methods with pseudo-residual analysis:
+Run all dating methods with validation:
 ```{r}
 tree=unroot(tree)
 for (a in 1:5) {
   r=runDating(tree,dates,algo=a)
   print(r)
   plot(r,show.tip.label=F)
-  plotProbBranches(r)
-  plotResid(r)
-  print(testResid(r))
+  validate(r)
 }
 ```

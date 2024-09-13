@@ -242,7 +242,7 @@ validate=function(x,nrep=1000,resampling,nstore=1000,showPlot=T)
   if (!resampling) {
 
     #Using existing posterior sample
-    if (is.null(x$record)) error('No posterior sample was found.')
+    if (is.null(x$record)) stop('No posterior sample was found.')
     inds=round(seq(max(1,floor(nrow(x$record)/2)),nrow(x$record),length.out=nrep))
     for (i in 1:nrep) {
       x2=takeSample(x,inds[i])

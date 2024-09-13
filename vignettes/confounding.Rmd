@@ -59,6 +59,7 @@ for (a in 1:5) {
   r=runDating(tree,dates,algo=a)
   plot(r,show.tip.label=F)
   print(r)
+  validate(r)
 }
 ```
 
