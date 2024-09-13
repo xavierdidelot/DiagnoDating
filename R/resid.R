@@ -140,8 +140,8 @@ plotProbBranches = function(x,sub=NA,color=T,minProb=NA,...) {
 plotResid = function(x,sub=NA,...) {
   p=x$resid#uniform pseudo-residual
   xs=x$tree$edge.length
-  if (any(p==0 | p==1)) {
-    w=which(p!=0 & p!=1)
+  if (any(is.nan(p) | p==0 | p==1)) {
+    w=which(!is.nan(p) & p!=0 & p!=1)
     p=p[w]
     xs=xs[w]
     warning('Ignoring impossible branches.')
@@ -211,8 +211,8 @@ plotResid = function(x,sub=NA,...) {
 #'
 testResid=function(x,test=1) {
   p=x$resid#uniform pseudo-residual
-  if (any(p==0 | p==1)) {
-    p=p[which(p!=0 & p!=1)]
+  if (any(is.nan(p) | p==0 | p==1)) {
+    p=p[which(!is.nan(p) & p!=0 & p!=1)]
     warning('Ignoring impossible branches.')
   }
   n=qnorm(p)#normal pseudo-residual
