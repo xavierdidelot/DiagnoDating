@@ -10,6 +10,7 @@ test_that("Simulate with simStructure and inference with all methods", {
   expect_is(res,'resDating')
   expect_is(capture_output(print(res)),'character')
   expect_silent(validate(res))
+  expect_silent(validate(res,resampling=F))
   expect_silent(res<-runDating(p,unlist(samplingDates),algo='LSD'))
   expect_is(res,'resDating')
   expect_is(capture_output(print(res)),'character')

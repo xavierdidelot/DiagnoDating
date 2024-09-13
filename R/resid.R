@@ -229,15 +229,20 @@ testResid=function(x,test=1) {
 #'
 #' @param x object of class resDating
 #' @param nrep number of repeats to perform
+#' @param resampling whether to use the approximate posterior resampling method, default is to do this iff no posterior sample is available
+#' @param nstore size of the store to use in approximate posterior resampling method
 #' @param showPlot whether or not to show the plot
 #' @export
 #'
-validate=function(x,nrep=500,showPlot=T)
+validate=function(x,nrep=1000,resampling,nstore=1000,showPlot=T)
 {
+  if (!hasArg('resampling')) resampling=is.null(x$record)
+
   ps=rep(NA,nrep)
-  if (!is.null(x$record)) {
+  if (!resampling) {
 
     #Using existing posterior sample
+    if (is.null(x$record)) error('No posterior sample was found.')
     inds=round(seq(max(1,floor(nrow(x$record)/2)),nrow(x$record),length.out=nrep))
     for (i in 1:nrep) {
       x2=takeSample(x,inds[i])
@@ -250,7 +255,7 @@ validate=function(x,nrep=500,showPlot=T)
     mu=x$rate
     l2=unname(x$tree$edge.length)
     n=length(l2)
-    store=matrix(NA,100,n)
+    store=matrix(NA,nstore,n)
     for (i in 1:nrow(store)) {
       t=simcoaltree(dates,alpha=sampleAlpha(x$tree))$edge.length
       s2=rpois(n,t*mu)
