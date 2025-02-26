@@ -253,10 +253,11 @@ validate=function(x,nrep=1000,resampling=0,nstore=1000,showPlot=T)
     #Using resampling via BactDating
     rtree=x$tree
     phy=x$inputtree
+    dates=unname(x$tree$root.time+dist.nodes(x$tree)[1:Ntip(x$tree),1+Ntip(x$tree)])
     rtree$root.time=NULL
     k=sum(phy$edge.length)/sum(rtree$edge.length)
     rtree$edge.length=rtree$edge.length*k
-    r2=runDating(rtree,dates,minbralen=1e-10,model='strictgamma',showProgress=T,initMu=k,updateMu=F,updateRoot=F)#,initAlpha=mean(r$record[501:1000,'alpha']),updateAlpha=F)
+    r2=runDating(rtree,dates,minbralen=1e-10,model='strictgamma',initMu=k,updateMu=F,updateRoot=F)#,initAlpha=mean(r$record[501:1000,'alpha']),updateAlpha=F)
     r4=resDating(r2$tree,phy,algo=x$algo,model='poisson',rate=x$rate)
     r4$record=r2$record
     inds=round(seq(max(1,floor(nrow(r4$record)/2)),nrow(r4$record),length.out=nrep))
