@@ -7,13 +7,13 @@
 #' @param rate Clock rate used for dating
 #' @param relax Relaxation parameter used for dating
 #' @param rootdate Date of the root inferred by dating
+#' @param record Sample of dates in BactDating format
 #'
 #' @return Object of class resDating
 #' @export
 #'
 resDating = function(dt, phy, algo='Unknown', model='poisson', rate=10, relax=0, rootdate=NA)
 {
-  phy=unroot(phy)
   r=list()
   r$rate=rate
   r$relax=relax
@@ -21,6 +21,8 @@ resDating = function(dt, phy, algo='Unknown', model='poisson', rate=10, relax=0,
   if (is.na(rootdate)) r$rootdate=dt$root.time else r$rootdate=rootdate
   r$model=model
   r$algo=algo
+  r$inputtree=phy
+  phy=unroot(phy)
   class(r) <- 'resDating'
   subs=rep(NA,length(dt$edge.length))
   matphy=matrixChildren(phy)

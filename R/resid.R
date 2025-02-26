@@ -229,18 +229,17 @@ testResid=function(x,test=1) {
 #'
 #' @param x object of class resDating
 #' @param nrep number of repeats to perform
-#' @param resampling whether to use the approximate posterior resampling method, default is to do this iff no posterior sample is available
+#' @param resampling method used for resampling: 0 (default) for using given sample, 1 to use the approximate posterior resampling method, 2 to use BactDating resampling
 #' @param nstore size of the store to use in approximate posterior resampling method
 #' @param showPlot whether or not to show the plot
 #' @export
 #'
-validate=function(x,nrep=1000,resampling,nstore=1000,showPlot=T)
+validate=function(x,nrep=1000,resampling=0,nstore=1000,showPlot=T)
 {
-  if (!hasArg('resampling')) resampling=is.null(x$record)
 
   ps=rep(NA,nrep)
-  if (!resampling) {
 
+  if (resampling==0) {
     #Using existing posterior sample
     if (is.null(x$record)) stop('No posterior sample was found.')
     inds=round(seq(max(1,floor(nrow(x$record)/2)),nrow(x$record),length.out=nrep))
@@ -248,8 +247,29 @@ validate=function(x,nrep=1000,resampling,nstore=1000,showPlot=T)
       x2=takeSample(x,inds[i])
       ps[i]=testResid(x2)$p.value
     }
-  } else {
+  }
 
+  if (resampling==2) {
+    #Using resampling via BactDating
+    rtree=x$tree
+    rtree$root.time=NULL
+    k=sum(phy$edge.length)/sum(rtree$edge.length)
+    rtree$edge.length=rtree$edge.length*k
+    r2=runDating(rtree,dates,minbralen=1e-10,model='strictgamma',showProgress=T,initMu=k,updateMu=F,updateRoot=F)#,initAlpha=mean(r$record[501:1000,'alpha']),updateAlpha=F)
+    r4=resDating(r2$tree,phy,algo=x$algo,model='poisson',rate=x$rate)
+    r4$record=r2$record
+    inds=round(seq(max(1,floor(nrow(r4$record)/2)),nrow(r4$record),length.out=nrep))
+    x3=resDating(takeSample(r4,inds[nrep])$tree,r4$inputtree,algo=r4$algo,model=r4$model,rate=r4$rate,relax=r4$relax,rootdate=r4$rootdate)
+    for (i in 1:nrep) {
+      x2=takeSample(r4,inds[i])
+      x2$tree$subs=x3$tree$subs
+      x2$rate=r4$rate
+      x2$resid=calcResiduals(x2)
+      ps[i]=testResid(x2)$p.value
+    }
+  }
+
+  if (resampling==1) {
     #Generating approximate posterior sample
     dates=unname(dist.nodes(x$tree)[Ntip(x$tree)+1,1:Ntip(x$tree)])
     mu=x$rate

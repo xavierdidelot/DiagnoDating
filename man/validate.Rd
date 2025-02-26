@@ -4,14 +4,14 @@
 \alias{validate}
 \title{Check whether a dating analysis is valid}
 \usage{
-validate(x, nrep = 1000, resampling, nstore = 1000, showPlot = T)
+validate(x, nrep = 1000, resampling = 0, nstore = 1000, showPlot = T)
 }
 \arguments{
 \item{x}{object of class resDating}
 
 \item{nrep}{number of repeats to perform}
 
-\item{resampling}{whether to use the approximate posterior resampling method, default is to do this iff no posterior sample is available}
+\item{resampling}{method used for resampling: 0 (default) for using given sample, 1 to use the approximate posterior resampling method, 2 to use BactDating resampling}
 
 \item{nstore}{size of the store to use in approximate posterior resampling method}
 

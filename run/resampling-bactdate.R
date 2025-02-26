@@ -8,12 +8,11 @@ phy=simobsphy(dt,mu=10,model='poisson')
 
 #perfect residuals
 r0=resDating(dt,phy,rate=10)
-plotResid(r0);title(testResid(r0)$p.value)
+plotResid(r0);title(testResid(r0)$p.value)#great
 
 #perform dating
 r=runDating(phy,dates,algo='node.dating')
-r$inputtree=phy
-plotResid(r);title(testResid(r)$p.value)
+plotResid(r);title(testResid(r)$p.value)#underdispersed
 
 #using bactdate run to resample
 rtree=r$tree
@@ -23,7 +22,12 @@ rtree$edge.length=rtree$edge.length*k
 roottotip(rtree,dates)#perfect
 r2=runDating(rtree,dates,minbralen=1e-10,model='strictgamma',showProgress=T,initMu=k,updateMu=F,updateRoot=F)#,initAlpha=mean(r$record[501:1000,'alpha']),updateAlpha=F)
 tmp=r2;class(tmp)='resBactDating';plot(tmp,'trace')#just to check traces
-r3=resDating(r2$tree,phy,algo=r$algo,model='poisson',rate=r$rate)
-r3$record=r2$record
-r3$inputtree=r$inputtree
-validate(r3,resampling = F)
+
+#check residuals for a single sample
+nr=nrow(r2$record)
+samtree=takeSample(r2,w=sample((nr/2):nr,1))$tree
+r3=resDating(samtree,phy,algo=r$algo,model='poisson',rate=r$rate)
+plotResid(r3);title(testResid(r3)$p.value)
+
+#compute posterior distribution of p-values
+validate(r,resampling = 2)

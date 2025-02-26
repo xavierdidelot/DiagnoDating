@@ -22,6 +22,6 @@ VignetteBuilder: knitr
 License: MIT + file LICENSE
 URL: https://github.com/xavierdidelot/ValidateDating
 BugReports: https://github.com/xavierdidelot/ValidateDating/issues
-RoxygenNote: 7.3.1
+RoxygenNote: 7.3.2
 Encoding: UTF-8
 LazyData: true
