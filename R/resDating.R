@@ -7,7 +7,6 @@
 #' @param rate Clock rate used for dating
 #' @param relax Relaxation parameter used for dating
 #' @param rootdate Date of the root inferred by dating
-#' @param record Sample of dates in BactDating format
 #'
 #' @return Object of class resDating
 #' @export

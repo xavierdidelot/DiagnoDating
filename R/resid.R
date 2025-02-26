@@ -252,6 +252,7 @@ validate=function(x,nrep=1000,resampling=0,nstore=1000,showPlot=T)
   if (resampling==2) {
     #Using resampling via BactDating
     rtree=x$tree
+    phy=x$inputtree
     rtree$root.time=NULL
     k=sum(phy$edge.length)/sum(rtree$edge.length)
     rtree$edge.length=rtree$edge.length*k
