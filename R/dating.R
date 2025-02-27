@@ -155,6 +155,10 @@ runTreeTime=function(tree,dates,...) {
   resrate=read.table(sprintf('/tmp/%d/molecular_clock.txt',tag))[1,1]*l
   restree=read.nexus(sprintf('/tmp/%d/timetree.nexus',tag))
   resrootdate=max(dates)-max(dist.nodes(restree)[Ntip(restree)+1,1:Ntip(restree)])
+  restree$node.label=NULL
+  trees=c(tree,restree)
+  trees=.compressTipLabel(trees)
+  restree=trees[[2]]
   res=resDating(restree,tree,algo='TreeTime',model='poisson',rate=resrate,relax=0,rootdate=resrootdate)
   return(res)
 }

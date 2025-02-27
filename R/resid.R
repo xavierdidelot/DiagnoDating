@@ -250,18 +250,18 @@ validate=function(x,nrep=1000,resampling=0,nstore=1000,showPlot=T)
   }
 
   if (resampling==2) {
-    #Using resampling via BactDating
+    #Using resampling via bactdate
     rtree=x$tree
     phy=x$inputtree
-    dates=unname(x$tree$root.time+dist.nodes(x$tree)[1:Ntip(x$tree),1+Ntip(x$tree)])
+    dates=unname(x$rootdate+dist.nodes(x$tree)[1:Ntip(x$tree),1+Ntip(x$tree)])
     rtree$root.time=NULL
     k=sum(phy$edge.length)/sum(rtree$edge.length)
     rtree$edge.length=rtree$edge.length*k
     r2=runDating(rtree,dates,minbralen=1e-10,model='strictgamma',initMu=k,updateMu=F,updateRoot=F)#,initAlpha=mean(r$record[501:1000,'alpha']),updateAlpha=F)
     r4=resDating(r2$tree,phy,algo=x$algo,model='poisson',rate=x$rate)
     r4$record=r2$record
+    x3=resDating(takeSample(r4)$tree,r4$inputtree,algo=r4$algo,model=r4$model,rate=r4$rate,relax=r4$relax,rootdate=r4$rootdate)
     inds=round(seq(max(1,floor(nrow(r4$record)/2)),nrow(r4$record),length.out=nrep))
-    x3=resDating(takeSample(r4,inds[nrep])$tree,r4$inputtree,algo=r4$algo,model=r4$model,rate=r4$rate,relax=r4$relax,rootdate=r4$rootdate)
     for (i in 1:nrep) {
       x2=takeSample(r4,inds[i])
       x2$tree$subs=x3$tree$subs

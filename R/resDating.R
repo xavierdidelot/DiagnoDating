@@ -40,8 +40,8 @@ resDating = function(dt, phy, algo='Unknown', model='poisson', rate=10, relax=0,
     }
   }
   r$tree$subs=subs
-  if (abs(sum(r$tree$subs)-sum(phy$edge.length))>0.01) warning('Incorrect number of subs.')
   if (any(is.na(r$tree$subs))) warning('NAs in subs, maybe change in topology.')
+  if (abs(sum(r$tree$subs)-sum(phy$edge.length))>0.01) warning('Incorrect number of subs.')
   r$resid=calcResiduals(r)
   return(r)
 }
