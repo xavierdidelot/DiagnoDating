@@ -109,6 +109,9 @@ runLSD=function(tree,dates,...) {
   lines=lines[grep('tMRCA',lines)]
   lines=as.numeric(unlist(strsplit(lines, "[ ,]"))[c(3,6)])
   rtd=read.nexus(sprintf('/tmp/tree%d.nwk.result.date.nexus',tag))
+  trees=c(tree,rtd)
+  trees=.compressTipLabel(trees)
+  rtd=trees[[2]]
   res=resDating(rtd,tree,algo='LSD',model='poisson',rate=lines[1]*l,relax=0,rootdate=lines[2])
   return(res)
 }
