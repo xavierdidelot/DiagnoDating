@@ -237,43 +237,9 @@ by number of successes and probability of success. In the four models we have th
 $d_i \mu$. The variance of $l_i$ is equal to its mean in the two strict clock models, and equal to its mean 
 times $(1+\omega)$ in the two relaxed clock models.
 
-\subsection*{Approximate posterior sampling given a point estimate}
+\subsection*{Computation and analysis of residuals}
 
-We want to validate an estimated dated phylogeny $\mathcal{D}$ by comparison with an undated phylogeny $\mathcal{L}$. If the dated phylogeny $\mathcal{D}$ was sampled from the posterior distribution $p(.|\mathcal{L})$ for example using BactDating \citep{Didelot2018}, 
-then residuals can be calculated directly as described in the
-next subsection. This analysis can be performed for multiple posterior samples in order to 
-generate a posterior distribution of p-values \citep{streftarisNonexponentialToleranceInfection2012,lauNewModelDiagnostics2014,gibsonComparisonAssessmentEpidemic2018}.
-
-On the other hand $\mathcal{D}$ may be a point estimate, 
-for example the result of maximum likelihood estimation
-or a summary tree built from a posterior sample \citep{heledLookingTreesForest2013}
-but for which the posterior sample itself is no longer available.
-In this case first we need to generate samples from the posterior before residuals can be computed.
-To illustrate this, let us first consider the discrete strict clock model (Equation \ref{eq:sc})
-and that the true branch durations $d_i$ are independent and identically
-distribution as:
-\begin{equation}
-d_i \sim \mathrm{Gamma}(k,\theta)
-\end{equation}
-Let $\hat{d_i}$ be a branch length in $\mathcal{D}$, on which there are $l_i$ substitutions in the undated phylogeny $\mathcal{L}$. If $\hat{d_i}$ is a maximum likelihood estimate of $d_i$ then
-$\hat{d_i}=l_i/\mu$.
-By conjugacy of the Gamma prior and Poisson likelihood, we can deduce that the posterior of $d_i$ is:
-\begin{equation}
-d_i \sim \mathrm{Gamma}\left(k+\hat{d_i} \mu,\frac{\theta}{1+\theta \mu}\right)
-\end{equation}
-We can simulate from this distribution to get a posterior sample $d_i$, from which we can then compute the residuals.
-
-TODO non-iid case based on coalescent simulation. 
-
-TODO Maybe use improper $\mathrm{InvGamma}(0,\infty)$ prior on $\alpha$ so that posterior is:
-\begin{equation}
-\alpha \sim \mathrm{InvGamma}\left(n-1, \frac{2}{\sum_{i=2}^{2n-1}k_i (k_i-1)(t_i-t_{i+1})}\right)
-\end{equation}
-
-TODO Need to do other models than strict clock model. Conjugacy of priors and posteriors is not as readily available as for Poisson case. May need a Monte-Carlo method (short run of MH algorithm?) to get sample.
-
-\subsection*{Computation of residuals}
-
+We want to validate a dated phylogeny $\mathcal{D}$ by comparison with an undated phylogeny $\mathcal{L}$. We start by considering the case where the dated phylogeny $\mathcal{D}$ is a single sample from the posterior distribution $p(.|\mathcal{L})$ for example using BactDating \citep{Didelot2018}.
 Let $d_i$ be the duration of a given branch in $\mathcal{D}$ and $l_i$ be the number of substitutions on the corresponding branch of $\mathcal{L}$, that is the branch that separates the leaves in the same way. There is a unique corresponding branch in $\mathcal{L}$ for all branches in $\mathcal{D}$ except for the two branches $a$ and $b$ connected to the root of $\mathcal{D}$ for which there is only a single corresponding branch $x$. We therefore split the substitutions on $x$ proportionally between the two branches $a$ and $b$ by defining:
 
 \begin{equation}
@@ -319,8 +285,6 @@ adjustment \citep{dunnRandomizedQuantileResiduals1996,brockwellUniversalResidual
 u_i \sim \mathrm{Unif}(F_i(l_i),F_i(l_i+1))
 \end{equation}
 
-\subsection*{Analysis of residuals}
-
 After computation of the uniform residuals $u_i$ and normal residuals $n_i$,
 we use several methods to assess the validity of the dated phylogeny inference.
 The uniform residuals $u_i$ can be plotted as a histogram to compare their
@@ -340,6 +304,46 @@ Anderson-Darling simple hypothesis testing was used in \citep{lauNewModelDiagnos
 %\footnote{Need to check there is not too much loss of power compared to Shapiro-Wilk or even composite Anderson-Darling which can apparently be more powerful, cf 
 %https://en.wikipedia.org/wiki/Anderson-Darling\_test quote :
 %Stephens[1] notes that the test becomes better when the parameters are computed from the data, even if they are known.}
+
+We have described the validation procedure above as if there was a single posterior
+sample $\mathcal{D}$ to validate, whereas there would typically be multiple samples
+from this posterior available for example from running a Markov Chain Monte-Carlo
+method \citep{Didelot2018}. However, the same computation and analysis of residuals
+could be performed for each sample as described above. Each statistical test will
+return a separate p-value and these can be combined to form a 
+a posterior distribution of p-values \citep{streftarisNonexponentialToleranceInfection2012,lauNewModelDiagnostics2014,gibsonComparisonAssessmentEpidemic2018}.
+
+\subsection*{Approximate posterior sampling given a point estimate}
+
+We now consider the case where the dated phylogeny $\mathcal{D}$ that we wish
+to validate was not sampled from the posterior. Instead it may be a point estimate, 
+for example the result of maximum likelihood estimation
+or a summary tree built from a posterior sample \citep{heledLookingTreesForest2013}
+but for which the posterior sample itself is no longer available.
+In this case first we need to generate approximate 
+samples from the posterior before residuals can be computed.
+To illustrate this, let us first consider the discrete strict clock model (Equation \ref{eq:sc})
+and that the true branch durations $d_i$ are independent and identically
+distribution as:
+\begin{equation}
+d_i \sim \mathrm{Gamma}(k,\theta)
+\end{equation}
+Let $\hat{d_i}$ be a branch length in $\mathcal{D}$, on which there are $l_i$ substitutions in the undated phylogeny $\mathcal{L}$. If $\hat{d_i}$ is a maximum likelihood estimate of $d_i$ then
+$\hat{d_i}=l_i/\mu$.
+By conjugacy of the Gamma prior and Poisson likelihood, we can deduce that the posterior of $d_i$ is:
+\begin{equation}
+d_i \sim \mathrm{Gamma}\left(k+\hat{d_i} \mu,\frac{\theta}{1+\theta \mu}\right)
+\end{equation}
+We can simulate from this distribution to get a posterior sample $d_i$, from which we can then compute the residuals.
+
+TODO non-iid case based on coalescent simulation. 
+
+TODO Maybe use improper $\mathrm{InvGamma}(0,\infty)$ prior on $\alpha$ so that posterior is:
+\begin{equation}
+\alpha \sim \mathrm{InvGamma}\left(n-1, \frac{2}{\sum_{i=2}^{2n-1}k_i (k_i-1)(t_i-t_{i+1})}\right)
+\end{equation}
+
+TODO Need to do other models than strict clock model. Conjugacy of priors and posteriors is not as readily available as for Poisson case. May need a Monte-Carlo method (short run of MH algorithm?) to get sample.
 
 \subsection*{Data simulation}
 
