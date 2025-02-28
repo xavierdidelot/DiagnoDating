@@ -15,7 +15,7 @@ First we generate a dated tree with three populations existing for only 1 year e
 ```{r}
 library(ValidateDating,quietly=T)
 library(DetectImports)
-set.seed(180)
+set.seed(0)
 NeFunImp=function(t,texp) {return(pmax(0,(t-texp)-(t-texp)^2))}
 xs=seq(0,2,0.01);plot(xs,NeFunImp(xs,0),type='l',xlab='Time since pop start',ylab='Pop size')
 dt=simImports(localPopStart = 2000,importDates=c(2001,2002),samplingStartDate = 2000,samplingEndDate = 2100,samplingNumber = 100,globalNeg = 10,NeFunImp = NeFunImp)
@@ -27,15 +27,15 @@ axisPhylo(1,backward = F)
 Next we generate a phylogenetic tree using a Poisson(10) mutation model:
 ```{r}
 tree=simobsphy(dt,mu=10,model='poisson')
-plot(tree,show.tip.label = F)
-axisPhylo(1,backward=F)
+roottotip(tree,dates)
 ```
 
-Run all analysis methods:
+Run and validate BactDating:
 ```{r}
-for (a in 1:5) {
-  r=runDating(tree,dates,algo=a)
-  plot(r,show.tip.label=F)
-  print(r)
-}
+r=runDating(tree,dates,algo=3,nbIts=2e4)
+rb=r;class(rb)<-'resBactDating'
+plot(rb,'treeCI',show.tip.label=F)
+print(rb)
+plot(rb,'trace')
+validate(r)
 ```

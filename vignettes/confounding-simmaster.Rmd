@@ -10,11 +10,11 @@ vignette: >
   %\usepackage[utf8]{inputenc}
 ---
 
-First we generate a dated tree with three populations existing for only 1 year each and separated by 1 years.
+First we generate a dated tree with three populations existing for only 1 year each and separated by 1 year.
 
 ```{r}
 library(ValidateDating,quietly=T)
-set.seed(0)
+set.seed(1)
 s=list(runif(30,2010,2010.1),runif(30,2010.1,2010.2),runif(30,2010.2,2010.3))
 dt=simMaster(samplingDates=s,demes=3,coalrate = 5,migrate = 0.1)
 dates=unname(dist.nodes(dt)[Ntip(dt)+1,1:Ntip(dt)])+dt$root.time
@@ -24,7 +24,7 @@ axisPhylo(1,backward = F)
 
 Next we generate a phylogenetic tree using a Poisson(10) mutation model:
 ```{r}
-tree=simobsphy(dt,mu=10,model='poisson')
+tree=simobsphy(dt,mu=5,model='poisson')
 plot(tree,show.tip.label = F)
 axisPhylo(1,backward=F)
 ```
@@ -34,11 +34,12 @@ Root-to-tip regression:
 r=roottotip(tree,dates)
 ```
 
-Run all analysis methods:
+Run BactDating and validate:
 ```{r}
-for (a in 1:5) {
-  r=runDating(tree,dates,algo=a)
-  plot(r,show.tip.label=F)
-  print(r)
-}
+r=runDating(tree,dates,algo=3,nbIts=2e4)
+rb=r;class(rb)<-'resBactDating'
+plot(rb,'treeCI',show.tip.label=F)
+print(rb)
+plot(rb,'trace')
+validate(r)
 ```
