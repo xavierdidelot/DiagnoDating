@@ -239,15 +239,16 @@ times $(1+\omega)$ in the two relaxed clock models.
 
 \subsection*{Approximate posterior sampling given a point estimate}
 
-We want to validate a dated phylogeny $\mathcal{D}$ by comparison with an undated phylogeny $\mathcal{L}$. If the dated phylogeny $\mathcal{D}$ was sampled from its posterior distribution 
-for example using BactDating \citep{Didelot2018}, 
+We want to validate an estimated dated phylogeny $\mathcal{D}$ by comparison with an undated phylogeny $\mathcal{L}$. If the dated phylogeny $\mathcal{D}$ was sampled from the posterior distribution $p(.|\mathcal{L})$ for example using BactDating \citep{Didelot2018}, 
 then residuals can be calculated directly as described in the
 next subsection. This analysis can be performed for multiple posterior samples in order to 
-generate a posterior distribution of p-values (TODO cites).
+generate a posterior distribution of p-values \citep{streftarisNonexponentialToleranceInfection2012,lauNewModelDiagnostics2014,gibsonComparisonAssessmentEpidemic2018}.
 
-If on the other hand $\mathcal{D}$ is the result of maximum likelihood estimation,
-then first we need to generate samples from the posterior before residuals can be computed.
-\footnote{Could mention somewhere case of a summary tree from the posterior distribution \citep{heledLookingTreesForest2013}}
+On the other hand $\mathcal{D}$ may be a point estimate, 
+for example the result of maximum likelihood estimation
+or a summary tree built from a posterior sample \citep{heledLookingTreesForest2013}
+but for which the posterior sample itself is no longer available.
+In this case first we need to generate samples from the posterior before residuals can be computed.
 To illustrate this, let us first consider the discrete strict clock model (Equation \ref{eq:sc})
 and that the true branch durations $d_i$ are independent and identically
 distribution as:
@@ -264,16 +265,14 @@ We can simulate from this distribution to get a posterior sample $d_i$, from whi
 
 TODO non-iid case based on coalescent simulation. 
 
-Maybe use improper $\mathrm{InvGamma}(0,\infty)$ prior on $\alpha$ so that posterior is:
+TODO Maybe use improper $\mathrm{InvGamma}(0,\infty)$ prior on $\alpha$ so that posterior is:
 \begin{equation}
 \alpha \sim \mathrm{InvGamma}\left(n-1, \frac{2}{\sum_{i=2}^{2n-1}k_i (k_i-1)(t_i-t_{i+1})}\right)
 \end{equation}
 
-\footnote{Need to do other models than strict clock model. Conjugacy of priors and posteriors is not as readily available as for Poisson case. May need a Monte-Carlo method (short run of MH algorithm?) to get sample.}
+TODO Need to do other models than strict clock model. Conjugacy of priors and posteriors is not as readily available as for Poisson case. May need a Monte-Carlo method (short run of MH algorithm?) to get sample.
 
 \subsection*{Computation of residuals}
-
-\footnote{Notations are not consistent. $\mathcal{D}$ sometimes refer to input dated phylogeny and sometimes to sampled dated phylogeny.}
 
 Let $d_i$ be the duration of a given branch in $\mathcal{D}$ and $l_i$ be the number of substitutions on the corresponding branch of $\mathcal{L}$, that is the branch that separates the leaves in the same way. There is a unique corresponding branch in $\mathcal{L}$ for all branches in $\mathcal{D}$ except for the two branches $a$ and $b$ connected to the root of $\mathcal{D}$ for which there is only a single corresponding branch $x$. We therefore split the substitutions on $x$ proportionally between the two branches $a$ and $b$ by defining:
 
