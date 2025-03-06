@@ -2,17 +2,18 @@
 #' @param tree Tree to date
 #' @param dates Dates of leaves in the tree
 #' @param algo Algorithm to use, can be one of: LSD, node.dating, BactDating, treedater, TreeTime
+#' @param rate If provided, force analysis to use specified value for rate
 #' @param ... Passed on to dating algorithm
 #'
 #' @return resDating object containing results of dating analysis
 #' @export
 #'
-runDating=function(tree,dates,algo='BactDating',...) {
-  if (algo=='1' || algo=='LSD') r=runLSD(tree,dates,...)
-  if (algo=='2' || algo=='node.dating') r=runNodeDating(tree,dates,...)
-  if (algo=='3' || algo=='BactDating') r=runBactDating(tree,dates,...)
-  if (algo=='4' || algo=='treedater') r=runTreeDater(tree,dates,...)
-  if (algo=='5' || algo=='TreeTime') r=runTreeTime(tree,dates,...)
+runDating=function(tree,dates,algo='BactDating',rate=NA,...) {
+  if (algo=='1' || algo=='LSD') r=runLSD(tree,dates,rate,...)
+  if (algo=='2' || algo=='node.dating') r=runNodeDating(tree,dates,rate,...)
+  if (algo=='3' || algo=='BactDating') r=runBactDating(tree,dates,rate,...)
+  if (algo=='4' || algo=='treedater') r=runTreeDater(tree,dates,rate,...)
+  if (algo=='5' || algo=='TreeTime') r=runTreeTime(tree,dates,rate,...)
   return(r)
 }
 
@@ -20,13 +21,15 @@ runDating=function(tree,dates,algo='BactDating',...) {
 #'
 #' @param tree Tree to date
 #' @param dates Dates of leaves in the tree
+#' @param rate If provided, force analysis to use specified value for rate
 #' @param ... Passed on to BactDating::bactdate
 #'
 #' @return resDating object containing results of BactDating analysis
 #'
-runBactDating=function(tree,dates,...) {
+runBactDating=function(tree,dates,rate=NA,...) {
   def_args=list(tree=tree,date=dates,model='poisson')
-  cl=as.list(match.call())[-(1:3)]
+  if (!is.na(rate)) def_args=c(def_args,initMu=rate,updateMu=F)
+  cl=as.list(match.call())[-(1:4)]
   args=c(cl,def_args[!names(def_args) %in% names(cl)])
   r=do.call("bactdate",args)
   r$algo='BactDating'
@@ -72,11 +75,13 @@ takeSample=function(r,w=nrow(r$record)) {
 #'
 #' @param tree Tree to date
 #' @param dates Dates of leaves in the tree
+#' @param rate If provided, force analysis to use specified value for rate
 #' @param ... Passed on to treedater::dater
 #'
 #' @return resDating object containing results of treedater analysis
 #'
-runTreeDater=function(tree,dates,...) {
+runTreeDater=function(tree,dates,rate=NA,...) {
+  if (!is.na(rate)) warning('Forced rate not implemented')
   tre=unroot(tree)
   l=max(tree$edge.length)*1000
   tre$edge.length=tre$edge.length/l
@@ -91,11 +96,13 @@ runTreeDater=function(tree,dates,...) {
 #'
 #' @param tree Tree to date
 #' @param dates Dates of leaves in the tree
+#' @param rate If provided, force analysis to use specified value for rate
 #' @param ... Ignored for the time being
 #'
 #' @return resDating object containing results of LSD analysis
 #'
-runLSD=function(tree,dates,...) {
+runLSD=function(tree,dates,rate=NA,...) {
+  if (!is.na(rate)) warning('Forced rate not implemented')
   tag=round(runif(1,1,1e8))
   tre=unroot(tree)
   l=round(max(tree$edge.length)*1000)
@@ -120,14 +127,18 @@ runLSD=function(tree,dates,...) {
 #'
 #' @param tree Tree to date
 #' @param dates Dates of leaves in the tree
+#' @param rate If provided, force analysis to use specified value for rate
 #' @param ... Passed on to ape::node.dating
 #'
 #' @return resDating object containing results of node.dating analysis
 #'
-runNodeDating=function(tree,dates,...) {
+runNodeDating=function(tree,dates,rate=NA,...) {
   try(suppressWarnings(tre<-rtt(unroot(tree),dates)),silent=T)
-  try(suppressWarnings(mu<-ape::estimate.mu(tre,dates)),silent=T)
-  if (mu<=0) mu=0.01
+  if (!is.na(rate)) mu=rate
+  else {
+    try(suppressWarnings(mu<-ape::estimate.mu(tre,dates)),silent=T)
+    if (mu<=0) mu=0.01
+  }
   suppressWarnings(d<-ape::estimate.dates(tre,dates,mu=mu))
   dt=tre
   dt$subs=dt$edge.length
@@ -141,11 +152,13 @@ runNodeDating=function(tree,dates,...) {
 #'
 #' @param tree Tree to date
 #' @param dates Dates of leaves in the tree
+#' @param rate If provided, force analysis to use specified value for rate
 #' @param ... Passed on
 #'
 #' @return resDating object containing results of TreeTime analysis
 #'
-runTreeTime=function(tree,dates,...) {
+runTreeTime=function(tree,dates,rate=NA,...) {
+  if (!is.na(rate)) warning('Forced rate not implemented')
   tag=round(runif(1,1,1e8))
   tre=unroot(tree)
   l=round(max(tree$edge.length)*1000)

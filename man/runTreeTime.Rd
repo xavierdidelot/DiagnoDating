@@ -4,12 +4,14 @@
 \alias{runTreeTime}
 \title{Date a tree using TreeTime}
 \usage{
-runTreeTime(tree, dates, ...)
+runTreeTime(tree, dates, rate = NA, ...)
 }
 \arguments{
 \item{tree}{Tree to date}
 
 \item{dates}{Dates of leaves in the tree}
+
+\item{rate}{If provided, force analysis to use specified value for rate}
 
 \item{...}{Passed on}
 }

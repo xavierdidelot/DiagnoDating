@@ -4,7 +4,7 @@
 \alias{runDating}
 \title{Run a dating analysis}
 \usage{
-runDating(tree, dates, algo = "BactDating", ...)
+runDating(tree, dates, algo = "BactDating", rate = NA, ...)
 }
 \arguments{
 \item{tree}{Tree to date}
@@ -12,6 +12,8 @@ runDating(tree, dates, algo = "BactDating", ...)
 \item{dates}{Dates of leaves in the tree}
 
 \item{algo}{Algorithm to use, can be one of: LSD, node.dating, BactDating, treedater, TreeTime}
+
+\item{rate}{If provided, force analysis to use specified value for rate}
 
 \item{...}{Passed on to dating algorithm}
 }
