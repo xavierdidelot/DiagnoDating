@@ -2,6 +2,7 @@
 
 S3method(plot,resDating)
 S3method(print,resDating)
+export(estimAlpha)
 export(plotProbBranches)
 export(plotResid)
 export(resDating)

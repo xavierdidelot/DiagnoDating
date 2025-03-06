@@ -125,7 +125,9 @@ below can also be applied to methods that build a dated phylogeny directly from 
 such as BEAST \citep{Suchard2018},
 simply by constructing a separate undated phylogeny from the same alignment using
 for example PhyML \citep{Guindon2010} or RAxML \citep{Stamatakis2015} 
-(Figure \ref{fig:approach}B). For each branch in the dated phylogeny $\mathcal{D}$ we can
+(Figure \ref{fig:approach}B). 
+\footnote{Not clear what to do if the dated phylogeny and undated phylogeny don't have the same topology.}
+For each branch in the dated phylogeny $\mathcal{D}$ we can
 consider its inferred length, the number of substitutions happening on that branch in the standard phylogeny
 $\mathcal{L}$, and the model and parameters used when building the dated phylogeny $\mathcal{D}$,
 in order to compute a residual for that branch (see Methods). If the inference is valid,
@@ -323,6 +325,7 @@ but for which the posterior sample itself is no longer available.
 In this case first we need to generate approximate 
 samples from the posterior before residuals can be computed.
 To illustrate this, let us first consider the discrete strict clock model (Equation \ref{eq:sc})
+with known mutation rate $\mu$
 and that the true branch durations $d_i$ are independent and identically
 distribution as:
 \begin{equation}
@@ -330,20 +333,36 @@ d_i \sim \mathrm{Gamma}(k,\theta)
 \end{equation}
 Let $\hat{d_i}$ be a branch length in $\mathcal{D}$, on which there are $l_i$ substitutions in the undated phylogeny $\mathcal{L}$. If $\hat{d_i}$ is a maximum likelihood estimate of $d_i$ then
 $\hat{d_i}=l_i/\mu$.
+The residuals of the data points $l_i$ against the estimates $\hat{d_i}$ would look
+underdispersed, because the maximum likelihood estimates are overfitted.
+It is however possible in this case to recover the correct residuals by sampling from
+the correct posterior. 
 By conjugacy of the Gamma prior and Poisson likelihood, we can deduce that the posterior of $d_i$ is:
 \begin{equation}
 d_i \sim \mathrm{Gamma}\left(k+\hat{d_i} \mu,\frac{\theta}{1+\theta \mu}\right)
 \end{equation}
 We can simulate from this distribution to get a posterior sample $d_i$, from which we can then compute the residuals.
 
-TODO non-iid case based on coalescent simulation. 
-
-TODO Maybe use improper $\mathrm{InvGamma}(0,\infty)$ prior on $\alpha$ so that posterior is:
+The case described above works exactly but is idealised for two reasons:
+firstly the branch durations $d_i$ are not independent and identically distributed
+but rather related through each other via the coalescent process, and secondly
+the clock is not usually strict with a known rate. However, we can follow
+a similar idea of generating an approximate posterior sample centered on the given
+point estimate $\mathcal{D}$. To do so, we perform a short run of BactDating \citep{Didelot2018}
+for the input with branch lengths equal to
+the lengths in $\mathcal{D}$ multiplied by the estimated clock rate.
+Inference is performed under the 
+continuous version of the strict clock model (Equation \ref{eq:csc}).  
+The clock rate is fixed equal to its previous estimate, and the coalescent rate $\alpha$
+is fixed equal to its maximum likelihood estimator:
+\begin{equation}
+\alpha = \frac{\sum_{i=2}^{2n-1}k_i (k_i-1)(t_i-t_{i+1})}{2(n-1)}
+\end{equation}
+Note that this corresponds to the mean of the posterior distribution of $\alpha$ 
+assuming an improper $\mathrm{InvGamma}(0,\infty)$ prior on $\alpha$ so that posterior is:
 \begin{equation}
 \alpha \sim \mathrm{InvGamma}\left(n-1, \frac{2}{\sum_{i=2}^{2n-1}k_i (k_i-1)(t_i-t_{i+1})}\right)
 \end{equation}
-
-TODO Need to do other models than strict clock model. Conjugacy of priors and posteriors is not as readily available as for Poisson case. May need a Monte-Carlo method (short run of MH algorithm?) to get sample.
 
 \subsection*{Data simulation}
 

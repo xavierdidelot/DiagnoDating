@@ -179,3 +179,26 @@ runTreeTime=function(tree,dates,rate=NA,...) {
   res=resDating(restree,tree,algo='TreeTime',model='poisson',rate=resrate,relax=0,rootdate=resrootdate)
   return(res)
 }
+
+#' Estimation of the coalescent rate alpha
+#'
+#' @param tree Dated tree
+#' @param sampling Whether to sample from the distribution or return the mean
+#'
+#' @return Estimated value of the coalescent rate alpha
+#' @export
+#'
+estimAlpha=function(tree,sampling=F)
+{
+  n=Ntip(tree)
+  nr=2*n-1
+  d=dist.nodes(tree)[n+1,]
+  s=sort(d,decreasing = T, index.return = TRUE)
+  k=cumsum(2*(s$ix<=n)-1)
+  difs=s$x[1:(nr-1)]-s$x[2:nr]
+  su=sum(k[1:(nr-1)]*(k[1:(nr-1)]-1)*difs)
+  #Using inverse-gamma prior
+  if (sampling==F) alpha=1/((n-1)*2/su)
+  else alpha=1/rgamma(1,shape=n-1,scale=2/su)
+  return(alpha)
+}

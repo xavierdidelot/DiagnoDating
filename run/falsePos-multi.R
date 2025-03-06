@@ -6,7 +6,7 @@ library(foreach)
 cl <- parallel::makeCluster(parallel::detectCores() - 1, type = "PSOCK")
 doParallel::registerDoParallel(cl)
 
-allres <- foreach (rep = 1:50,.packages = c('ape','BactDating','ValidateDating')) %dopar% {
+allres <- foreach (rep = 1:20,.packages = c('ape','BactDating','ValidateDating')) %dopar% {
   set.seed(rep)
   dates=runif(200,2000,2020)
   dt=simcoaltree(dates,10)
@@ -29,7 +29,7 @@ allres <- foreach (rep = 1:50,.packages = c('ape','BactDating','ValidateDating')
   v3=validate(r3,resampling = 2);p3f=length(which(v3<0.05))/length(v3)
   r4=runDating(phy,dates,algo='TreeTime',rate=10)
   v4=validate(r4,resampling = 2);p4f=length(which(v4<0.05))/length(v4)
-  return(list(seed=rep,p0,p1,p2,p3,p4,p1f,p2f,p3f,p4f,p5f))
+  return(list(seed=rep,p0,p1,p2,p3,p4,p1f,p2f,p3f,p4f))
 }
 parallel::stopCluster(cl)
 save.image('falsePos-multi.RData')

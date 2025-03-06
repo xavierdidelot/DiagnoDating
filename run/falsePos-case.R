@@ -7,9 +7,7 @@ dt=simcoaltree(dates,10)
 phy=simobsphy(dt,mu=10,model='poisson')
 
 r1=runDating(phy,dates,algo='node.dating')
-validate(r1,resampling=2,showLast = T)
+validate(r1,resampling=2,showLast = T,showTraces = T)
 
 r2=runDating(phy,dates,algo='node.dating',rate=10)
-validate(r2,resampling=2,showLast = T)
-
-
+validate(r2,resampling=2,showLast = T,showTraces = T)
