@@ -231,10 +231,12 @@ testResid=function(x,test=1) {
 #' @param nrep number of repeats to perform
 #' @param resampling method used for resampling: 0 (default) for using given sample, 1 to use the approximate posterior resampling method, 2 to use BactDating resampling
 #' @param nstore size of the store to use in approximate posterior resampling method
+#' @param showProgress Whether or not to show progress
 #' @param showPlot whether or not to show the plot
+#' @param showLast whether or not to show the residuals for the last sample
 #' @export
 #'
-validate=function(x,nrep=1000,resampling=0,nstore=1000,showPlot=T)
+validate=function(x,nrep=1000,resampling=0,nstore=1000,showProgress=T,showPlot=T,showLast=F)
 {
 
   ps=rep(NA,nrep)
@@ -257,7 +259,7 @@ validate=function(x,nrep=1000,resampling=0,nstore=1000,showPlot=T)
     rtree$root.time=NULL
     k=sum(phy$edge.length)/sum(rtree$edge.length)
     rtree$edge.length=rtree$edge.length*k
-    r2=runDating(rtree,dates,minbralen=1e-10,model='strictgamma',initMu=k,updateMu=F,updateRoot=F)#,initAlpha=mean(r$record[501:1000,'alpha']),updateAlpha=F)
+    r2=runDating(rtree,dates,minbralen=1e-10,model='strictgamma',initMu=k,updateMu=F,updateRoot=F,showProgress=showProgress)#,initAlpha=mean(r$record[501:1000,'alpha']),updateAlpha=F)
     r4=resDating(r2$tree,phy,algo=x$algo,model='poisson',rate=x$rate)
     r4$record=r2$record
     x3=resDating(takeSample(r4)$tree,r4$inputtree,algo=r4$algo,model=r4$model,rate=r4$rate,relax=r4$relax,rootdate=r4$rootdate)
@@ -267,6 +269,27 @@ validate=function(x,nrep=1000,resampling=0,nstore=1000,showPlot=T)
       x2$tree$subs=x3$tree$subs
       x2$rate=r4$rate
       x2$resid=calcResiduals(x2)
+      ps[i]=testResid(x2)$p.value
+    }
+  }
+
+  if (resampling==3) {
+    #Using resampling via bactdate, slower but clearer version
+    rtree=x$tree
+    phy=x$inputtree
+    dates=unname(x$rootdate+dist.nodes(x$tree)[1:Ntip(x$tree),1+Ntip(x$tree)])
+    rtree$root.time=NULL
+    k=sum(phy$edge.length)/sum(rtree$edge.length)
+    rtree$edge.length=rtree$edge.length*k
+    r2=runDating(rtree,dates,minbralen=1e-10,model='strictgamma',showProgress=showProgress,initMu=k,updateMu=F,updateRoot=F)#,initAlpha=mean(r$record[501:1000,'alpha']),updateAlpha=F)
+    #tmp=r2;class(tmp)='resBactDating';plot(tmp,'trace')#to plot traces
+    inds=round(seq(max(1,floor(nrow(r2$record)/2)),nrow(r2$record),length.out=nrep))
+    if (showProgress) print('Computing p-values...')
+    if (showProgress) pb <- utils::txtProgressBar(min=0,max=nrep,style = 3)
+    for (i in 1:nrep) {
+      if (showProgress) utils::setTxtProgressBar(pb, i)
+      samtree=takeSample(r2,inds[i])$tree
+      x2=resDating(samtree,phy,algo=r$algo,model='poisson',rate=r$rate)
       ps[i]=testResid(x2)$p.value
     }
   }
@@ -302,6 +325,8 @@ validate=function(x,nrep=1000,resampling=0,nstore=1000,showPlot=T)
       ps[i]=testResid(x2)$p.value
     }
   }
+
+  if (showLast) {plotResid(x2);title(testResid(x2)$p.value)}
 
   #Plot histogram if requested
   if (showPlot) {

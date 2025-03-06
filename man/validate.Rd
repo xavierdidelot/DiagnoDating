@@ -4,7 +4,15 @@
 \alias{validate}
 \title{Check whether a dating analysis is valid}
 \usage{
-validate(x, nrep = 1000, resampling = 0, nstore = 1000, showPlot = T)
+validate(
+  x,
+  nrep = 1000,
+  resampling = 0,
+  nstore = 1000,
+  showProgress = T,
+  showPlot = T,
+  showLast = F
+)
 }
 \arguments{
 \item{x}{object of class resDating}
@@ -15,7 +23,11 @@ validate(x, nrep = 1000, resampling = 0, nstore = 1000, showPlot = T)
 
 \item{nstore}{size of the store to use in approximate posterior resampling method}
 
+\item{showProgress}{Whether or not to show progress}
+
 \item{showPlot}{whether or not to show the plot}
+
+\item{showLast}{whether or not to show the residuals for the last sample}
 }
 \description{
 Check whether a dating analysis is valid
