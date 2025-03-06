@@ -8,7 +8,7 @@ phy=simobsphy(dt,mu=10,model='poisson')
 r0=resDating(dt,phy)#perfect residuals
 plotResid(r0);title(testResid(r0)$p.value)
 
-r=runDating(phy,dates,showProgress=T,nbIts=2e4)
+r=runDating(phy,dates,showProgress=T)
 plotResid(r);title(testResid(r)$p.value)
 validate(r)
 validate(r,resampling = 2)

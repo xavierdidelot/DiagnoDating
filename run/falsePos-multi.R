@@ -6,7 +6,7 @@ library(foreach)
 cl <- parallel::makeCluster(parallel::detectCores() - 1, type = "PSOCK")
 doParallel::registerDoParallel(cl)
 
-allres <- foreach (rep = 1:20,.packages = c('ape','BactDating','ValidateDating')) %dopar% {
+allres <- foreach (rep = 1:100,.packages = c('ape','BactDating','ValidateDating')) %dopar% {
   set.seed(rep)
   dates=runif(200,2000,2020)
   dt=simcoaltree(dates,10)

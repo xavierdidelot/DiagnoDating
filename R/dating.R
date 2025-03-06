@@ -55,14 +55,12 @@ runBactDating=function(tree,dates,rate=NA,...) {
 #'
 takeSample=function(r,w=nrow(r$record)) {
   tree = r$inputtree
-  bestroot = as.numeric(names(sort(table(r$record[w,'root']),decreasing=T)[1]))
-  bestrows = intersect(w,which(r$record[,'root']==bestroot))
-  meanRec = colMeans(r$record[bestrows, ,drop=F])
-  for (i in 1:nrow(tree$edge)) {
-    tree$edge[i,1]=r$record[bestrows[1],(Ntip(tree)+Nnode(tree))+tree$edge[i,2]]
-    tree$edge.length[i] = meanRec[tree$edge[i, 2]] - meanRec[tree$edge[i, 1]]
-    tree$subs[i] = meanRec[(Ntip(tree)+Nnode(tree))*2+tree$edge[i,2]]
-  }
+  rowRec = r$record[w,]
+  s=Ntip(tree)+Nnode(tree)
+  i2=1:nrow(tree$edge)
+  tree$edge[i2,1]=r$record[w,s+tree$edge[i2,2]]
+  tree$edge.length[i2] = rowRec[tree$edge[i2, 2]] - rowRec[tree$edge[i2, 1]]
+  tree$subs[i2] = rowRec[s*2+tree$edge[i2,2]]
   rmod=r
   rmod$tree=tree
   rmod$rootdate=r$record[w,Ntip(tree)+1]
