@@ -11,7 +11,8 @@ validate(
   nstore = 1000,
   showProgress = T,
   showPlot = T,
-  showLast = F
+  showLast = F,
+  showTraces = F
 )
 }
 \arguments{
@@ -25,9 +26,11 @@ validate(
 
 \item{showProgress}{Whether or not to show progress}
 
-\item{showPlot}{whether or not to show the plot}
+\item{showPlot}{whether or not to show the histogram of p-values}
 
 \item{showLast}{whether or not to show the residuals for the last sample}
+
+\item{showTraces}{whether or not to show the MCMC traces}
 }
 \description{
 Check whether a dating analysis is valid

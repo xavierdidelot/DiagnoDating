@@ -14,6 +14,7 @@ runDating=function(tree,dates,algo='BactDating',rate=NA,...) {
   if (algo=='3' || algo=='BactDating') r=runBactDating(tree,dates,rate,...)
   if (algo=='4' || algo=='treedater') r=runTreeDater(tree,dates,rate,...)
   if (algo=='5' || algo=='TreeTime') r=runTreeTime(tree,dates,rate,...)
+  if (!exists('r')) stop('Unknown algorithm')
   return(r)
 }
 
@@ -81,13 +82,13 @@ takeSample=function(r,w=nrow(r$record)) {
 #' @return resDating object containing results of treedater analysis
 #'
 runTreeDater=function(tree,dates,rate=NA,...) {
-  if (!is.na(rate)) warning('Forced rate not implemented')
   tre=unroot(tree)
   l=max(tree$edge.length)*1000
   tre$edge.length=tre$edge.length/l
   sts=dates
   names(sts)=tree$tip.label
-  o=capture.output(rtd<-suppressWarnings(treedater::dater(tre,sts,s=l,...)))
+  if (is.na(rate)) o=capture.output(rtd<-suppressWarnings(treedater::dater(tre,sts,s=l,...)))
+  else o=capture.output(rtd<-suppressWarnings(treedater::dater(tre,sts,s=l,omega0=rate/l,meanRateLimits=c(1-1e-10,1+1e-10)*rate/l,...)))
   res=resDating(rtd,tree,algo='treedater',model='poisson',rate=rtd$mean.rate*l,relax=0,rootdate=rtd$timeOfMRCA)
   return(res)
 }
@@ -102,7 +103,6 @@ runTreeDater=function(tree,dates,rate=NA,...) {
 #' @return resDating object containing results of LSD analysis
 #'
 runLSD=function(tree,dates,rate=NA,...) {
-  if (!is.na(rate)) warning('Forced rate not implemented')
   tag=round(runif(1,1,1e8))
   tre=unroot(tree)
   l=round(max(tree$edge.length)*1000)
@@ -111,7 +111,8 @@ runLSD=function(tree,dates,rate=NA,...) {
   names(sts)=tre$tip.label
   write.tree(tre,sprintf('/tmp/tree%d.nwk',tag))
   write.table(sts,sprintf('/tmp/dates%d.csv',tag),quote = F,col.names=length(sts))
-  system(sprintf("lsd2 -i /tmp/tree%d.nwk -d /tmp/dates%d.csv -s %d -l -1 -r a> /dev/null",tag,tag,l))
+  if (is.na(rate)) system(sprintf("lsd2 -i /tmp/tree%d.nwk -d /tmp/dates%d.csv -s %d -l -1 -r a > /dev/null",tag,tag,l))
+  else system(sprintf("echo %f > /tmp/rate%d;lsd2 -i /tmp/tree%d.nwk -d /tmp/dates%d.csv -s %d -l -1 -r a -w /tmp/rate%d > /dev/null",rate/l,tag,tag,tag,l,tag))
   lines=readLines(sprintf('/tmp/tree%d.nwk.result',tag))
   lines=lines[grep('tMRCA',lines)]
   lines=as.numeric(unlist(strsplit(lines, "[ ,]"))[c(3,6)])
@@ -158,7 +159,6 @@ runNodeDating=function(tree,dates,rate=NA,...) {
 #' @return resDating object containing results of TreeTime analysis
 #'
 runTreeTime=function(tree,dates,rate=NA,...) {
-  if (!is.na(rate)) warning('Forced rate not implemented')
   tag=round(runif(1,1,1e8))
   tre=unroot(tree)
   l=round(max(tree$edge.length)*1000)
@@ -167,7 +167,8 @@ runTreeTime=function(tree,dates,rate=NA,...) {
   names(sts)=tree$tip.label
   write.tree(tre,sprintf('/tmp/tree%d.nwk',tag))
   write.table(sts,sprintf('/tmp/dates%d.tsv',tag),quote = F,col.names='strain\tdate',sep='\t')
-  system(sprintf("treetime --tree /tmp/tree%d.nwk --dates /tmp/dates%d.tsv --sequence-length %d --outdir /tmp/%d > /dev/null",tag,tag,l,tag))
+  if (is.na(rate)) system(sprintf("treetime --tree /tmp/tree%d.nwk --dates /tmp/dates%d.tsv --sequence-length %d --outdir /tmp/%d > /dev/null",tag,tag,l,tag))
+  else system(sprintf("treetime --tree /tmp/tree%d.nwk --dates /tmp/dates%d.tsv --sequence-length %d --outdir /tmp/%d --clock-rate %f > /dev/null",tag,tag,l,tag,rate/l))
   resrate=read.table(sprintf('/tmp/%d/molecular_clock.txt',tag))[1,1]*l
   restree=read.nexus(sprintf('/tmp/%d/timetree.nexus',tag))
   resrootdate=max(dates)-max(dist.nodes(restree)[Ntip(restree)+1,1:Ntip(restree)])

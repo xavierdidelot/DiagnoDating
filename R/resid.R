@@ -232,11 +232,12 @@ testResid=function(x,test=1) {
 #' @param resampling method used for resampling: 0 (default) for using given sample, 1 to use the approximate posterior resampling method, 2 to use BactDating resampling
 #' @param nstore size of the store to use in approximate posterior resampling method
 #' @param showProgress Whether or not to show progress
-#' @param showPlot whether or not to show the plot
+#' @param showPlot whether or not to show the histogram of p-values
 #' @param showLast whether or not to show the residuals for the last sample
+#' @param showTraces whether or not to show the MCMC traces
 #' @export
 #'
-validate=function(x,nrep=1000,resampling=0,nstore=1000,showProgress=T,showPlot=T,showLast=F)
+validate=function(x,nrep=1000,resampling=0,nstore=1000,showProgress=T,showPlot=T,showLast=F,showTraces=F)
 {
 
   ps=rep(NA,nrep)
@@ -259,8 +260,8 @@ validate=function(x,nrep=1000,resampling=0,nstore=1000,showProgress=T,showPlot=T
     rtree$root.time=NULL
     k=sum(phy$edge.length)/sum(rtree$edge.length)
     rtree$edge.length=rtree$edge.length*k
-    r2=runDating(rtree,dates,minbralen=1e-10,model='strictgamma',initMu=k,updateMu=F,updateRoot=F,showProgress=showProgress)#,initAlpha=mean(r$record[501:1000,'alpha']),updateAlpha=F)
-    #tmp=r2;class(tmp)='resBactDating';plot(tmp,'trace')#to plot traces
+    r2=runDating(rtree,dates,rate=k,minbralen=1e-10,model='strictgamma',updateRoot=F,showProgress=showProgress)#,initAlpha=estimAlpha(x$tree),updateAlpha=F)
+    if (showTraces) {tmp=r2;class(tmp)='resBactDating';plot(tmp,'trace')}
     r4=resDating(r2$tree,phy,algo=x$algo,model=x$model,rate=x$rate,relax=x$relax)
     r4$record=r2$record
     x3=resDating(takeSample(r4)$tree,r4$inputtree,algo=r4$algo,model=r4$model,rate=r4$rate,relax=r4$relax,rootdate=r4$rootdate)
@@ -283,8 +284,8 @@ validate=function(x,nrep=1000,resampling=0,nstore=1000,showProgress=T,showPlot=T
     rtree$root.time=NULL
     k=sum(phy$edge.length)/sum(rtree$edge.length)
     rtree$edge.length=rtree$edge.length*k
-    r2=runDating(rtree,dates,minbralen=1e-10,model='strictgamma',showProgress=showProgress,initMu=k,updateMu=F,updateRoot=F)#,initAlpha=mean(r$record[501:1000,'alpha']),updateAlpha=F)
-    if (showProgress) {tmp=r2;class(tmp)='resBactDating';plot(tmp,'trace')}
+    r2=runDating(rtree,dates,rate=k,minbralen=1e-10,model='strictgamma',showProgress=showProgress,updateRoot=F)#,initAlpha=estimAlpha(x$tree),updateAlpha=F)
+    if (showTraces) {tmp=r2;class(tmp)='resBactDating';plot(tmp,'trace')}
     inds=round(seq(max(1,floor(nrow(r2$record)/2)),nrow(r2$record),length.out=nrep))
     if (showProgress) print('Computing p-values...')
     if (showProgress) pb <- utils::txtProgressBar(min=0,max=nrep,style = 3)
