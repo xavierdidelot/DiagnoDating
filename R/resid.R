@@ -334,7 +334,13 @@ validate=function(x,nrep=1000,resampling=0,nstore=1000,showProgress=T,showPlot=T
 
   #Plot histogram if requested
   if (showPlot) {
-    hist(ps,breaks=seq(0,1,length.out=21),xlab='',ylab='',main=sprintf('Posterior distribution of p-values, with %.1f%% of p-values below 0.05',100*length(which(ps<0.05))/nrep))
+    h=hist(ps,breaks=seq(0,1,length.out=21),xlab='',ylab='',main='Posterior distribution of p-values')
+    y=length(which(ps<0.05))
+    par(xpd=NA)
+    text(0.025,y,sprintf('%.1f%%',y*100/nrep),pos=3)
+    med=median(ps)
+    lines(c(med,med),c(0,max(h$counts)),lty=2)
+    text(med,max(h$counts),format(med,digits=3),pos=4)
   }
   invisible(ps)
 }

@@ -241,7 +241,7 @@ times $(1+\omega)$ in the two relaxed clock models.
 
 \subsection*{Computation and analysis of residuals}
 
-We want to validate a dated phylogeny $\mathcal{D}$ by comparison with an undated phylogeny $\mathcal{L}$. We start by considering the case where the dated phylogeny $\mathcal{D}$ is a single sample from the posterior distribution $p(.|\mathcal{L})$ for example using BactDating \citep{Didelot2018}.
+We want to validate a dated phylogeny $\mathcal{D}$ by comparison with an undated phylogeny $\mathcal{L}$. We start by considering the case where the dated phylogeny $\mathcal{D}$ is a single sample from the posterior distribution $p(.|\mathcal{L})$ obtained for example using BactDating \citep{Didelot2018}.
 Let $d_i$ be the duration of a given branch in $\mathcal{D}$ and $l_i$ be the number of substitutions on the corresponding branch of $\mathcal{L}$, that is the branch that separates the leaves in the same way. There is a unique corresponding branch in $\mathcal{L}$ for all branches in $\mathcal{D}$ except for the two branches $a$ and $b$ connected to the root of $\mathcal{D}$ for which there is only a single corresponding branch $x$. We therefore split the substitutions on $x$ proportionally between the two branches $a$ and $b$ by defining:
 
 \begin{equation}
@@ -276,7 +276,7 @@ n_i=\Phi^{-1}(u_i)
 \label{eq:norm-resid}
 \end{equation}
 
-If the inference is valid, then the normal residual $n_i$ should be distributed
+If the inference is valid, then the normal residuals $n_i$ should be distributed
 as Normal(0,1) which is more convenient to work with than the Uniform(0,1) for uniform residuals.
 The uniform and normal residuals above can be computed directly
 when the clock model is continuous (Equations \ref{eq:csc} and \ref{eq:carc}) but when
@@ -285,9 +285,10 @@ adjustment \citep{dunnRandomizedQuantileResiduals1996,brockwellUniversalResidual
 
 \begin{equation}
 u_i \sim \mathrm{Unif}(F_i(l_i),F_i(l_i+1))
+\label{eq:unif-resid-discrete}
 \end{equation}
 
-After computation of the uniform residuals $u_i$ and normal residuals $n_i$,
+After computation of the uniform residuals $u_i$ and normal residuals $n_i$ for each branch,
 we use several methods to assess the validity of the dated phylogeny inference.
 The uniform residuals $u_i$ can be plotted as a histogram to compare their
 distribution with the theoretical Uniform(0,1) distribution, but as previously noted this can
@@ -295,17 +296,21 @@ be difficult to interpret. We therefore prefer to use the normal residuals $n_i$
 as a histogram to compare their distribution with the theoretical Normal(0,1).
 A quantile-quantile plot (QQ plot) can be used to compare the distribution of the residuals
 to their theoretical distribution.
-Anderson-Darling test \citep{lewis1961distribution} 
-in DescTools R package implements simple hypothesis testing
-(unlike nortest package which is composite test). Use this to test that normal residuals
-are standard normal.   
-Note this is exactly equivalent to testing the uniform residuals against Uniform(0,1).
-Anderson-Darling simple hypothesis testing was used in \citep{lauNewModelDiagnostics2014} via implementation in package ADGofTest, returns same results as DescTools. Both use the same C code from \citep{marsagliaEvaluatingAndersonDarlingDistribution2004}. 
-%\footnote{Other option: Shapiro-Wilk test for normality. Usually found to be most powerful test of normality. But performs composite testing only (ie tests if Normal, not if standard Normal)}
-%\footnote{Other option: Kolmogorov-Smirnov test, specific against standard Normal but not very powerful. Note this is exactly equivalent to testing the uniform residuals against Uniform(0,1).}
-%\footnote{Need to check there is not too much loss of power compared to Shapiro-Wilk or even composite Anderson-Darling which can apparently be more powerful, cf 
-%https://en.wikipedia.org/wiki/Anderson-Darling\_test quote :
-%Stephens[1] notes that the test becomes better when the parameters are computed from the data, even if they are known.}
+A p-value can be computed to assess that the normal
+residuals are distributed as expected. 
+The most commonly used and powerful test of normality 
+is the Shapiro-Wilk test \citep{razaliPowerComparisonsShapiroWilk2011},
+but it is a composite test for when the mean and variance
+are unknown, whereas here we know that the
+normal residuals follow the standard normal distribution with
+mean 0 and variance 1. We therefore use the
+Anderson-Darling simple hypothesis 
+test \citep{lewis1961distribution} 
+as implemented in the DescTools R package
+based on previously published code
+\citep{marsagliaEvaluatingAndersonDarlingDistribution2004}. 
+%Anderson-Darling simple hypothesis testing was used in \citep{lauNewModelDiagnostics2014} via implementation in package ADGofTest, returns same results as DescTools. Both use the same C code from 
+%\citep{marsagliaEvaluatingAndersonDarlingDistribution2004}. 
 
 We have described the validation procedure above as if there was a single posterior
 sample $\mathcal{D}$ to validate, whereas there would typically be multiple samples
@@ -314,6 +319,12 @@ method \citep{Didelot2018}. However, the same computation and analysis of residu
 could be performed for each sample as described above. Each statistical test will
 return a separate p-value and these can be combined to form a 
 a posterior distribution of p-values \citep{streftarisNonexponentialToleranceInfection2012,lauNewModelDiagnostics2014,gibsonComparisonAssessmentEpidemic2018}.
+From this posterior distribution of p-values we can compute
+various summaries to measure the validity of the inference,
+for example the proportion of p-values that are below 0.05
+\citep{lauNewModelDiagnostics2014}. Here we prefer instead
+to focus on the median of the posterior sample of p-values,
+since it can be interpreted more directly as a p-value.
 
 \subsection*{Approximate posterior sampling given a point estimate}
 
@@ -321,10 +332,12 @@ We now consider the case where the dated phylogeny $\mathcal{D}$ that we wish
 to validate was not sampled from the posterior. Instead it may be a point estimate, 
 for example the result of maximum likelihood estimation
 or a summary tree built from a posterior sample \citep{heledLookingTreesForest2013}
-but for which the posterior sample itself is no longer available.
-In this case first we need to generate approximate 
-samples from the posterior before residuals can be computed.
-To illustrate this, let us first consider the discrete strict clock model (Equation \ref{eq:sc})
+but for which the posterior sample itself is not available.
+In this case we propose to first generate approximate 
+samples from the posterior before residuals can be computed as described above.
+If the residuals were computed directly from the point estimate, they would not follow the same distribution as in Equations
+\ref{eq:unif-resid} and \ref{eq:unif-resid-discrete}.
+To explain and illustrate this, let us first consider the discrete strict clock model (Equation \ref{eq:sc})
 with known mutation rate $\mu$
 and that the true branch durations $d_i$ are independent and identically
 distribution as:
@@ -335,34 +348,70 @@ Let $\hat{d_i}$ be a branch length in $\mathcal{D}$, on which there are $l_i$ su
 $\hat{d_i}=l_i/\mu$.
 The residuals of the data points $l_i$ against the estimates $\hat{d_i}$ would look
 underdispersed, because the maximum likelihood estimates are overfitted.
-It is however possible in this case to recover the correct residuals by sampling from
-the correct posterior. 
+It is however possible in this case to recover the exact correct residuals by sampling from
+the posterior. 
 By conjugacy of the Gamma prior and Poisson likelihood, we can deduce that the posterior of $d_i$ is:
 \begin{equation}
 d_i \sim \mathrm{Gamma}\left(k+\hat{d_i} \mu,\frac{\theta}{1+\theta \mu}\right)
 \end{equation}
-We can simulate from this distribution to get a posterior sample $d_i$, from which we can then compute the residuals.
+We can simulate from this distribution to get a posterior sample $d_i$, from which we can then compute the residuals as 
+described previously which will be distributed as in 
+Equations \ref{eq:unif-resid} and \ref{eq:unif-resid-discrete}.
 
-The case described above works exactly but is idealised for two reasons:
-firstly the branch durations $d_i$ are not independent and identically distributed
-but rather related through each other via the coalescent process, and secondly
-the clock is not usually strict with a known rate. However, we can follow
+The case described above works exactly but is idealised for two reasons.
+Firstly the branch durations $d_i$ are neither independent nor identically distributed,
+but rather related through each other via the coalescent process. Secondly
+the clock is not usually strict with a known rate so that
+a posterior would not be analytically available. 
+However, we can follow
 a similar idea of generating an approximate posterior sample centered on the given
 point estimate $\mathcal{D}$. To do so, we perform a short run of BactDating \citep{Didelot2018}
-for the input with branch lengths equal to
-the lengths in $\mathcal{D}$ multiplied by the estimated clock rate.
-Inference is performed under the 
-continuous version of the strict clock model (Equation \ref{eq:csc}).  
-The clock rate is fixed equal to its previous estimate, and the coalescent rate $\alpha$
-is fixed equal to its maximum likelihood estimator:
+for the input phylogeny $\mathcal{R}$ 
+with branch lengths equal to
+the lengths in $\mathcal{D}$ multiplied by the clock rate 
+$\hat \mu$ estimated when the dated tree was inferred. 
+If this estimate is not available, a simple maximum likelihood
+estimator can be used instead: 
 \begin{equation}
-\alpha = \frac{\sum_{i=2}^{2n-1}k_i (k_i-1)(t_i-t_{i+1})}{2(n-1)}
+\hat \mu = \frac{\sum_i l_i}{\sum_i d_i}
+\end{equation}
+Since the branch lengths in $\mathcal{R}$ are continuous, 
+inference is performed under the 
+continuous version of the strict clock model (Equation \ref{eq:csc}).  
+The clock rate is fixed equal to its previous estimate $\hat \mu$, and the coalescent rate $\alpha$
+is fixed equal to either its previous estimate (if available) or
+thw maximum likelihood estimator:
+\begin{equation}
+\hat \alpha = \frac{\sum_{i=2}^{2n-1}k_i (k_i-1)(t_i-t_{i+1})}{2(n-1)}
 \end{equation}
 Note that this corresponds to the mean of the posterior distribution of $\alpha$ 
 assuming an improper $\mathrm{InvGamma}(0,\infty)$ prior on $\alpha$ so that posterior is:
 \begin{equation}
 \alpha \sim \mathrm{InvGamma}\left(n-1, \frac{2}{\sum_{i=2}^{2n-1}k_i (k_i-1)(t_i-t_{i+1})}\right)
 \end{equation}
+
+TODO say something about why not using eg 
+parametric bootstrap \citep{efronBayesianInferenceParametric2012}.
+
+\subsection*{Posterior predictive checks}
+
+TODO Posterior predictive assessment is another way to perform
+validation \citep{Meng1994,Gelman1996}.
+Would usually expect to be less powerful since it is 
+based on summary statistics \citep{gibsonComparisonAssessmentEpidemic2018}.
+Need to select summary statistics, and need to combine
+tests between them, maybe using harmonic mean
+p-value \citep{wilsonHarmonicMeanPvalue2019}.
+ Figure \ref{fig:flowchart} shows how the different methods relate.
+
+\begin{figure}[t!]
+\begin{center}
+\includegraphics[width=10cm]{flowchart.png}
+\end{center}
+\caption{Flowchart.
+\label{fig:flowchart}}
+\end{figure}
+
 
 \subsection*{Data simulation}
 
