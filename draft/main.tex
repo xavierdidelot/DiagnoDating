@@ -34,7 +34,7 @@
 
 
 \vspace*{2cm}
-Xavier Didelot$^{1,2,*}$, Jake Carson$^{1,3}$, Paolo Ribeca$^{4,5}$, ...
+Xavier Didelot$^{1,2,*}$, Jake Carson$^{1,3}$, Paolo Ribeca$^{4,5}$
 
 \vspace*{2cm}
 $^1$ School of Life Sciences, University of Warwick, United Kingdom\\\\
@@ -42,7 +42,7 @@ $^2$ Department of Statistics, University of Warwick, United Kingdom\\\\
 $^3$ Mathematics Institute, University of Warwick, United Kingdom\\\\
 $^4$ UK Health Security Agency, London, United Kingdom\\\\
 $^5$ Biomathematics and Statistics Scotland, The James Hutton Institute, Edinburgh, United Kingdom\\\\
-$^*$ Corresponding author. Tel: 0044 (0)2476 572827. Email: \verb+xavier.didelot@gmail.com+
+$^*$ Corresponding author. Tel: 0044 (0)2476 572827. Email: \verb+xavier.didelot@warwick.ac.uk+
 
 %Journal target:  Bioinformatics? PLoS CB?
 
@@ -103,38 +103,6 @@ We also demonstrate the usefulness of this approach in practice on real datasets
 
 \section*{RESULTS}
 
-\subsection*{General approach}
-
-\begin{figure}[t!]
-\begin{center}
-A\hspace*{6cm}B\hspace*{6cm}~\\
-\includegraphics[width=10cm]{fig1.png}
-\end{center}
-\caption{(A) General approach for validation of a dated phylogeny built by dating the nodes of a standard phylogeny. (B) General approach for validation of a dated phylogeny built directly from a sequence alignment.
-\label{fig:approach}}
-\end{figure}
-
-We want to validate a dated phylogeny $\mathcal{D}$, previously constructed using
-any method. We propose to do so by comparing the dated phylogeny $\mathcal{D}$ with 
-an undated phylogeny $\mathcal{L}$. 
-If the method used to construct $\mathcal{D}$ involved dating the nodes of an undated
-phylogeny, for example TreeTime \citep{Sagulenko2018} or treedater \citep{Volz2017}, 
-then this is readily available for validation and we therefore focus on this case in this article
-(Figure \ref{fig:approach}A). However, the validation methodology
-below can also be applied to methods that build a dated phylogeny directly from the alignment
-such as BEAST \citep{Suchard2018},
-simply by constructing a separate undated phylogeny from the same alignment using
-for example PhyML \citep{Guindon2010} or RAxML \citep{Stamatakis2015} 
-(Figure \ref{fig:approach}B). 
-\footnote{Not clear what to do if the dated phylogeny and undated phylogeny don't have the same topology.}
-For each branch in the dated phylogeny $\mathcal{D}$ we can
-consider its inferred length, the number of substitutions happening on that branch in the standard phylogeny
-$\mathcal{L}$, and the model and parameters used when building the dated phylogeny $\mathcal{D}$,
-in order to compute a residual for that branch (see Methods). If the inference is valid,
-these residuals will follow their theoretical distribution
-\citep{coxGeneralDefinitionResiduals1968,dunnRandomizedQuantileResiduals1996}. 
-We use this property as a way to test the validity of the dated phylogeny $\mathcal{D}$.
-
 \subsection*{Motivating example}
 
 \begin{figure}[p!]
@@ -168,12 +136,12 @@ The clock rate was estimated to be $\mu=10.5$ [9.4;11.6] and the root date
 However, when looking at a single sample from the posterior,
 the residuals for the branches were not distributed as Normal(0,1) (Figure \ref{fig:example}C)
 and a QQ plot revealed significant deviation (Figure \ref{fig:example}D). 
-The Anderson-Darling test rejects the hypothesis of standard normality of the residuals ($p=3.03\times10^{-6}$).
+The Anderson-Darling test rejects the hypothesis of standard normality of the residuals ($p<10^{-5}$).
 The same residual analysis performed on multiple samples from the posterior showed that they all
-had p-values below 0.05.
-We repeated the same analysis incorrectly assuming a strict clock model using 
-LSD \citep{To2016}, node.dating \citep{Jones2017}, treedater \citep{Volz2017} and TreeTime \citep{Sagulenko2018},
-all of which led to similar results (Figure \ref{fig:exampleS2}). 
+had p-values below 0.05, with a median p-value $p<10^{-5}$.
+%We repeated the same analysis incorrectly assuming a strict clock model using 
+%LSD \citep{To2016}, node.dating \citep{Jones2017}, treedater \citep{Volz2017} and TreeTime \citep{Sagulenko2018},
+%all of which led to similar results (Figure \ref{fig:exampleS2}). 
 
 We applied BactDating again, but this time used the correct additive relaxed clock model (Equation \ref{eq:arc}). 
 The clock rate estimated to be $\mu=11.3$ [8.8;14.1], the root date was 2008.9 [2007.7;2009.8]
@@ -183,17 +151,57 @@ looked approximately distributed as they should be both when plotting them again
 their theoretical distribution (Figure \ref{fig:example}E) and when constructing a QQ plot (Figure \ref{fig:example}F).
 The Anderson-Darling test did not reject the hypothesis of standard normality of the residuals ($p=0.465$).
 Repeating this residual analysis on multiple samples from the posterior showed that only 4.5\% of 
-them had p-values below 0.05.
+them had p-values below 0.05, and the median p-value was $p=0.53$.
+
+BactDating includes a procedure to perform model comparison by computing
+the deviance information criterion (DIC) of each model \citep{Spiegelhalter2002}.
+Here the strict clock model had a DIC of 1072.41, whereas the relaxed clock model
+had a DIC of 759.86, indicating strong support for the latter. 
+This model comparison approach agrees well with the model validation approach above,
+and both are correct since the data was generated here using the relaxed clock model.
+However, model comparison
+will not be useful when our aim is more generally to check the validity
+of a single model, without comparison to other models.
+
+\subsection*{Benchmarking}
 
 \subsection*{Confounding effect of population structure}
 
-\subsection*{Benchmarking}
+\subsection*{Validation of maximum likelihood dated phylogenies}
 
 \subsection*{Real data examples}
 
 \section*{DISCUSSION}
 
-TODO
+\begin{figure}[p!]
+\begin{center}
+A\hspace*{6cm}B\hspace*{6cm}~\\
+\includegraphics[width=10cm]{fig1.png}
+\end{center}
+\caption{(A) General approach for validation of a dated phylogeny built by dating the nodes of a standard phylogeny. (B) General approach for validation of a dated phylogeny built directly from a sequence alignment.
+\label{fig:approach}}
+\end{figure}
+
+We want to validate a dated phylogeny $\mathcal{D}$, previously constructed using
+any method. We propose to do so by comparing the dated phylogeny $\mathcal{D}$ with 
+an undated phylogeny $\mathcal{L}$. 
+If the method used to construct $\mathcal{D}$ involved dating the nodes of an undated
+phylogeny, for example TreeTime \citep{Sagulenko2018} or treedater \citep{Volz2017}, 
+then this is readily available for validation and we therefore focus on this case in this article
+(Figure \ref{fig:approach}A). However, the validation methodology
+below can also be applied to methods that build a dated phylogeny directly from the alignment
+such as BEAST \citep{Suchard2018},
+simply by constructing a separate undated phylogeny from the same alignment using
+for example PhyML \citep{Guindon2010} or RAxML \citep{Stamatakis2015} 
+(Figure \ref{fig:approach}B). 
+\footnote{Not clear what to do if the dated phylogeny and undated phylogeny don't have the same topology.}
+For each branch in the dated phylogeny $\mathcal{D}$ we can
+consider its inferred length, the number of substitutions happening on that branch in the standard phylogeny
+$\mathcal{L}$, and the model and parameters used when building the dated phylogeny $\mathcal{D}$,
+in order to compute a residual for that branch (see Methods). If the inference is valid,
+these residuals will follow their theoretical distribution
+\citep{coxGeneralDefinitionResiduals1968,dunnRandomizedQuantileResiduals1996}. 
+We use this property as a way to test the validity of the dated phylogeny $\mathcal{D}$.
 
 \section*{MATERIALS AND METHODS}
 
@@ -404,14 +412,13 @@ tests between them, maybe using harmonic mean
 p-value \citep{wilsonHarmonicMeanPvalue2019}.
  Figure \ref{fig:flowchart} shows how the different methods relate.
 
-\begin{figure}[t!]
+\begin{figure}[p!]
 \begin{center}
 \includegraphics[width=10cm]{flowchart.png}
 \end{center}
 \caption{Flowchart.
 \label{fig:flowchart}}
 \end{figure}
-
 
 \subsection*{Data simulation}
 
@@ -466,15 +473,13 @@ We acknowledge funding from the National Institute for Health Research (NIHR) He
 \label{fig:exampleS1}}
 \end{figure}
 
-\begin{figure}[t!]
-\begin{center}
-\includegraphics[width=15cm]{exampleS2.pdf}
-\end{center}
-\caption{Residuals after application on the motivating example of a strict clock model using LSD (A), node.dater (B), treedater (C) and TreeTime (D).
-\label{fig:exampleS2}}
-\end{figure}
-
-
+%\begin{figure}[t!]
+%\begin{center}
+%\includegraphics[width=15cm]{exampleS2.pdf}
+%\end{center}
+%\caption{Residuals after application on the motivating example of a strict clock model using LSD (A), node.dater (B), treedater (C) and TreeTime (D).
+%\label{fig:exampleS2}}
+%\end{figure}
 
 \end{document}
 
