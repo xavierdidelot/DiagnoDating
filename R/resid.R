@@ -254,13 +254,13 @@ validate=function(x,nrep=1000,resampling=0,nstore=1000,showProgress=T,showPlot=T
 
   if (resampling==2) {
     #Using resampling via bactdate
-    rtree=x$tree
+    rtree=reorder(x$tree)
     phy=x$inputtree
     dates=unname(x$rootdate+dist.nodes(x$tree)[1:Ntip(x$tree),1+Ntip(x$tree)])
     rtree$root.time=NULL
     k=x$rate#sum(phy$edge.length)/sum(rtree$edge.length)
     rtree$edge.length=rtree$edge.length*k
-    r2=runDating(rtree,dates,rate=k,minbralen=1e-10,algo='BactDating',model='strictgamma',updateRoot=F,showProgress=showProgress,initAlpha=estimAlpha(x$tree),updateAlpha=F)
+    r2=runDating(rtree,dates,rate=k,minbralen=1e-10,algo='BactDating',model='strictgamma',updateRoot='branch',showProgress=showProgress,initAlpha=estimAlpha(x$tree),updateAlpha=F)
     if (showTraces) {tmp=r2;class(tmp)='resBactDating';plot(tmp,'trace')}
     r4=resDating(r2$tree,phy,algo=x$algo,model=x$model,rate=x$rate,relax=x$relax)
     r4$record=r2$record
@@ -278,13 +278,13 @@ validate=function(x,nrep=1000,resampling=0,nstore=1000,showProgress=T,showPlot=T
 
   if (resampling==3) {
     #Using resampling via bactdate, slower but clearer version
-    rtree=x$tree
+    rtree=reorder(x$tree)
     phy=x$inputtree
     dates=unname(x$rootdate+dist.nodes(x$tree)[1:Ntip(x$tree),1+Ntip(x$tree)])
     rtree$root.time=NULL
     k=x$rate#sum(phy$edge.length)/sum(rtree$edge.length)
     rtree$edge.length=rtree$edge.length*k
-    r2=runDating(rtree,dates,rate=k,minbralen=1e-10,algo='BactDating',model='strictgamma',showProgress=showProgress,updateRoot=F,initAlpha=estimAlpha(x$tree),updateAlpha=F)
+    r2=runDating(rtree,dates,rate=k,minbralen=1e-10,algo='BactDating',model='strictgamma',showProgress=showProgress,updateRoot='branch',initAlpha=estimAlpha(x$tree),updateAlpha=F)
     if (showTraces) {tmp=r2;class(tmp)='resBactDating';plot(tmp,'trace')}
     inds=round(seq(max(1,floor(nrow(r2$record)/2)),nrow(r2$record),length.out=nrep))
     if (showProgress) print('Computing p-values...')

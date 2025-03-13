@@ -1,28 +1,32 @@
 rm(list=ls())
 
-set.seed(10)
 library(ValidateDating,quietly=T)
+
+rep=1
+set.seed(rep)
 dates=runif(200,2000,2020)
 dt=simcoaltree(dates,10)
 phy=simobsphy(dt,mu=10,model='poisson')
-r0=resDating(dt,phy)#perfect residuals
-plotResid(r0);title(testResid(r0)$p.value)
-
-r=runDating(phy,dates,showProgress=T)
-plotResid(r);title(testResid(r)$p.value)
-validate(r)
-validate(r,resampling = 2)
-
+phy=unroot(phy)
+r0=resDating(dt,phy)
+p0=testResid(r0)$p.value
+r1=runDating(phy,dates)
+v1=validate(r1,resampling = 0,showPlot = F);p1=median(v1)
+v1r=validate(r1,resampling = 2,showPlot = F);p1r=median(v1r)
 r2=runDating(phy,dates,algo='treedater')
-plotResid(r2);title(testResid(r2)$p.value)
-validate(r2,resampling = 2)
-
+v2=validate(r2,resampling = 2,showPlot = F);p2=median(v2)
 r3=runDating(phy,dates,algo='node.dating')
-plotResid(r3);title(testResid(r3)$p.value)
-validate(r3,resampling=2)
-
+v3=validate(r3,resampling = 2,showPlot = F);p3=median(v3)
 r4=runDating(phy,dates,algo='TreeTime')
-plotResid(r4);title(testResid(r4)$p.value)
-validate(r4,resampling = 2)
-
-
+v4=validate(r4,resampling = 2,showPlot = F);p4=median(v4)
+r1=runDating(phy,dates,rate=10)
+v1=validate(r1,resampling = 0,showPlot = F);p1f=median(v1)
+v1r=validate(r1,resampling = 2,showPlot = F);p1fr=median(v1r)
+r2=runDating(phy,dates,algo='treedater',rate=10)
+v2=validate(r2,resampling = 2,showPlot = F);p2f=median(v2)
+r3=runDating(phy,dates,algo='node.dating',rate=10)
+v3=validate(r3,resampling = 2,showPlot = F);p3f=median(v3)
+r4=runDating(phy,dates,algo='TreeTime',rate=10)
+v4=validate(r4,resampling = 2,showPlot = F);p4f=median(v4)
+retur=(list(seed=rep,p0,p1,p1f,p2,p3,p4,p1f,p1fr,p2f,p3f,p4f))
+#                1.  2. 3. 4.  5. 6. 7. 8.  9.   10. 11. 12.

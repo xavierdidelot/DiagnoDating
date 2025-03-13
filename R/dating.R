@@ -54,7 +54,7 @@ runBactDating=function(tree,dates,rate=NA,...) {
 #' @export
 #'
 takeSample=function(r,w=nrow(r$record)) {
-  tree = r$inputtree
+  tree = r$tree
   rowRec = r$record[w,]
   s=Ntip(tree)+Nnode(tree)
   i2=1:nrow(tree$edge)

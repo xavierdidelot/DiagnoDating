@@ -15,6 +15,7 @@ allres <- foreach (rep = 1:100,.packages = c('ape','BactDating','ValidateDating'
   p0=testResid(r0)$p.value
   r1=runDating(phy,dates)
   v1=validate(r1,resampling = 0,showPlot = F);p1=median(v1)
+  v1r=validate(r1,resampling = 2,showPlot = F);p1r=median(v1r)
   r2=runDating(phy,dates,algo='treedater')
   v2=validate(r2,resampling = 2,showPlot = F);p2=median(v2)
   r3=runDating(phy,dates,algo='node.dating')
@@ -23,17 +24,19 @@ allres <- foreach (rep = 1:100,.packages = c('ape','BactDating','ValidateDating'
   v4=validate(r4,resampling = 2,showPlot = F);p4=median(v4)
   r1=runDating(phy,dates,rate=10)
   v1=validate(r1,resampling = 0,showPlot = F);p1f=median(v1)
+  v1r=validate(r1,resampling = 2,showPlot = F);p1fr=median(v1r)
   r2=runDating(phy,dates,algo='treedater',rate=10)
   v2=validate(r2,resampling = 2,showPlot = F);p2f=median(v2)
   r3=runDating(phy,dates,algo='node.dating',rate=10)
   v3=validate(r3,resampling = 2,showPlot = F);p3f=median(v3)
   r4=runDating(phy,dates,algo='TreeTime',rate=10)
   v4=validate(r4,resampling = 2,showPlot = F);p4f=median(v4)
-  return(list(seed=rep,p0,p1,p2,p3,p4,p1f,p2f,p3f,p4f))
+  return(list(seed=rep,p0,p1,p1f,p2,p3,p4,p1f,p1fr,p2f,p3f,p4f))
+  #                1.  2. 3. 4.  5. 6. 7. 8.  9.   10. 11. 12.
 }
 parallel::stopCluster(cl)
 save.image('falsePos-multi.RData')
 
 rm(list=ls())
 load('falsePos-multi.RData')
-allres=t(matrix(unlist(allres),nrow=10))
+allres=t(matrix(unlist(allres),nrow=12))
