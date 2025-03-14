@@ -9,12 +9,13 @@
 #' @export
 #'
 runDating=function(tree,dates,algo='BactDating',rate=NA,...) {
+  r=NULL
   if (algo=='1' || algo=='LSD') r=runLSD(tree,dates,rate,...)
   if (algo=='2' || algo=='node.dating') r=runNodeDating(tree,dates,rate,...)
   if (algo=='3' || algo=='BactDating') r=runBactDating(tree,dates,rate,...)
   if (algo=='4' || algo=='treedater') r=runTreeDater(tree,dates,rate,...)
   if (algo=='5' || algo=='TreeTime') r=runTreeTime(tree,dates,rate,...)
-  if (!exists('r')) stop('Unknown algorithm')
+  if (is.null(r)) stop('Unknown algorithm')
   return(r)
 }
 
@@ -81,7 +82,7 @@ takeSample=function(r,w=nrow(r$record)) {
 #'
 runTreeDater=function(tree,dates,rate=NA,...) {
   tre=unroot(tree)
-  l=max(tree$edge.length)*1000
+  l=1000
   tre$edge.length=tre$edge.length/l
   sts=dates
   names(sts)=tree$tip.label
@@ -103,7 +104,7 @@ runTreeDater=function(tree,dates,rate=NA,...) {
 runLSD=function(tree,dates,rate=NA,...) {
   tag=round(runif(1,1,1e8))
   tre=unroot(tree)
-  l=round(max(tree$edge.length)*1000)
+  l=round(sum(tree$edge.length)*1000)
   tre$edge.length=tre$edge.length/l
   sts=dates
   names(sts)=tre$tip.label
@@ -159,7 +160,7 @@ runNodeDating=function(tree,dates,rate=NA,...) {
 runTreeTime=function(tree,dates,rate=NA,...) {
   tag=round(runif(1,1,1e8))
   tre=unroot(tree)
-  l=round(max(tree$edge.length)*1000)
+  l=round(sum(tree$edge.length)*1000)
   tre$edge.length=tre$edge.length/l
   sts=dates
   names(sts)=tree$tip.label

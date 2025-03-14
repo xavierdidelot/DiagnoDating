@@ -14,7 +14,7 @@ dev.off()
 system('open exampleS1.pdf')
 
 tree=unroot(midpoint(tree))
-r0=resDating(dt,tree,rate=10,model = 'poisson') #fine to ignore warning
+suppressWarnings(r0<-resDating(dt,tree,rate=10,model = 'poisson')) #fine to ignore warning
 r=runDating(tree,dates,algo='BactDating',model='poisson',showProgress=T)
 r2=runDating(tree,dates,algo='BactDating',model='arc',showProgress=T)
 
@@ -44,11 +44,10 @@ system('open example.pdf')
 testResid(sr)
 testResid(sr2)
 
-validate(r)
-validate(r2)
+v=validate(r);plot(v)
+v2=validate(r2);plot(v2)
 
 modelcompare(r,r2)
-
 
 if (F) {
 set.seed(0)

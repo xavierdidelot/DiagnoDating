@@ -230,14 +230,11 @@ testResid=function(x,test=1) {
 #' @param x object of class resDating
 #' @param nrep number of repeats to perform
 #' @param resampling method used for resampling: 0 (default) for using given sample, 1 to use the approximate posterior resampling method, 2 to use BactDating resampling
-#' @param nstore size of the store to use in approximate posterior resampling method
 #' @param showProgress Whether or not to show progress
-#' @param showPlot whether or not to show the histogram of p-values
-#' @param showLast whether or not to show the residuals for the last sample
 #' @param showTraces whether or not to show the MCMC traces
 #' @export
 #'
-validate=function(x,nrep=1000,resampling=0,nstore=1000,showProgress=T,showPlot=T,showLast=F,showTraces=F)
+validate=function(x,nrep=1000,resampling=0,showProgress=T,showTraces=F)
 {
 
   ps=rep(NA,nrep)
@@ -303,7 +300,7 @@ validate=function(x,nrep=1000,resampling=0,nstore=1000,showProgress=T,showPlot=T
     mu=x$rate
     l2=unname(x$tree$edge.length)
     n=length(l2)
-    store=matrix(NA,nstore,n)
+    store=matrix(NA,1000,n)
     for (i in 1:nrow(store)) {
       t=simcoaltree(dates,alpha=sampleAlpha(x$tree))$edge.length
       s2=rpois(n,t*mu)
@@ -329,18 +326,52 @@ validate=function(x,nrep=1000,resampling=0,nstore=1000,showProgress=T,showPlot=T
     }
   }
 
-  #Show the probability of branches and distribution of residuals in the last iteration if requested
-  if (showLast) {plotProbBranches(x2);plotResid(x2);title(testResid(x2)$p.value)}
+  ret=list()
+  ret$ps=ps
+  ret$input=x
+  ret$last=x2
+  class(ret)<-'resValidate'
+  return(ret)
+}
 
-  #Plot histogram if requested
-  if (showPlot) {
-    h=hist(ps,breaks=seq(0,1,length.out=21),xlab='',ylab='',main='Posterior distribution of p-values')
-    y=length(which(ps<0.05))
+#' Print function for resValidate objects
+#' @param x output from validate
+#' @param ... Passed on to cat
+#' @return Print out details of dating results
+#' @export
+print.resValidate <- function(x, ...)
+{
+  stopifnot(inherits(x, "resValidate"))
+  cat(sprintf('Result from validation with median p-value %.2f\n',median(x$ps)),...)
+  invisible(x)
+}
+
+#' Plotting methods
+#' @param x Output from validate
+#' @param type Type of plot to do. Currently either 'hist' or 'lastProbBranches' or 'lastResid'.
+#' @param ... Additional parameters are passed on
+#' @return Plot of results
+#' @export
+plot.resValidate = function(x, type='hist',...) {
+  stopifnot(inherits(x, "resValidate"))
+
+  if (type=='lastProbBranches') {
+    plotProbBranches(x$last,...)
+  }
+
+  if (type=='lastResid') {
+    plotResid(x$last,...)
+    title(sprintf('p=%s',format(testResid(x$last)$p.value)))
+    }
+
+  if (type=='hist') {
+    h=hist(x$ps,breaks=seq(0,1,length.out=21),xlab='',ylab='',main='Posterior distribution of p-values')
+    y=length(which(x$ps<0.05))
     par(xpd=NA)
-    text(0.025,y,sprintf('%.1f%%',y*100/nrep),pos=3)
-    med=median(ps)
+    text(0.025,y,sprintf('%.1f%%',y*100/length(x$ps)),pos=3)
+    med=median(x$ps)
     lines(c(med,med),c(0,max(h$counts)),lty=2)
     text(med,max(h$counts),format(med,digits=3),pos=4)
+    par(xpd=F)
   }
-  invisible(ps)
 }
