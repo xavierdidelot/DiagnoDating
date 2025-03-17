@@ -4,7 +4,7 @@
 \alias{runBactDating}
 \title{Date a tree using BactDating}
 \usage{
-runBactDating(tree, dates, rate = NA, ...)
+runBactDating(tree, dates, rate = NA, keepRoot = F, ...)
 }
 \arguments{
 \item{tree}{Tree to date}
@@ -12,6 +12,8 @@ runBactDating(tree, dates, rate = NA, ...)
 \item{dates}{Dates of leaves in the tree}
 
 \item{rate}{If provided, force analysis to use specified value for rate}
+
+\item{keepRoot}{Whether to keep the root as in the input}
 
 \item{...}{Passed on to BactDating::bactdate}
 }

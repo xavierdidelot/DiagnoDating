@@ -3,18 +3,20 @@
 #' @param dates Dates of leaves in the tree
 #' @param algo Algorithm to use, can be one of: LSD, node.dating, BactDating, treedater, TreeTime
 #' @param rate If provided, force analysis to use specified value for rate
+#' @param keepRoot Whether to keep the root as in the input
 #' @param ... Passed on to dating algorithm
 #'
 #' @return resDating object containing results of dating analysis
 #' @export
 #'
-runDating=function(tree,dates,algo='BactDating',rate=NA,...) {
+runDating=function(tree,dates,algo='BactDating',rate=NA,keepRoot=F,...) {
   r=NULL
-  if (algo=='1' || algo=='LSD') r=runLSD(tree,dates,rate,...)
-  if (algo=='2' || algo=='node.dating') r=runNodeDating(tree,dates,rate,...)
-  if (algo=='3' || algo=='BactDating') r=runBactDating(tree,dates,rate,...)
-  if (algo=='4' || algo=='treedater') r=runTreeDater(tree,dates,rate,...)
-  if (algo=='5' || algo=='TreeTime') r=runTreeTime(tree,dates,rate,...)
+  if (!is.rooted(tree) && keepRoot) stop('Need rooted tree as input for keepRoot option')
+  if (algo=='1' || algo=='LSD') r=runLSD(tree,dates,rate,keepRoot,...)
+  if (algo=='2' || algo=='node.dating') r=runNodeDating(tree,dates,rate,keepRoot,...)
+  if (algo=='3' || algo=='BactDating') r=runBactDating(tree,dates,rate,keepRoot,...)
+  if (algo=='4' || algo=='treedater') r=runTreeDater(tree,dates,rate,keepRoot,...)
+  if (algo=='5' || algo=='TreeTime') r=runTreeTime(tree,dates,rate,keepRoot,...)
   if (is.null(r)) stop('Unknown algorithm')
   return(r)
 }
@@ -24,14 +26,16 @@ runDating=function(tree,dates,algo='BactDating',rate=NA,...) {
 #' @param tree Tree to date
 #' @param dates Dates of leaves in the tree
 #' @param rate If provided, force analysis to use specified value for rate
+#' @param keepRoot Whether to keep the root as in the input
 #' @param ... Passed on to BactDating::bactdate
 #'
 #' @return resDating object containing results of BactDating analysis
 #'
-runBactDating=function(tree,dates,rate=NA,...) {
+runBactDating=function(tree,dates,rate=NA,keepRoot=F,...) {
   def_args=list(tree=tree,date=dates,model='poisson')
   if (!is.na(rate)) def_args=c(def_args,initMu=rate,updateMu=F)
-  cl=as.list(match.call())[-(1:4)]
+  if (keepRoot) def_args=c(def_args,updateRoot=F)
+  cl=as.list(match.call())[-(1:5)]
   args=c(cl,def_args[!names(def_args) %in% names(cl)])
   r=do.call("bactdate",args)
   r$algo='BactDating'
@@ -76,16 +80,17 @@ takeSample=function(r,w=nrow(r$record)) {
 #' @param tree Tree to date
 #' @param dates Dates of leaves in the tree
 #' @param rate If provided, force analysis to use specified value for rate
+#' @param keepRoot Whether to keep the root as in the input
 #' @param ... Passed on to treedater::dater
 #'
 #' @return resDating object containing results of treedater analysis
 #'
-runTreeDater=function(tree,dates,rate=NA,...) {
-  tre=unroot(tree)
+runTreeDater=function(tree,dates,rate=NA,keepRoot=F,...) {
+  if (keepRoot) tre=tree else tre=unroot(tree)
   l=1000
   tre$edge.length=tre$edge.length/l
   sts=dates
-  names(sts)=tree$tip.label
+  names(sts)=tre$tip.label
   if (is.na(rate)) o=capture.output(rtd<-suppressWarnings(treedater::dater(tre,sts,s=l,...)))
   else o=capture.output(rtd<-suppressWarnings(treedater::dater(tre,sts,s=l,omega0=rate/l,meanRateLimits=c(1-1e-10,1+1e-10)*rate/l,...)))
   res=resDating(rtd,tree,algo='treedater',model='poisson',rate=rtd$mean.rate*l,relax=0,rootdate=rtd$timeOfMRCA)
@@ -97,26 +102,28 @@ runTreeDater=function(tree,dates,rate=NA,...) {
 #' @param tree Tree to date
 #' @param dates Dates of leaves in the tree
 #' @param rate If provided, force analysis to use specified value for rate
+#' @param keepRoot Whether to keep the root as in the input
 #' @param ... Ignored for the time being
 #'
 #' @return resDating object containing results of LSD analysis
 #'
-runLSD=function(tree,dates,rate=NA,...) {
+runLSD=function(tree,dates,rate=NA,keepRoot=F,...) {
   tag=round(runif(1,1,1e8))
-  tre=unroot(tree)
+  if (keepRoot) tre=tree else tre=unroot(tree)
   l=round(sum(tree$edge.length)*1000)
   tre$edge.length=tre$edge.length/l
   sts=dates
   names(sts)=tre$tip.label
   write.tree(tre,sprintf('/tmp/tree%d.nwk',tag))
   write.table(sts,sprintf('/tmp/dates%d.csv',tag),quote = F,col.names=length(sts))
-  if (is.na(rate)) system(sprintf("lsd2 -i /tmp/tree%d.nwk -d /tmp/dates%d.csv -s %d -l -1 -r a > /dev/null",tag,tag,l))
-  else system(sprintf("echo %f > /tmp/rate%d;lsd2 -i /tmp/tree%d.nwk -d /tmp/dates%d.csv -s %d -l -1 -r a -w /tmp/rate%d > /dev/null",rate/l,tag,tag,tag,l,tag))
+  if (keepRoot) opts='' else opts='-r a'
+  if (is.na(rate)) system(sprintf("lsd2 -i /tmp/tree%d.nwk -d /tmp/dates%d.csv -s %d -l -1 %s > /dev/null",tag,tag,l,opts))
+  else system(sprintf("echo %f > /tmp/rate%d;lsd2 -i /tmp/tree%d.nwk -d /tmp/dates%d.csv -s %d -l -1 %s -w /tmp/rate%d > /dev/null",rate/l,tag,tag,tag,l,opts,tag))
   lines=readLines(sprintf('/tmp/tree%d.nwk.result',tag))
   lines=lines[grep('tMRCA',lines)]
   lines=as.numeric(unlist(strsplit(lines, "[ ,]"))[c(3,6)])
   rtd=read.nexus(sprintf('/tmp/tree%d.nwk.result.date.nexus',tag))
-  trees=c(tree,rtd)
+  trees=c(tre,rtd)
   trees=.compressTipLabel(trees)
   rtd=trees[[2]]
   res=resDating(rtd,tree,algo='LSD',model='poisson',rate=lines[1]*l,relax=0,rootdate=lines[2])
@@ -128,12 +135,13 @@ runLSD=function(tree,dates,rate=NA,...) {
 #' @param tree Tree to date
 #' @param dates Dates of leaves in the tree
 #' @param rate If provided, force analysis to use specified value for rate
+#' @param keepRoot Whether to keep the root as in the input
 #' @param ... Passed on to ape::node.dating
 #'
 #' @return resDating object containing results of node.dating analysis
 #'
-runNodeDating=function(tree,dates,rate=NA,...) {
-  try(suppressWarnings(tre<-rtt(unroot(tree),dates)),silent=T)
+runNodeDating=function(tree,dates,rate=NA,keepRoot=F,...) {
+  if (keepRoot) tre=tree else try(suppressWarnings(tre<-rtt(unroot(tree),dates)),silent=T)
   if (!is.na(rate)) mu=rate
   else {
     try(suppressWarnings(mu<-ape::estimate.mu(tre,dates)),silent=T)
@@ -153,26 +161,28 @@ runNodeDating=function(tree,dates,rate=NA,...) {
 #' @param tree Tree to date
 #' @param dates Dates of leaves in the tree
 #' @param rate If provided, force analysis to use specified value for rate
+#' @param keepRoot Whether to keep the root as in the input
 #' @param ... Passed on
 #'
 #' @return resDating object containing results of TreeTime analysis
 #'
-runTreeTime=function(tree,dates,rate=NA,...) {
+runTreeTime=function(tree,dates,rate=NA,keepRoot=F,...) {
   tag=round(runif(1,1,1e8))
-  tre=unroot(tree)
-  l=round(sum(tree$edge.length)*1000)
+  if (keepRoot) tre=tree else tre=unroot(tree)
+  l=round(sum(tre$edge.length)*1000)
   tre$edge.length=tre$edge.length/l
   sts=dates
-  names(sts)=tree$tip.label
+  names(sts)=tre$tip.label
   write.tree(tre,sprintf('/tmp/tree%d.nwk',tag))
   write.table(sts,sprintf('/tmp/dates%d.tsv',tag),quote = F,col.names='strain\tdate',sep='\t')
-  if (is.na(rate)) system(sprintf("treetime --tree /tmp/tree%d.nwk --dates /tmp/dates%d.tsv --sequence-length %d --outdir /tmp/%d > /dev/null",tag,tag,l,tag))
-  else system(sprintf("treetime --tree /tmp/tree%d.nwk --dates /tmp/dates%d.tsv --sequence-length %d --outdir /tmp/%d --clock-rate %f > /dev/null",tag,tag,l,tag,rate/l))
+  if (keepRoot) opts='--keep-root' else opts=''
+  if (!is.na(rate)) opts=sprintf('%s --clock-rate %f',opts,rate/l)
+  system(sprintf("treetime --tree /tmp/tree%d.nwk --dates /tmp/dates%d.tsv --sequence-length %d --outdir /tmp/%d %s > /dev/null",tag,tag,l,tag,opts))
   resrate=read.table(sprintf('/tmp/%d/molecular_clock.txt',tag))[1,1]*l
   restree=read.nexus(sprintf('/tmp/%d/timetree.nexus',tag))
   resrootdate=max(dates)-max(dist.nodes(restree)[Ntip(restree)+1,1:Ntip(restree)])
   restree$node.label=NULL
-  trees=c(tree,restree)
+  trees=c(tre,restree)
   trees=.compressTipLabel(trees)
   restree=trees[[2]]
   res=resDating(restree,tree,algo='TreeTime',model='poisson',rate=resrate,relax=0,rootdate=resrootdate)

@@ -4,7 +4,7 @@
 \alias{runTreeTime}
 \title{Date a tree using TreeTime}
 \usage{
-runTreeTime(tree, dates, rate = NA, ...)
+runTreeTime(tree, dates, rate = NA, keepRoot = F, ...)
 }
 \arguments{
 \item{tree}{Tree to date}
@@ -12,6 +12,8 @@ runTreeTime(tree, dates, rate = NA, ...)
 \item{dates}{Dates of leaves in the tree}
 
 \item{rate}{If provided, force analysis to use specified value for rate}
+
+\item{keepRoot}{Whether to keep the root as in the input}
 
 \item{...}{Passed on}
 }

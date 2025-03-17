@@ -4,7 +4,7 @@
 \alias{runTreeDater}
 \title{Date a tree using treedater}
 \usage{
-runTreeDater(tree, dates, rate = NA, ...)
+runTreeDater(tree, dates, rate = NA, keepRoot = F, ...)
 }
 \arguments{
 \item{tree}{Tree to date}
@@ -12,6 +12,8 @@ runTreeDater(tree, dates, rate = NA, ...)
 \item{dates}{Dates of leaves in the tree}
 
 \item{rate}{If provided, force analysis to use specified value for rate}
+
+\item{keepRoot}{Whether to keep the root as in the input}
 
 \item{...}{Passed on to treedater::dater}
 }
