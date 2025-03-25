@@ -28,7 +28,7 @@ calcProbBranches = function(x,log=FALSE) {
   stop(sprintf('Model %s is not yet implemented.',x$model))
 }
 
-#' Calculate residuals of branches
+#' Calculate normal residuals of branches
 #'
 #' @param x object of class resDating
 #'
@@ -41,17 +41,26 @@ calcResiduals = function(x) {
 
   if (x$model=='poisson') {
     probs=runif(length(ys),ppois(round(ys-1),xs*rate),ppois(round(ys),xs*rate))
-    return(probs)
+    n=qnorm(probs)
+    w=which(probs==1)
+    if (length(w)>0) n[w]=qnorm(runif(length(w),ppois(round(ys[w]),xs[w]*rate,lower.tail = F),ppois(round(ys[w]-1),xs[w]*rate,lower.tail = F)),lower.tail = F)
+    return(n)
   }
 
   if (x$model=='arc') {
     probs=runif(length(ys),pnbinom(round(ys-1),size=xs*rate/relax,prob=1/(1+relax)),pnbinom(round(ys),size=xs*rate/relax,prob=1/(1+relax)))
-    return(probs)
+    n=qnorm(probs)
+    w=which(probs==1)
+    if (length(w)>0) n[w]=qnorm(runif(length(w),pnbinom(round(ys[w]),size=xs[w]*rate/relax,prob=1/(1+relax),lower.tail = F),pnbinom(round(ys[w]-1),size=xs[w]*rate/relax,prob=1/(1+relax),lower.tail = F)),lower.tail = F)
+    return(n)
   }
 
   if (x$model=='strictgamma' || x$model=='carc') {
     probs=pgamma(ys,shape=xs*rate/(1+relax),scale=1+relax)
-    return(probs)
+    n=qnorm(probs)
+    w=which(probs==1)
+    if (length(w)>0) n[w]=qnorm(pgamma(ys[w],shape=xs[w]*rate/(1+relax),scale=1+relax,lower.tail=F),lower.tail = F)
+    return(n)
   }
 
   stop(sprintf('Model %s is not yet implemented.',x$model))
@@ -138,15 +147,16 @@ plotProbBranches = function(x,sub=NA,color=T,minProb=NA,...) {
 #' @export
 #'
 plotResid = function(x,sub=NA,...) {
-  p=x$resid#uniform pseudo-residual
+  n=x$resid#normal pseudo-residual
+  p=pnorm(n)#uniform pseudo-residual
   xs=x$tree$edge.length
-  if (any(is.nan(p) | p==0 | p==1)) {
-    w=which(!is.nan(p) & p!=0 & p!=1)
+  if (any(is.nan(n) | is.infinite(n))) {
+    w=which(!is.nan(n) & !is.infinite(n))
+    n=n[w]
     p=p[w]
     xs=xs[w]
     warning('Ignoring impossible branches.')
   }
-  n=qnorm(p)#normal pseudo-residual
   mi=min(min(n),-3)
   ma=max(max(n),3)
   if (is.na(sub)) old.par=par(no.readonly = T)
@@ -210,12 +220,14 @@ plotResid = function(x,sub=NA,...) {
 #' @export
 #'
 testResid=function(x,test=1) {
-  p=x$resid#uniform pseudo-residual
-  if (any(is.nan(p) | p==0 | p==1)) {
-    p=p[which(!is.nan(p) & p!=0 & p!=1)]
+  n=x$resid#normal pseudo-residual
+  p=pnorm(n)#uniform pseudo-residual
+  if (any(is.nan(n) | is.infinite(n))) {
+    w=which(!is.nan(n) & !is.infinite(n))
+    n=n[w]
+    p=p[w]
     warning('Ignoring impossible branches.')
   }
-  n=qnorm(p)#normal pseudo-residual
   if (test==1) r=DescTools::AndersonDarlingTest(n,null='pnorm',mean=0,sd=1)
   #the above is same as DescTools::AndersonDarlingTest(p,null='punif',min=0,max=1)
   #and also same as ADGofTest::ad.test(n,pnorm)
@@ -232,9 +244,10 @@ testResid=function(x,test=1) {
 #' @param resampling method used for resampling: 0 (default) for using given sample, 1 to use the approximate posterior resampling method, 2 to use BactDating resampling
 #' @param showProgress Whether or not to show progress
 #' @param showTraces whether or not to show the MCMC traces
+#' @param nbIts number of iterations in bactdate resampling
 #' @export
 #'
-validate=function(x,nrep=1000,resampling=0,showProgress=T,showTraces=F)
+validate=function(x,nrep=1000,resampling=0,showProgress=T,showTraces=F,nbIts=1e4)
 {
 
   ps=rep(NA,nrep)
@@ -255,9 +268,9 @@ validate=function(x,nrep=1000,resampling=0,showProgress=T,showTraces=F)
     phy=x$inputtree
     dates=unname(x$rootdate+dist.nodes(x$tree)[1:Ntip(x$tree),1+Ntip(x$tree)])
     rtree$root.time=NULL
-    k=x$rate#sum(phy$edge.length)/sum(rtree$edge.length)
+    k=sum(phy$edge.length)/sum(x$tree$edge.length)#or use x$rate
     rtree$edge.length=rtree$edge.length*k
-    r2=runDating(rtree,dates,rate=k,minbralen=1e-10,algo='BactDating',model='strictgamma',updateRoot='branch',showProgress=showProgress,initAlpha=estimAlpha(x$tree),updateAlpha=F)
+    r2=bactdate(rtree,dates,initMu=k,minbralen=0,model='strictgamma',showProgress=showProgress,initAlpha=estimAlpha(x$tree),updateRoot = 'branch',nbIts=nbIts)
     if (showTraces) {tmp=r2;class(tmp)='resBactDating';plot(tmp,'trace')}
     r4=resDating(r2$tree,phy,algo=x$algo,model=x$model,rate=x$rate,relax=x$relax)
     r4$record=r2$record

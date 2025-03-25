@@ -2,7 +2,7 @@
 % Please edit documentation in R/resid.R
 \name{calcResiduals}
 \alias{calcResiduals}
-\title{Calculate residuals of branches}
+\title{Calculate normal residuals of branches}
 \usage{
 calcResiduals(x)
 }
@@ -10,5 +10,5 @@ calcResiduals(x)
 \item{x}{object of class resDating}
 }
 \description{
-Calculate residuals of branches
+Calculate normal residuals of branches
 }

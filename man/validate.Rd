@@ -4,7 +4,14 @@
 \alias{validate}
 \title{Check whether a dating analysis is valid}
 \usage{
-validate(x, nrep = 1000, resampling = 0, showProgress = T, showTraces = F)
+validate(
+  x,
+  nrep = 1000,
+  resampling = 0,
+  showProgress = T,
+  showTraces = F,
+  nbIts = 10000
+)
 }
 \arguments{
 \item{x}{object of class resDating}
@@ -16,6 +23,8 @@ validate(x, nrep = 1000, resampling = 0, showProgress = T, showTraces = F)
 \item{showProgress}{Whether or not to show progress}
 
 \item{showTraces}{whether or not to show the MCMC traces}
+
+\item{nbIts}{number of iterations in bactdate resampling}
 }
 \description{
 Check whether a dating analysis is valid
