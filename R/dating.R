@@ -87,7 +87,7 @@ takeSample=function(r,w=nrow(r$record)) {
 #'
 runTreeDater=function(tree,dates,rate=NA,keepRoot=F,...) {
   if (keepRoot) tre=tree else tre=unroot(tree)
-  l=1000
+  l=1000#round(sum(tre$edge.length)*100)
   tre$edge.length=tre$edge.length/l
   sts=dates
   names(sts)=tre$tip.label
@@ -110,7 +110,7 @@ runTreeDater=function(tree,dates,rate=NA,keepRoot=F,...) {
 runLSD=function(tree,dates,rate=NA,keepRoot=F,...) {
   tag=round(runif(1,1,1e8))
   if (keepRoot) tre=tree else tre=unroot(tree)
-  l=round(sum(tree$edge.length)*1000)
+  l=round(sum(tre$edge.length)*100)
   tre$edge.length=tre$edge.length/l
   sts=dates
   names(sts)=tre$tip.label
@@ -169,7 +169,7 @@ runNodeDating=function(tree,dates,rate=NA,keepRoot=F,...) {
 runTreeTime=function(tree,dates,rate=NA,keepRoot=F,...) {
   tag=round(runif(1,1,1e8))
   if (keepRoot) tre=tree else tre=unroot(tree)
-  l=round(sum(tre$edge.length)*1000)
+  l=round(sum(tre$edge.length)*100)
   tre$edge.length=tre$edge.length/l
   sts=dates
   names(sts)=tre$tip.label
@@ -177,7 +177,7 @@ runTreeTime=function(tree,dates,rate=NA,keepRoot=F,...) {
   write.table(sts,sprintf('/tmp/dates%d.tsv',tag),quote = F,col.names='strain\tdate',sep='\t')
   if (keepRoot) opts='--keep-root' else opts=''
   if (!is.na(rate)) opts=sprintf('%s --clock-rate %f',opts,rate/l)
-  system(sprintf("treetime --tree /tmp/tree%d.nwk --dates /tmp/dates%d.tsv --sequence-length %d --outdir /tmp/%d %s > /dev/null",tag,tag,l,tag,opts))
+  system(sprintf("treetime --keep-polytomies --tree /tmp/tree%d.nwk --dates /tmp/dates%d.tsv --sequence-length %d --outdir /tmp/%d %s > /dev/null",tag,tag,l,tag,opts))
   resrate=read.table(sprintf('/tmp/%d/molecular_clock.txt',tag))[1,1]*l
   restree=read.nexus(sprintf('/tmp/%d/timetree.nexus',tag))
   resrootdate=max(dates)-max(dist.nodes(restree)[Ntip(restree)+1,1:Ntip(restree)])

@@ -7,7 +7,7 @@
 validate(
   x,
   nrep = 1000,
-  resampling = 0,
+  resampling = NA,
   showProgress = T,
   showTraces = F,
   nbIts = 10000
@@ -18,7 +18,7 @@ validate(
 
 \item{nrep}{number of repeats to perform}
 
-\item{resampling}{method used for resampling: 0 (default) for using given sample, 1 to use the approximate posterior resampling method, 2 to use BactDating resampling}
+\item{resampling}{force resampling method: 0 for using given sample, 1 to use the approximate posterior resampling method, 2 to use BactDating resampling}
 
 \item{showProgress}{Whether or not to show progress}
 

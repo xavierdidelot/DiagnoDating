@@ -241,15 +241,15 @@ testResid=function(x,test=1) {
 #'
 #' @param x object of class resDating
 #' @param nrep number of repeats to perform
-#' @param resampling method used for resampling: 0 (default) for using given sample, 1 to use the approximate posterior resampling method, 2 to use BactDating resampling
+#' @param resampling force resampling method: 0 for using given sample, 1 to use the approximate posterior resampling method, 2 to use BactDating resampling
 #' @param showProgress Whether or not to show progress
 #' @param showTraces whether or not to show the MCMC traces
 #' @param nbIts number of iterations in bactdate resampling
 #' @export
 #'
-validate=function(x,nrep=1000,resampling=0,showProgress=T,showTraces=F,nbIts=1e4)
+validate=function(x,nrep=1000,resampling=NA,showProgress=T,showTraces=F,nbIts=1e4)
 {
-
+  if (is.na(resampling)) resampling=ifelse(is.null(x$record),2,0)
   ps=rep(NA,nrep)
 
   if (resampling==0) {
@@ -270,6 +270,7 @@ validate=function(x,nrep=1000,resampling=0,showProgress=T,showTraces=F,nbIts=1e4
     rtree$root.time=NULL
     k=sum(phy$edge.length)/sum(x$tree$edge.length)#or use x$rate
     rtree$edge.length=rtree$edge.length*k
+    rtree$edge.length=ifelse(rtree$edge.length==0,0.01,rtree$edge.length)
     r2=bactdate(rtree,dates,initMu=k,minbralen=0,model='strictgamma',showProgress=showProgress,initAlpha=estimAlpha(x$tree),updateRoot = 'branch',nbIts=nbIts)
     if (showTraces) {tmp=r2;class(tmp)='resBactDating';plot(tmp,'trace')}
     r4=resDating(r2$tree,phy,algo=x$algo,model=x$model,rate=x$rate,relax=x$relax)
