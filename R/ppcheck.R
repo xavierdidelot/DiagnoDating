@@ -19,6 +19,7 @@ ppcheck=function(x,nrep=1000,showProgress=T,showPlot=F)
     phy2=simobsphy(x2$tree,model=x2$model,mu=x2$rate,sigma=x2$relax)
     staM[i,]=computeStats(phy2)
   }
+  if (showProgress) close(pb)
 
   if (showPlot){
     old.par=par(no.readonly = T)
@@ -26,7 +27,7 @@ ppcheck=function(x,nrep=1000,showProgress=T,showPlot=F)
     par(mfrow=c(sub,sub))
     for (i in 1:length(sta)) {
       xl=c(min(staM[,i],sta[i]),max(staM[,i],sta[i]))
-      hist(staM[,i],main='',xlab='',ylab='',xlim=xl)
+      hist(staM[,i],main='',xlab='',ylab='',xlim=xl,breaks=20)
       lines(c(sta[i],sta[i]),c(0,nrep),col='red')
       title(names(sta)[i])
     }

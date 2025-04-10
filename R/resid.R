@@ -306,6 +306,7 @@ validate=function(x,nrep=1000,resampling=NA,showProgress=T,showTraces=F,nbIts=1e
       x2=resDating(samtree,phy,algo=x$algo,model=x$model,rate=x$rate,relax=x$relax)
       ps[i]=testResid(x2)$p.value
     }
+    if (showProgress) close(pb)
   }
 
   if (resampling==1) {
