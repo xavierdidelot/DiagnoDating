@@ -8,15 +8,14 @@
 #'
 ppcheck=function(x,nrep=1000,showProgress=T,showPlot=F)
 {
-  if (is.null(x$record)) stop('No posterior sample was found.')
   phy=x$inputtree
   sta=computeStats(phy)
-  inds=round(seq(max(1,floor(nrow(x$record)/2)),nrow(x$record),length.out=nrep))
+  if (!is.null(x$record)) inds=round(seq(max(1,floor(nrow(x$record)/2)),nrow(x$record),length.out=nrep))
   if (showProgress) pb <- utils::txtProgressBar(min=0,max=nrep,style = 3)
   staM=matrix(NA,nrow=nrep,ncol=length(sta))
   for (i in 1:nrep) {
     if (showProgress) utils::setTxtProgressBar(pb, i)
-    x2=takeSample(x,inds[i])
+    if (is.null(x$record)) x2=x else x2=takeSample(x,inds[i])
     phy2=simobsphy(x2$tree,model=x2$model,mu=x2$rate,sigma=x2$relax)
     staM[i,]=computeStats(phy2)
   }
