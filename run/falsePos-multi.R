@@ -18,9 +18,9 @@ allres <- foreach (rep = 1:(4*reps),.packages = c('ape','BactDating','ValidateDa
   if (rep%%4 == 1 || rep%%4 == 2) keepRoot=T else {keepRoot=F;phy=unroot(phy)}
   if (rep%%4 == 1 || rep%%4 == 3) rate=NA else rate=10
   r1=runDating(phy,dates,keepRoot=keepRoot,rate=rate)
-  #v1=validate(r1);p1=median(v1$ps)
-  #v1r=validate(r1,resampling = 2);p1r=median(v1r$ps)
-  p1=1;p1r=1
+  v1=validate(r1);p1=median(v1$ps)
+  v1r=validate(r1,resampling = 2);p1r=median(v1r$ps)
+  #p1=1;p1r=1
   r2=runDating(phy,dates,algo='treedater',keepRoot=keepRoot,rate=rate)
   v2=validate(r2);p2=median(v2$ps)
   r3=runDating(phy,dates,algo='node.dating',keepRoot=keepRoot,rate=rate)

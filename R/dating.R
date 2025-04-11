@@ -40,6 +40,8 @@ runBactDating=function(tree,dates,rate=NA,keepRoot=F,...) {
   r=do.call("bactdate",args)
   r$algo='BactDating'
   r$model=args$model
+  attributes(r$tree)$order<-NULL
+  attributes(r$inputtree)$order<-NULL
   v=r$record[,'mu']
   v=v[(1+length(v)/2):length(v)]
   r$rate=mean(v)
