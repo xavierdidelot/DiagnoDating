@@ -93,9 +93,7 @@ in the inference, including the aforementioned confounding effect of population 
 \citep{Murray2016}. 
 We also demonstrate the usefulness of this approach in practice on real datasets.
 
-\section*{RESULTS}
-
-\subsection*{Concepts in validation}
+\section*{NEW APPROACHES}
 
 The relationship between the different conceptual methods
  used in this paper is illustrated in Figure \ref{fig:flowchart}.  
@@ -142,6 +140,8 @@ reminiscent of regression models
 but also previously applied more generally for example to
 epidemic models \citep{lauNewModelDiagnostics2014} or 
 Hidden Markov Models \citep{zucchini2009hidden,buckbyModelCheckingHidden2020}.
+
+\section*{RESULTS}
 
 \subsection*{Motivating example}
 
@@ -206,6 +206,8 @@ of a single model, without comparison to other models.
 \subsection*{Benchmarking}
 
 \subsection*{Confounding effect of population structure} 
+
+\subsection*{Validation of a single dated phylogeny}
 
 \subsection*{Real data examples}
 
@@ -287,13 +289,29 @@ times $(1+\omega)$ in the two relaxed clock models.
 
 \subsection*{Posterior predictive checks}
 
-TODO Posterior predictive assessment is another way to perform
-validation \citep{Meng1994,Gelman1996}.
-Would usually expect to be less powerful since it is 
-based on summary statistics \citep{gibsonComparisonAssessmentEpidemic2018}.
-Need to select summary statistics, and need to combine
-tests between them, maybe using harmonic mean
-p-value \citep{wilsonHarmonicMeanPvalue2019}.
+Posterior predictive assessment is a popular way to perform
+model validation in Bayesian statistics \citep{Meng1994,Gelman1996}.
+Frequently used for example in infectious disease epidemiology modeling \citep{Didelot2017b,Whittles2017,gibsonComparisonAssessmentEpidemic2018}.
+When applied to the phylogenetic dating problem, posterior predictive checking requires
+to simulate many undated phylogenies from the posterior sample of dated phylogeny,
+and comparing them to the observed undated phylogeny from which inference was performed.
+Simulation is done using the appropriate clock model (Equations \ref{eq:sc} to \ref{eq:carc})
+and using the inferred parameters. Posterior predictive assessment can also be performed
+following inference from a maximization method, using the single inferred dated tree and parameters as 
+starting point for all simulations. 
+The comparison of simulated and observed phylogenies is done on the basis of summary statistics, and
+here we used the following four: mean of branch lengths, variance of branch lengths,
+maximum of branch lengths and stemminess. The latter is defined as the sum of lengths of 
+internal branches divided by the total sum of branch lengths, with high values usually indicating
+variations in population size \citep{fialaFactorsDeterminingAccuracy1985,Didelot2009d}.
+These summary statistics were selected to represent different aspects of the phylogeny without
+being too numerous to avoid worsening the multiple testing issue, and we found them to be a useful
+choice in practice but we do not claim that they are in any way optimal.
+For each summary statistics, an empirical p-value is computed representing how extreme the 
+observed phylogeny is compared to the set of simulated ones. 
+These p-values can then be combined into a single p-value while controlling for multiple testing.
+We used a false discovery rate (FDR) correction \citep{Benjamini1995} although other options would also be 
+possible for example using a harmonic mean p-value \citep{wilsonHarmonicMeanPvalue2019}.
 
 \subsection*{Computation and analysis of residuals}
 
