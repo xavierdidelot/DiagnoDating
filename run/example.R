@@ -49,7 +49,6 @@ v2=validate(r2);plot(v2)
 
 modelcompare(r,r2)
 
-if (F) {
 set.seed(0)
 a1=runDating(tree,dates,algo='LSD')
 a2=runDating(tree,dates,algo='node.dating')
@@ -68,4 +67,3 @@ plotResid(a4,3,main='',xlim=c(-4,4),xlab='Residuals',ylim=c(0,0.5),breaks=seq(-1
 fig_label('D',cex=2)
 dev.off()
 system('open exampleS2.pdf')
-}
