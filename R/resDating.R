@@ -13,6 +13,7 @@
 #'
 resDating = function(dt, phy, algo='Unknown', model='poisson', rate=10, relax=0, rootdate=NA)
 {
+  if (xor(is.numeric(dt$tip.label),is.numeric(phy$tip.label))) {dt$tip.label=as.numeric(dt$tip.label);phy$tip.label=as.numeric(phy$tip.label)}
   if (!isTRUE(all.equal(dt$tip.label,phy$tip.label))) stop('Trees should have the same tip labels.')
   r=list()
   r$rate=rate
