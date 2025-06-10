@@ -13,7 +13,7 @@ vignette: >
 We start by generating a dated tree with $N_e g=10$ years and sampling frame of only 0.01 year:
 
 ```{r}
-library(ValidateDating,quietly=T)
+library(DiagnoDating,quietly=T)
 set.seed(0)
 dates=runif(100,0,0.01)
 dt=simcoaltree(dates,alpha=10)

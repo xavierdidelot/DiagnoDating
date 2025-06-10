@@ -13,7 +13,7 @@ vignette: >
 First we generate a dated tree with three populations existing for only 1 year each and separated by 1 years.
 
 ```{r}
-library(ValidateDating,quietly=T)
+library(DiagnoDating,quietly=T)
 library(DetectImports)
 set.seed(0)
 NeFunImp=function(t,texp) {return(pmax(0,(t-texp)-(t-texp)^2))}

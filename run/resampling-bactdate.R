@@ -1,7 +1,7 @@
 rm(list=ls())
 
 set.seed(0)
-library(ValidateDating,quietly=T)
+library(DiagnoDating,quietly=T)
 dates=runif(50,2000,2020)
 dt=simcoaltree(dates,10)
 phy=simobsphy(dt,mu=1,model='poisson')

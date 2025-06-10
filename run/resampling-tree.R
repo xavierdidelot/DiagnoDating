@@ -15,7 +15,7 @@ par(mfrow=c(2,3))
 
 phy=ttree
 phy$edge.length=s
-#infer=runDating(phy,dates,initMu=mu,updateMu=F,initAlpha=alpha,updateAlpha=F,model='poisson',updateRoot=F,showProgress=T);infer=ValidateDating:::reorderEdges(infer$tree,phy)
+#infer=runDating(phy,dates,initMu=mu,updateMu=F,initAlpha=alpha,updateAlpha=F,model='poisson',updateRoot=F,showProgress=T);infer=DiagnoDating:::reorderEdges(infer$tree,phy)
 d<-ape::estimate.dates(phy,dates,mu=mu,lik.tol=1e-5);infer=phy;for (i in 1:nrow(infer$edge)) infer$edge.length[i]=d[infer$edge[i,2]]-d[infer$edge[i,1]]
 l2=infer$edge.length
 

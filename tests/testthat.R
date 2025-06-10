@@ -1,4 +1,4 @@
 library(testthat)
-library(ValidateDating)
+library(DiagnoDating)
 
-test_check("ValidateDating")
+test_check("DiagnoDating")

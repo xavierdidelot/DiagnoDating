@@ -20,7 +20,7 @@ Another difference is that instead of having the three clades exactly equally re
 $s=2$ years, again to show that this is not the cause of the problem.
 
 ```{r}
-library(ValidateDating,quietly=T)
+library(DiagnoDating,quietly=T)
 set.seed(5)#cherry-picked a nice example
 t1=rcoal(30,1:30)
 s=2

@@ -1,6 +1,6 @@
-Package: ValidateDating
+Package: DiagnoDating
 Type: Package
-Title: ValidateDating: validating dated phylogenies
+Title: DiagnoDating: validating dated phylogenies
 Version: 0.0.1
 Date: 2024-07-02
 Authors@R: person("Xavier","Didelot",email="xavier.didelot@gmail.com",role=c("aut", "cre"))
@@ -17,11 +17,11 @@ Suggests: knitr,
     mlesky,
     treedater,
     treeio
-Description: ValidateDating is a R package to test the validity of dated phylogenies.
+Description: DiagnoDating is a R package to test the validity of dated phylogenies.
 VignetteBuilder: knitr
 License: MIT + file LICENSE
-URL: https://github.com/xavierdidelot/ValidateDating
-BugReports: https://github.com/xavierdidelot/ValidateDating/issues
+URL: https://github.com/xavierdidelot/DiagnoDating
+BugReports: https://github.com/xavierdidelot/DiagnoDating/issues
 RoxygenNote: 7.3.2
 Encoding: UTF-8
 LazyData: true

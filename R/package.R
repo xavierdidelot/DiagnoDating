@@ -1,7 +1,7 @@
-#' @name ValidateDating
-#' @title ValidateDating:  validating dated phylogenies
+#' @name DiagnoDating
+#' @title DiagnoDating:  validating dated phylogenies
 #'
-#' @description ValidateDating is a R package to test the validity of dated phylogenies.
+#' @description DiagnoDating is a R package to test the validity of dated phylogenies.
 #'
 #' The main functions of the package are:
 #' \itemize{

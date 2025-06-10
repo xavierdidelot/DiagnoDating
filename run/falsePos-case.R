@@ -1,5 +1,5 @@
 rm(list=ls())
-library(ValidateDating,quietly=T)
+library(DiagnoDating,quietly=T)
 
 set.seed(1)
 dates=runif(200,2000,2020)

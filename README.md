@@ -12,16 +12,16 @@ using an inappropriate clock model.
 
 ## Installation
 
-You can install ValidateDating from github with:
+You can install DiagnoDating from github with:
 
 ``` r
-devtools::install_github("xavierdidelot/ValidateDating")
+devtools::install_github("xavierdidelot/DiagnoDating")
 ```
 
 The package can then be loaded using:
 
 ``` r
-library(ValidateDating,quietly=T)
+library(DiagnoDating,quietly=T)
 ```
 
 ## Example
@@ -81,12 +81,12 @@ validate(r)
 
 ## More information and getting help
 
-For more detailed examples of how to use ValidateDating, see the
+For more detailed examples of how to use DiagnoDating, see the
 vignettes
-[here](https://github.com/xavierdidelot/ValidateDating/tree/master/vignettes).
+[here](https://github.com/xavierdidelot/DiagnoDating/tree/master/vignettes).
 See also the help included in the package using the R command
-`help(package='ValidateDating')`.
+`help(package='DiagnoDating')`.
 
 If you have any problem or question please create an issue
-[here](https://github.com/xavierdidelot/ValidateDating/issues) or get in
+[here](https://github.com/xavierdidelot/DiagnoDating/issues) or get in
 touch by emailing `xavier.didelot@gmail.com`

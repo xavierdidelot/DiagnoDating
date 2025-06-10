@@ -1,4 +1,4 @@
-library(ValidateDating,quietly=T)
+library(DiagnoDating,quietly=T)
 library(phangorn)
 rm(list=ls())
 source('fig_label.R')

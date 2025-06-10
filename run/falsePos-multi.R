@@ -1,13 +1,13 @@
 rm(list=ls())
 
-library(ValidateDating,quietly=T)
+library(DiagnoDating,quietly=T)
 library(foreach)
 
 cl <- parallel::makeCluster(parallel::detectCores() - 1, type = "PSOCK")
 doParallel::registerDoParallel(cl)
 
 reps=40
-allres <- foreach (rep = 1:(4*reps),.packages = c('ape','BactDating','ValidateDating')) %dopar% {
+allres <- foreach (rep = 1:(4*reps),.packages = c('ape','BactDating','DiagnoDating')) %dopar% {
   seed=floor(seq(1,reps+0.75,0.25))[rep]
   set.seed(seed)
   dates=runif(200,2000,2020)
