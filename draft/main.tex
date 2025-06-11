@@ -31,11 +31,11 @@
 %\renewcommand\footnote[2][]{\relax}
 
 \begin{document}
-{\Large Validation of dated phylogenies in microbial population genetics}
+{\Large Diagnostics of dated phylogenies in microbial population genetics}
 
 
 \vspace*{2cm}
-Xavier Didelot$^{1,2,*}$, Jake Carson$^{3}$, Paolo Ribeca$^{4,5}$, ...
+Xavier Didelot$^{1,2,*}$, Jake Carson$^{3}$, Paolo Ribeca$^{4,5}$, ..., Erik Volz$^6$
 
 \vspace*{2cm}
 $^1$ School of Life Sciences, University of Warwick, United Kingdom\\
@@ -43,6 +43,7 @@ $^2$ Department of Statistics, University of Warwick, United Kingdom\\
 $^3$ Mathematics Institute, University of Warwick, United Kingdom\\
 $^4$ UK Health Security Agency, London, United Kingdom\\
 $^5$ Biomathematics and Statistics Scotland, The James Hutton Institute, Edinburgh, United Kingdom\\
+$^6$ MRC Centre for Global Infectious Disease Analysis, Department of Infectious Disease Epidemiology, Imperial College London, London, United Kingdom\\
 $^*$ Corresponding author. Tel: 0044 (0)2476 572827. Email: \verb+xavier.didelot@warwick.ac.uk+
 
 %\newpage
@@ -106,7 +107,7 @@ The relationship between the different conceptual methods
 \begin{center}
 \includegraphics[width=15cm]{flowchart.png}
 \end{center}
-\caption{Concepts used in validation of dated phylogenies. (A) Flowchart for Bayesian methods.
+\caption{Concepts used in diagnostics of dated phylogenies. (A) Flowchart for Bayesian methods.
 (B) Flowchart for maximizing methods. Methods for which a ground truth is needed are show in red.
 Posterior predictive checks are shown in blue. Methods based on residuals are shown in green.
 \label{fig:flowchart}}
@@ -132,7 +133,7 @@ A popular approach to model validation is to perform a posterior predictive asse
 Need to select summary statistics, and need to combine
 tests between them, maybe using harmonic mean
 p-value \citep{wilsonHarmonicMeanPvalue2019}.
-Can also be done based on maximzing inference.
+Can also be done based on maximum likelihood inference.
 
 Another approach is to consider the distribution of residuals after fitting a model, following methodology
 reminiscent of regression models
@@ -140,6 +141,17 @@ reminiscent of regression models
 but also previously applied more generally for example to
 epidemic models \citep{lauNewModelDiagnostics2014} or 
 Hidden Markov Models \citep{zucchini2009hidden,buckbyModelCheckingHidden2020}.
+
+List of diagnostics to cover:
+\begin{enumerate}
+\item Comparison to ground truth (when available), using distance or coverage
+\item Outliers detection eg in root-to-tip plot cf tempest \citep{Rambaut2016a}, 
+cf also treedater approach \citep{Volz2017}. 
+Cholera hypermutator example \citep{Didelot2015}.
+\item Compute likelihood per branch and compare to expected distribution
+\item Posterior predictive checks
+\item Residuals approach
+\end{enumerate}
 
 \section*{RESULTS}
 
@@ -207,7 +219,7 @@ of a single model, without comparison to other models.
 
 \subsection*{Confounding effect of population structure} 
 
-\subsection*{Validation of a single dated phylogeny}
+\subsection*{Diagnostic of a single dated phylogeny}
 
 \subsection*{Real data examples}
 
@@ -218,18 +230,18 @@ of a single model, without comparison to other models.
 A\hspace*{6cm}B\hspace*{6cm}~\\
 \includegraphics[width=10cm]{fig1.png}
 \end{center}
-\caption{(A) General approach for validation of a dated phylogeny built by dating the nodes of a standard phylogeny. (B) General approach for validation of a dated phylogeny built directly from a sequence alignment.
+\caption{(A) General approach for diagnostics of a dated phylogeny built by dating the nodes of a standard phylogeny. (B) General approach for diagnostics of a dated phylogeny built directly from a sequence alignment.
 \label{fig:approach}}
 \end{figure}
 
-We want to validate a dated phylogeny $\mathcal{D}$, previously constructed using
+We want to diagnose a dated phylogeny $\mathcal{D}$, previously constructed using
 any method. We propose to do so by comparing the dated phylogeny $\mathcal{D}$ with 
 an undated phylogeny $\mathcal{L}$. 
 If the method used to construct $\mathcal{D}$ involved dating the nodes of an undated
 phylogeny, for example TreeTime \citep{Sagulenko2018} or treedater \citep{Volz2017}, 
-then this is readily available for validation and we therefore focus on this case in this article
-(Figure \ref{fig:approach}A). However, the validation methodology
-below can also be applied to methods that build a dated phylogeny directly from the alignment
+then this is readily available for diagnosics and we therefore focus on this case in this article
+(Figure \ref{fig:approach}A). However, the diagnosics methodology
+above can also be applied to methods that build a dated phylogeny directly from the alignment
 such as BEAST \citep{Suchard2018},
 simply by constructing a separate undated phylogeny from the same alignment using
 for example PhyML \citep{Guindon2010} or RAxML \citep{Stamatakis2015} 
@@ -290,7 +302,7 @@ times $(1+\omega)$ in the two relaxed clock models.
 \subsection*{Posterior predictive checks}
 
 Posterior predictive assessment is a popular way to perform
-model validation in Bayesian statistics \citep{Meng1994,Gelman1996}.
+model diagnostics in Bayesian statistics \citep{Meng1994,Gelman1996}.
 Frequently used for example in infectious disease epidemiology modeling \citep{Didelot2017b,Whittles2017,gibsonComparisonAssessmentEpidemic2018}.
 When applied to the phylogenetic dating problem, posterior predictive checking requires
 to simulate many undated phylogenies from the posterior sample of dated phylogeny,
@@ -315,7 +327,7 @@ possible for example using a harmonic mean p-value \citep{wilsonHarmonicMeanPval
 
 \subsection*{Computation and analysis of residuals}
 
-We want to validate a dated phylogeny $\mathcal{D}$ by comparison with an undated phylogeny $\mathcal{L}$. We start by considering the case where the dated phylogeny $\mathcal{D}$ is a single sample from the posterior distribution $p(.|\mathcal{L})$ obtained for example using BactDating \citep{Didelot2018}.
+We want to diagnose a dated phylogeny $\mathcal{D}$ by comparison with an undated phylogeny $\mathcal{L}$. We start by considering the case where the dated phylogeny $\mathcal{D}$ is a single sample from the posterior distribution $p(.|\mathcal{L})$ obtained for example using BactDating \citep{Didelot2018}.
 Let $d_i$ be the duration of a given branch in $\mathcal{D}$ and $l_i$ be the number of substitutions on the corresponding branch of $\mathcal{L}$, that is the branch that separates the leaves in the same way. There is a unique corresponding branch in $\mathcal{L}$ for all branches in $\mathcal{D}$ except for the two branches $a$ and $b$ connected to the root of $\mathcal{D}$ for which there is only a single corresponding branch $x$. We therefore split the substitutions on $x$ proportionally between the two branches $a$ and $b$ by defining:
 
 \begin{equation}
@@ -386,8 +398,8 @@ based on previously published code
 %Anderson-Darling simple hypothesis testing was used in \citep{lauNewModelDiagnostics2014} via implementation in package ADGofTest, returns same results as DescTools. Both use the same C code from 
 %\citep{marsagliaEvaluatingAndersonDarlingDistribution2004}. 
 
-We have described the validation procedure above as if there was a single posterior
-sample $\mathcal{D}$ to validate, whereas there would typically be multiple samples
+We have described the diagnosics procedure above as if there was a single posterior
+sample $\mathcal{D}$ to diagnose, whereas there would typically be multiple samples
 from this posterior available for example from running a Markov Chain Monte-Carlo
 method \citep{Didelot2018}. However, the same computation and analysis of residuals
 could be performed for each sample as described above. Each statistical test will
@@ -403,7 +415,7 @@ since it can be interpreted more directly as a p-value.
 \subsection*{Approximate posterior sampling given a point estimate}
 
 We now consider the case where the dated phylogeny $\mathcal{D}$ that we wish
-to validate was not sampled from the posterior. Instead it may be a point estimate, 
+to diagnose was not sampled from the posterior. Instead it may be a point estimate, 
 for example the result of maximum likelihood estimation
 or a summary tree built from a posterior sample \citep{heledLookingTreesForest2013}
 but for which the posterior sample itself is not available.
@@ -412,16 +424,19 @@ samples from the posterior before residuals can be computed as described above.
 If the residuals were computed directly from the point estimate, they would not follow the same distribution as in Equations
 \ref{eq:unif-resid} and \ref{eq:unif-resid-discrete}.
 To explain and illustrate this, let us first consider the discrete strict clock model (Equation \ref{eq:sc})
-with known mutation rate $\mu$
+with known mutation rate $\mu=1$
 and that the true branch durations $d_i$ are independent and identically
 distribution as:
 \begin{equation}
-d_i \sim \mathrm{Gamma}(k,\theta)
+d_i \sim \mathrm{Gamma}(k=2,\theta=2)
 \end{equation}
-Let $\hat{d_i}$ be a branch length in $\mathcal{D}$, on which there are $l_i$ substitutions in the undated phylogeny $\mathcal{L}$. If $\hat{d_i}$ is a maximum likelihood estimate of $d_i$ then
+Let $\hat{d_i}$ be a branch length in $\mathcal{D}$, on which there are $l_i$ substitutions in the undated phylogeny $\mathcal{L}$. 
+The true residuals of each branch are distributed as expected (Figure \ref{fig:iid}A)
+and so are the residuals based on a posterior sample of $d_i$ given $l_i$ (Figure \ref{fig:iid}B).
+If $\hat{d_i}$ is a maximum likelihood estimate of $d_i$ then
 $\hat{d_i}=l_i/\mu$.
-The residuals of the data points $l_i$ against the estimates $\hat{d_i}$ would look
-underdispersed, because the maximum likelihood estimates are overfitted.
+The residuals of the data points $l_i$ against the estimates $\hat{d_i}$ are
+underdispersed, because the maximum likelihood estimates are overfitted (Figure \ref{fig:iid}C).
 It is however possible in this case to recover the exact correct residuals by sampling from
 the posterior. 
 By conjugacy of the Gamma prior and Poisson likelihood, we can deduce that the posterior of $d_i$ is:
@@ -430,7 +445,7 @@ d_i \sim \mathrm{Gamma}\left(k+\hat{d_i} \mu,\frac{\theta}{1+\theta \mu}\right)
 \end{equation}
 We can simulate from this distribution to get a posterior sample $d_i$, from which we can then compute the residuals as 
 described previously which will be distributed as in 
-Equations \ref{eq:unif-resid} and \ref{eq:unif-resid-discrete}.
+Equations \ref{eq:unif-resid} and \ref{eq:unif-resid-discrete} (Figure \ref{fig:iid}D).
 
 The case described above works exactly but is idealised for two reasons.
 Firstly the branch durations $d_i$ are neither independent nor identically distributed,
@@ -489,9 +504,9 @@ TODO
 \subsection*{Implementation}
 
 We implemented the analytical methods described in this paper in a 
-new R package entitled \emph{ValidateDating} which is available
-at \url{https://github.com/xavierdidelot/ValidateDating} for R version 3.5 or later. 
-All code and data needed to replicate the results are included in the ``run'' directory of the \emph{ValidateDating} repository.
+new R package entitled \emph{DiagnoDating} which is available
+at \url{https://github.com/xavierdidelot/DiagnoDating} for R version 3.5 or later. 
+All code and data needed to replicate the results are included in the ``run'' directory of the \emph{DiagnoDating} repository.
 
 \section*{ACKNOWLEDGEMENTS}
 
@@ -527,6 +542,18 @@ We acknowledge funding from the National Institute for Health Research (NIHR) He
 \caption{Residuals after application on the motivating example of a strict clock model using LSD (A), node.dater (B), treedater (C) and TreeTime (D).
 \label{fig:exampleS2}}
 \end{figure}
+
+\begin{figure}[t!]
+\begin{center}
+\includegraphics[width=15cm]{iid.pdf}
+\end{center}
+\caption{Uniform residuals in the independent and identically distributed case. 
+(A) True residuals. (B) Residuals based on a posterior sample.
+(C) Residuals based on a point estimate.
+(D) Residuals based on a point estimate with resampling.
+\label{fig:iid}}
+\end{figure}
+
 
 \end{document}
 
