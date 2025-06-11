@@ -27,7 +27,7 @@ test_that("Simulate with simStructure and inference with all methods", {
   expect_is(res,'resDating')
   expect_is(capture_output(print(res)),'character')
   expect_silent(validate(res,resampling=1))
-  expect_silent(plotProbBranches(res))
+  expect_silent(plotLikBranches(res))
   expect_silent(plotResid(res))
   expect_silent(t<-testResid(res))
   expect_is(t,'htest')

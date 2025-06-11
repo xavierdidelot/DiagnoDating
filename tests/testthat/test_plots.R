@@ -14,9 +14,9 @@ test_that("All plots work.", {
   expect_silent(plotResid(r,sub=2,xlab='',ylab='',main=''))
   expect_silent(plotResid(r,sub=3,xlab='',ylab='',main=''))
   expect_silent(plotResid(r,sub=4,xlab='',ylab='',main=''))
-  expect_silent(plotProbBranches(r))
-  expect_silent(plotProbBranches(r,color=F))
-  expect_silent(plotProbBranches(r,sub=1,xlab='',ylab='',main=''))
-  expect_silent(plotProbBranches(r,sub=2,main=''))
+  expect_silent(plotLikBranches(r))
+  expect_silent(plotLikBranches(r,color=F))
+  expect_silent(plotLikBranches(r,sub=1,xlab='',ylab='',main=''))
+  expect_silent(plotLikBranches(r,sub=2,main=''))
 })
 

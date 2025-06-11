@@ -2,7 +2,7 @@
 % Please edit documentation in R/resid.R
 \name{plotResid}
 \alias{plotResid}
-\title{Plot pseudo-residuals}
+\title{Plot residuals}
 \usage{
 plotResid(x, sub = NA, ...)
 }
@@ -14,5 +14,5 @@ plotResid(x, sub = NA, ...)
 \item{...}{Passed on}
 }
 \description{
-Plot pseudo-residuals
+Plot residuals
 }

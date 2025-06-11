@@ -1,9 +1,9 @@
-#' Calculate probability of branches
+#' Calculate likelihood of branches
 #'
 #' @param x object of class resDating
-#' @param log whether to return the log of the probability
+#' @param log whether to return the log of the likelihoods
 #'
-calcProbBranches = function(x,log=FALSE) {
+calcLikBranches = function(x,log=FALSE) {
   if (!inherits(x,'resDating')) stop('Not a resDating object.')
   xs=x$tree$edge.length
   ys=x$tree$subs
@@ -67,17 +67,17 @@ calcResiduals = function(x) {
 }
 
 
-#' Plot probability of branches
+#' Plot likelihood of branches
 #'
 #' @param x object of class resDating
 #' @param sub Plot only one of the four subplots
-#' @param color Whether to use colors to show probabilities
-#' @param minProb Minimum probability to show as red
+#' @param color Whether to use colors to show likelihoods
+#' @param minProb Minimum likelihood to show as red
 #' @param ... Passed on
 #' @export
 #'
-plotProbBranches = function(x,sub=NA,color=T,minProb=NA,...) {
-  ll=calcProbBranches(x,log=T)
+plotLikBranches = function(x,sub=NA,color=T,minProb=NA,...) {
+  ll=calcLikBranches(x,log=T)
   ll[is.infinite(ll)]=NA
   ll=pmin(ll,log(1))
   if (!is.na(minProb)) ll=pmax(ll,log(minProb))
@@ -139,7 +139,7 @@ plotProbBranches = function(x,sub=NA,color=T,minProb=NA,...) {
   if (is.na(sub)) par(old.par)
 }
 
-#' Plot pseudo-residuals
+#' Plot residuals
 #'
 #' @param x object of class resDating
 #' @param sub Plot only one of the four subplots
@@ -147,8 +147,8 @@ plotProbBranches = function(x,sub=NA,color=T,minProb=NA,...) {
 #' @export
 #'
 plotResid = function(x,sub=NA,...) {
-  n=x$resid#normal pseudo-residual
-  p=pnorm(n)#uniform pseudo-residual
+  n=x$resid#normal residuals
+  p=pnorm(n)#uniform residuals
   xs=x$tree$edge.length
   if (any(is.nan(n) | is.infinite(n))) {
     w=which(!is.nan(n) & !is.infinite(n))
@@ -162,7 +162,7 @@ plotResid = function(x,sub=NA,...) {
   if (is.na(sub)) old.par=par(no.readonly = T)
   if (is.na(sub)) par(mfrow=c(2,2))
   if (is.na(sub) || sub==1) {
-    def_args=list(x=p,xlab='',main='Uniform pseudo-residuals',freq=F)
+    def_args=list(x=p,xlab='',main='Uniform residuals',freq=F)
     cl=as.list(match.call())[-1]
     cl=cl[setdiff(names(cl),c('x','sub'))]
     args=c(cl,def_args[!names(def_args) %in% names(cl)])
@@ -172,7 +172,7 @@ plotResid = function(x,sub=NA,...) {
   o=order(xs)
 
   if (is.na(sub) || sub==2) {
-    def_args=list(x=n[o],xlab='Branches in increasing order of duration',ylab='',main='Normal pseudo-residuals',ylim=c(mi,ma))
+    def_args=list(x=n[o],xlab='Branches in increasing order of duration',ylab='',main='Normal residuals',ylim=c(mi,ma))
     cl=as.list(match.call())[-1]
     cl=cl[setdiff(names(cl),c('x','sub'))]
     args=c(cl,def_args[!names(def_args) %in% names(cl)])
@@ -181,7 +181,7 @@ plotResid = function(x,sub=NA,...) {
   }
 
   if (is.na(sub) || sub==3) {
-    def_args=list(x=n,xlab='',main='Normal pseudo-residuals',freq=F,xlim=c(mi,ma))
+    def_args=list(x=n,xlab='',main='Normal residuals',freq=F,xlim=c(mi,ma))
     cl=as.list(match.call())[-1]
     cl=cl[setdiff(names(cl),c('x','sub'))]
     args=c(cl,def_args[!names(def_args) %in% names(cl)])
@@ -213,15 +213,15 @@ plotResid = function(x,sub=NA,...) {
   if (is.na(sub)) par(old.par)
 }
 
-#' Test on pseudo-residuals
+#' Test on residuals
 #'
 #' @param x object of class resDating
 #' @param test which test to use: 1 for Anderson-Darling simple test (default), 2 for Kolmogorov-Smirnov simple test, 3 for Shapiro-Wilk composite test
 #' @export
 #'
 testResid=function(x,test=1) {
-  n=x$resid#normal pseudo-residual
-  p=pnorm(n)#uniform pseudo-residual
+  n=x$resid#normal residual
+  p=pnorm(n)#uniform residual
   if (any(is.nan(n) | is.infinite(n))) {
     w=which(!is.nan(n) & !is.infinite(n))
     n=n[w]
@@ -365,15 +365,15 @@ print.resValidate <- function(x, ...)
 
 #' Plotting methods
 #' @param x Output from validate
-#' @param type Type of plot to do. Currently either 'hist' or 'lastProbBranches' or 'lastResid'.
+#' @param type Type of plot to do. Currently either 'hist' or 'lastLikBranches' or 'lastResid'.
 #' @param ... Additional parameters are passed on
 #' @return Plot of results
 #' @export
 plot.resValidate = function(x, type='hist',...) {
   stopifnot(inherits(x, "resValidate"))
 
-  if (type=='lastProbBranches') {
-    plotProbBranches(x$last,...)
+  if (type=='lastLikBranches') {
+    plotLikBranches(x$last,...)
   }
 
   if (type=='lastResid') {

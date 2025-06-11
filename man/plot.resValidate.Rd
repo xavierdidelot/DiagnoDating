@@ -9,7 +9,7 @@
 \arguments{
 \item{x}{Output from validate}
 
-\item{type}{Type of plot to do. Currently either 'hist' or 'lastProbBranches' or 'lastResid'.}
+\item{type}{Type of plot to do. Currently either 'hist' or 'lastLikBranches' or 'lastResid'.}
 
 \item{...}{Additional parameters are passed on}
 }
