@@ -23,32 +23,38 @@ resDating = function(dt, phy, algo='Unknown', model='poisson', rate=10, relax=0,
   r$model=model
   r$algo=algo
   r$inputtree=phy
-  phy=unroot(phy)
   class(r) <- 'resDating'
-  subs=rep(NA,length(dt$edge.length))
-  matphy=matrixChildren(phy)
-  matdt=matrixChildren(dt)
-  d1=do.call(paste, data.frame(matdt[dt$edge[,2],]))
-  d2=do.call(paste, data.frame( matphy[phy$edge[,2],]))
-  d3=do.call(paste, data.frame(!matphy[phy$edge[,2],]))
-  matches1=match(d1, d2)
-  matches2=match(d1, d3)
-  matches1[is.na(matches1)]=0
-  matches2[is.na(matches2)]=0
-  matches=matches1+matches2
-  for (i in 1:nrow(dt$edge)) {
-    prop=1
-    if (dt$edge[i,1]==Ntip(dt)+1) #Branch connected to root
-      prop=dt$edge.length[i]/sum(dt$edge.length[which(dt$edge[,1]==Ntip(dt)+1)])
-    subs[i]=phy$edge.length[matches[i]]*prop
-    #cdt=matdt[dt$edge[i,2],]
-    #for (j in 1:nrow(phy$edge)) {
-    #  cphy=matphy[phy$edge[j,2],]
-    #  if (identical(cdt,cphy) || identical(cdt,!cphy)) {
-    #    subs[i]=phy$edge.length[j]*prop
-    #  }
-    #}
+
+  if (isTRUE(all.equal(dt$edge,phy$edge))) {
+    subs=phy$edge.length
+  } else {
+    phy=unroot(phy)
+    subs=rep(NA,length(dt$edge.length))
+    matphy=matrixChildren(phy)
+    matdt=matrixChildren(dt)
+    d1=do.call(paste, data.frame(matdt[dt$edge[,2],]))
+    d2=do.call(paste, data.frame( matphy[phy$edge[,2],]))
+    d3=do.call(paste, data.frame(!matphy[phy$edge[,2],]))
+    matches1=match(d1, d2)
+    matches2=match(d1, d3)
+    matches1[is.na(matches1)]=0
+    matches2[is.na(matches2)]=0
+    matches=matches1+matches2
+    for (i in 1:nrow(dt$edge)) {
+      prop=1
+      if (dt$edge[i,1]==Ntip(dt)+1) #Branch connected to root
+        prop=dt$edge.length[i]/sum(dt$edge.length[which(dt$edge[,1]==Ntip(dt)+1)])
+      subs[i]=phy$edge.length[matches[i]]*prop
+      #cdt=matdt[dt$edge[i,2],]
+      #for (j in 1:nrow(phy$edge)) {
+      #  cphy=matphy[phy$edge[j,2],]
+      #  if (identical(cdt,cphy) || identical(cdt,!cphy)) {
+      #    subs[i]=phy$edge.length[j]*prop
+      #  }
+      #}
+    }
   }
+
   r$tree$subs=subs
   if (any(is.na(r$tree$subs))) warning('NAs in subs, maybe change in topology.')
   if (abs(sum(r$tree$subs)-sum(phy$edge.length))>0.01) warning('Incorrect number of subs.')

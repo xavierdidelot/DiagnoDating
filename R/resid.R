@@ -237,19 +237,47 @@ testResid=function(x,test=1) {
   return(r)
 }
 
-#' Check whether a dating analysis is valid
+#' Resample a dated tree using bactdate
 #'
 #' @param x object of class resDating
-#' @param nrep number of repeats to perform
-#' @param resampling force resampling method: 0 for using given sample, 1 to use the approximate posterior resampling method, 2 to use BactDating resampling
 #' @param showProgress Whether or not to show progress
 #' @param showTraces whether or not to show the MCMC traces
 #' @param nbIts number of iterations in bactdate resampling
 #' @export
 #'
-validate=function(x,nrep=1000,resampling=NA,showProgress=T,showTraces=F,nbIts=1e4)
+resample=function(x,showProgress=T,showTraces=F,nbIts=1e4)
 {
-  if (is.na(resampling)) resampling=ifelse(is.null(x$record),2,0)
+  rtree=x$tree#reorder(x$tree)
+  phy=x$inputtree
+  dates=unname(x$rootdate+dist.nodes(x$tree)[1:Ntip(x$tree),1+Ntip(x$tree)])
+  rtree$root.time=NULL
+  k=sum(phy$edge.length)/sum(x$tree$edge.length)
+  rtree$edge.length=rtree$edge.length*k
+  rtree$edge.length=ifelse(rtree$edge.length==0,0.01,rtree$edge.length)
+  r2=bactdate(rtree,dates,initMu=k,minbralen=0,model='strictgamma',showProgress=showProgress,initAlpha=estimAlpha(x$tree),updateRoot = 'branch',nbIts=nbIts)
+  attributes(r2$tree)$order<-NULL
+  attributes(r2$inputtree)$order<-NULL
+  if (showTraces) {tmp=r2;class(tmp)='resBactDating';plot(tmp,'trace')}
+  r4=resDating(r2$tree,phy,algo=x$algo,model=x$model,rate=x$rate,relax=x$relax)
+  r4$record=r2$record
+  x3=resDating(takeSample(r4)$tree,r4$inputtree,algo=r4$algo,model=r4$model,rate=r4$rate,relax=r4$relax,rootdate=r4$rootdate)
+  s=Ntip(rtree)+Nnode(rtree)
+  i2=1:nrow(r4$tree$edge)
+  for (w in 1:nrow(r4$record)) r4$record[w,s*2+r4$tree$edge[i2,2]]=x3$tree$subs
+  r4$record[,'mu']=x$rate
+  r4$record[,'sigma']=x$relax
+  return(r4)
+}
+
+#' Compute posterior distribution of p-values
+#'
+#' @param x object of class resDating
+#' @param nrep number of repeats to perform
+#' @export
+#'
+postdistpvals=function(x,nrep=1000)
+{
+  resampling=0;showProgress=T;shoeTraces=F;nbIts=1e4#old arguments
   ps=rep(NA,nrep)
 
   if (resampling==0) {
@@ -347,30 +375,30 @@ validate=function(x,nrep=1000,resampling=NA,showProgress=T,showTraces=F,nbIts=1e
   ret$ps=ps
   ret$input=x
   ret$last=x2
-  class(ret)<-'resValidate'
+  class(ret)<-'resPDPV'
   return(ret)
 }
 
-#' Print function for resValidate objects
-#' @param x output from validate
+#' Print function for resPDPV objects
+#' @param x output from postdistpval
 #' @param ... Passed on to cat
 #' @return Print out details of dating results
 #' @export
-print.resValidate <- function(x, ...)
+print.resPDPV <- function(x, ...)
 {
-  stopifnot(inherits(x, "resValidate"))
-  cat(sprintf('Result from validation with median p-value %.2f\n',median(x$ps)),...)
+  stopifnot(inherits(x, "resPDPV"))
+  cat(sprintf('Result from postdistpval with median p-value %.2f\n',median(x$ps)),...)
   invisible(x)
 }
 
 #' Plotting methods
-#' @param x Output from validate
+#' @param x Output from postdistpval
 #' @param type Type of plot to do. Currently either 'hist' or 'lastLikBranches' or 'lastResid'.
 #' @param ... Additional parameters are passed on
 #' @return Plot of results
 #' @export
-plot.resValidate = function(x, type='hist',...) {
-  stopifnot(inherits(x, "resValidate"))
+plot.resPDPV = function(x, type='hist',...) {
+  stopifnot(inherits(x, "resPDPV"))
 
   if (type=='lastLikBranches') {
     plotLikBranches(x$last,...)
