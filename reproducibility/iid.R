@@ -26,9 +26,8 @@ u=runif(n,ppois(s-1,l2*mu),ppois(s,l2*mu))
 hist(u,breaks=seq(0,1,0.05),freq=F,main='',ylab='',xlab='Residuals for a point estimate')
 fig_label('C',cex=2)
 
-#k=shape;theta=scale#prior known
-m=mean(l2);v=var(l2)
-k=m^2*mu/(v*mu-m);theta=v/m-1/mu#guessing prior using the Law of total expectation and the Law of total variance
+k=shape;theta=scale#prior known
+#m=mean(l2);v=var(l2);k=m^2*mu/(v*mu-m);theta=v/m-1/mu#guessing prior using the Law of total expectation and the Law of total variance
 l4=rgamma(n,shape=k+l2*mu,scale=theta/(1+theta*mu))#sample from posterior based on MLE
 u=runif(n,ppois(s-1,l4*mu),ppois(s,l4*mu))
 hist(u,breaks=seq(0,1,0.05),freq=F,main='',ylab='',xlab='Residuals for a point estimate with resampling')

@@ -273,9 +273,10 @@ resample=function(x,showProgress=T,showTraces=F,nbIts=1e4)
 #'
 #' @param x object of class resDating
 #' @param nrep number of repeats to perform
+#' @param showPlot Whether or not to show the plot
 #' @export
 #'
-postdistpvals=function(x,nrep=1000)
+postdistpvals=function(x,nrep=1000,showPlot=F)
 {
   resampling=0;showProgress=T;shoeTraces=F;nbIts=1e4#old arguments
   ps=rep(NA,nrep)
@@ -371,52 +372,20 @@ postdistpvals=function(x,nrep=1000)
     }
   }
 
-  ret=list()
-  ret$ps=ps
-  ret$input=x
-  ret$last=x2
-  class(ret)<-'resPDPV'
-  return(ret)
-}
-
-#' Print function for resPDPV objects
-#' @param x output from postdistpval
-#' @param ... Passed on to cat
-#' @return Print out details of dating results
-#' @export
-print.resPDPV <- function(x, ...)
-{
-  stopifnot(inherits(x, "resPDPV"))
-  cat(sprintf('Result from postdistpval with median p-value %.2f\n',median(x$ps)),...)
-  invisible(x)
-}
-
-#' Plotting methods
-#' @param x Output from postdistpval
-#' @param type Type of plot to do. Currently either 'hist' or 'lastLikBranches' or 'lastResid'.
-#' @param ... Additional parameters are passed on
-#' @return Plot of results
-#' @export
-plot.resPDPV = function(x, type='hist',...) {
-  stopifnot(inherits(x, "resPDPV"))
-
-  if (type=='lastLikBranches') {
-    plotLikBranches(x$last,...)
-  }
-
-  if (type=='lastResid') {
-    plotResid(x$last,...)
-    title(sprintf('p=%s',format(testResid(x$last)$p.value)))
-    }
-
-  if (type=='hist') {
-    h=hist(x$ps,breaks=seq(0,1,length.out=21),xlab='',ylab='',main='Posterior distribution of p-values')
-    y=length(which(x$ps<0.05))
+  if (showPlot) {
+    h=hist(ps,breaks=seq(0,1,length.out=21),xlab='',ylab='',main='Posterior distribution of p-values')
+    y=length(which(ps<0.05))
     par(xpd=NA)
-    text(0.025,y,sprintf('%.1f%%',y*100/length(x$ps)),pos=3)
-    med=median(x$ps)
+    text(0.025,y,sprintf('%.1f%%',y*100/length(ps)),pos=3)
+    med=median(ps)
     lines(c(med,med),c(0,max(h$counts)),lty=2)
     text(med,max(h$counts),format(med,digits=3),pos=4)
     par(xpd=F)
   }
+
+  ret=list()
+  ret$ps=ps
+  ret$input=x
+  ret$last=x2
+  return(ret)
 }

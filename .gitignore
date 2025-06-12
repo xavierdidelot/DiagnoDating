@@ -1,5 +1,6 @@
 
-run/*.pdf
+reproducibility/*.pdf
+unsorted/*.pdf
 .Rproj.user
 .Rhistory
 .DS_Store

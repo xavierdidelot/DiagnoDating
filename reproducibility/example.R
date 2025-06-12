@@ -44,8 +44,8 @@ system('open example.pdf')
 testResid(sr)
 testResid(sr2)
 
-v=validate(r);plot(v)
-v2=validate(r2);plot(v2)
+v =postdistpvals(r ,showPlot=T)
+v2=postdistpvals(r2,showPlot=T)
 
 modelcompare(r,r2)
 

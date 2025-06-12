@@ -57,32 +57,41 @@ plot(r)
 
 ![](man/figures/unnamed-chunk-5-1.png)<!-- -->
 
-We can see how this dated phylogeny fits the data:
+We can perform a posterior predictive check:
 
 ``` r
-plotProbBranches(r)
+p=ppcheck(r,showPlot = T,showProgress = F)
 ```
 
 ![](man/figures/unnamed-chunk-6-1.png)<!-- -->
+
+We can see the likelihood of each branch:
+
+``` r
+plotLikBranches(r)
+```
+
+![](man/figures/unnamed-chunk-7-1.png)<!-- -->
+
+We can compute the residuals:
 
 ``` r
 plotResid(r)
 ```
 
-![](man/figures/unnamed-chunk-6-2.png)<!-- -->
+![](man/figures/unnamed-chunk-8-1.png)<!-- -->
 
-We can perform the validation:
+We can compute the posterior distribution of residual p-values:
 
 ``` r
-validate(r)
+p=postdistpvals(r,showPlot = T)
 ```
 
-![](man/figures/unnamed-chunk-7-1.png)<!-- -->
+![](man/figures/unnamed-chunk-9-1.png)<!-- -->
 
 ## More information and getting help
 
-For more detailed examples of how to use DiagnoDating, see the
-vignettes
+For more detailed examples of how to use DiagnoDating, see the vignettes
 [here](https://github.com/xavierdidelot/DiagnoDating/tree/master/vignettes).
 See also the help included in the package using the R command
 `help(package='DiagnoDating')`.

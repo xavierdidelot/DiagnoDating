@@ -56,15 +56,25 @@ r=runDating(phy,dates)
 plot(r)
 ```
 
-We can see how this dated phylogeny fits the data:
+We can perform a posterior predictive check:
 ```{r}
-plotProbBranches(r)
+p=ppcheck(r,showPlot = T,showProgress = F)
+```
+
+We can see the likelihood of each branch:
+```{r}
+plotLikBranches(r)
+```
+
+We can compute the residuals:
+```{r}
 plotResid(r)
 ```
 
-We can perform the validation:
+
+We can compute the posterior distribution of residual p-values:
 ```{r}
-validate(r)
+p=postdistpvals(r,showPlot = T)
 ```
 
 ## More information and getting help

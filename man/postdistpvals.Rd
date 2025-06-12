@@ -4,12 +4,14 @@
 \alias{postdistpvals}
 \title{Compute posterior distribution of p-values}
 \usage{
-postdistpvals(x, nrep = 1000)
+postdistpvals(x, nrep = 1000, showPlot = F)
 }
 \arguments{
 \item{x}{object of class resDating}
 
 \item{nrep}{number of repeats to perform}
+
+\item{showPlot}{Whether or not to show the plot}
 }
 \description{
 Compute posterior distribution of p-values
