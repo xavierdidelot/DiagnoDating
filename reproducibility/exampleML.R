@@ -10,7 +10,11 @@ tree=simobsphy(dt,mu=10,model='poisson')
 tree=unroot(midpoint(tree))
 
 r=runDating(tree,dates,algo='treedater')
-v=validate(r,resampling=2)
+rs=resample(r)
+pdf('exampleMLSup.pdf')
+v=postdistpvals(rs,showPlot = T)
+dev.off()
+system('open exampleMLSup.pdf')
 
 pdf('exampleML.pdf',6,10)
 par(mfrow=c(3,2),mar=c(4,4,2,2))
@@ -31,5 +35,5 @@ dev.off()
 system('open exampleML.pdf')
 
 testResid(r)
-print(v)
-plot(v)
+testResid(v$last)
+

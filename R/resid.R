@@ -383,6 +383,7 @@ postdistpvals=function(x,nrep=1000,showPlot=F)
     par(xpd=F)
   }
 
+  cat(sprintf('The posterior distribution of p-values has median %.2f and %.2f%% of values below 5%%\n',median(ps),length(which(ps<0.05))*100/length(ps)))
   ret=list()
   ret$ps=ps
   ret$input=x
