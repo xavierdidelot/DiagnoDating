@@ -35,7 +35,7 @@
 
 
 \vspace*{2cm}
-Xavier Didelot$^{1,2,*}$, Jake Carson$^{3}$, Paolo Ribeca$^{4,5}$, ..., Erik Volz$^6$
+Xavier Didelot$^{1,2,*}$, Jake Carson$^{3}$, Paolo Ribeca$^{4,5}$, Erik Volz$^6$
 
 \vspace*{2cm}
 $^1$ School of Life Sciences, University of Warwick, United Kingdom\\
@@ -75,8 +75,8 @@ at different dates \citep{tongComparisonMethodsEstimating2018}, have different c
 More generally, any incorrect assumptions made by the model under which the dating analysis is performed
 can invalidate the results.
 
-One approach that has been used to ensure that there are no incorrect assumptions being made in the 
-model is to perform inference under multiple models and perform model comparison,
+One approach that has been used to ensure that there are no incorrect assumptions being made 
+is to perform inference under multiple models and perform model comparison,
 typically by computing a Bayes Factor \citep{Baele2012,Li2012,bouckaertBModelTestBayesianPhylogenetic2017}. 
 However, this requires multiple runs under different models, and only provides a relative measure
 of model appropriateness, with no indication of how good the best model actually is in absolute terms.
@@ -85,79 +85,106 @@ Another related line of research involves testing the significance of the tempor
 comparing results with and without dates \citep{Rambaut2000} or by 
 randomizing the leaf dates \citep{Duchene2015a}. 
 
-Here we present an alternative approach, in which we seek to evaluate
+Here we focus on an alternative approach, in which we seek to evaluate
 the correctness of an inference and detect if there are any reasons to believe that the inference is not valid.
 This approach is sometimes referred to as model checking, model diagnostics or model validation, 
 and it is complementary with the model comparison methodology mentioned above. 
-We use simulated datasets to demonstrate that this approach can detect a wide range of problems
+We propose several new methods for diagnosing problems in dated phylogenies.
+We use simulated datasets to test their ability to detect a range of problems
 in the inference, including the aforementioned confounding effect of population structure
 \citep{Murray2016}. 
 We also demonstrate the usefulness of this approach in practice on real datasets.
 
-\section*{NEW APPROACHES}
+%\section*{NEW APPROACHES}
+%
+%The relationship between the different conceptual methods
+% used in this paper is illustrated in Figure \ref{fig:flowchart}.  
+% Bayesian inference of a dated phylogeny from an undated phylogeny,
+% as performed for example using BactDating \citep{Didelot2018}, is shown in Figure \ref{fig:flowchart}A,
+% whereas maximization inference, as performed for example using
+% LSD \citep{To2016} or treedater \citep{Volz2017}, is shown in Figure \ref{fig:flowchart}B.
+% 
+% \begin{figure}[p!]
+%\begin{center}
+%\includegraphics[width=15cm]{flowchart.png}
+%\end{center}
+%\caption{Concepts used in diagnostics of dated phylogenies. (A) Flowchart for Bayesian methods.
+%(B) Flowchart for maximizing methods. Methods using the ground truth are shown in red.
+%Posterior predictive checks are shown in blue. Methods based on residuals are shown in green.
+%\label{fig:flowchart}}
+%\end{figure}
+% 
+% The ground truth is not known in real applications, but is typically known when simulating
+% data for the purpose of testing inference methods. In that case, 
+% it is possible to compute the distance between this ground truth and
+% the inferred dated phylogeny, with smaller values indicating better performance. 
+% However, the absolute (rather than relative) 
+% interpretation of this distance can be difficult, which means it is only really
+% useful when comparing different inferences from the same dataset. 
+%A related concept often used when performing Bayesian inference is coverage.
+%For example, when inferring a single parameter value, the coverage represents
+%how often the true value is contained within a credible interval. This concept can be used
+%when the ground truth is known to validate the dating of a phylogeny inferred using
+%Bayesian methods (Figure \ref{fig:flowchart}A) and can also be extended to maximizing methods
+%of a parametric bootstrap \citep{efronBayesianInferenceParametric2012} is used to quantify the uncertainty 
+%(Figure \ref{fig:flowchart}B).
+%
 
-The relationship between the different conceptual methods
- used in this paper is illustrated in Figure \ref{fig:flowchart}.  
- Bayesian inference of a dated phylogeny from an undated phylogeny,
- as performed for example using BactDating \citep{Didelot2018}, is shown in Figure \ref{fig:flowchart}A,
- whereas maximization inference, as performed for example using
- LSD \citep{To2016} or treedater \citep{Volz2017}, is shown in Figure \ref{fig:flowchart}B.
- 
- \begin{figure}[p!]
+\section*{RESULTS}
+
+\subsection*{Outlier detection analysis}
+
+\begin{figure}[p!]
 \begin{center}
-\includegraphics[width=15cm]{flowchart.png}
+\includegraphics[width=10cm]{outlier.pdf}
 \end{center}
-\caption{Concepts used in diagnostics of dated phylogenies. (A) Flowchart for Bayesian methods.
-(B) Flowchart for maximizing methods. Methods for which a ground truth is needed are show in red.
-Posterior predictive checks are shown in blue. Methods based on residuals are shown in green.
-\label{fig:flowchart}}
+\caption{Example of diagnosis using outlier detection.
+(A) Simulated phylogeny with 5 outliers. 
+(B) Root-to-tip regression analysis.
+(C) Distribution of substitutions per branch before removing outliers.
+(D) Distribution of substitutions per branch after removing outliers.
+\label{fig:outlier}}
 \end{figure}
- 
- The ground truth is not known in real applications, but is typically known when simulating
- data for the purpose of testing inference methods. In that case, 
- it is possible to compute the distance between this ground truth and
- the inferred dated phylogeny, with smaller values indicating better performance. 
- However, the absolute (rather than relative) 
- interpretation of this distance can be difficult, which means it is only really
- useful when comparing different inferences from the same dataset. 
-A related concept often used when performing Bayesian inference is coverage.
-For example, when inferring a single parameter value, the coverage represents
-how often the true value is contained within a credible interval. This concept can be used
-when the ground truth is known to validate the dating of a phylogeny inferred using
-Bayesian methods (Figure \ref{fig:flowchart}A) and can also be extended to maximizing methods
-of a parametric bootstrap \citep{efronBayesianInferenceParametric2012} is used to quantify the uncertainty 
-(Figure \ref{fig:flowchart}B).
 
-A popular approach to model validation is to perform a posterior predictive assessment
-\citep{Meng1994,Gelman1996}.
-Need to select summary statistics, and need to combine
-tests between them, maybe using harmonic mean
-p-value \citep{wilsonHarmonicMeanPvalue2019}.
-Can also be done based on maximum likelihood inference.
+Outliers detection eg in root-to-tip plot cf tempest \citep{Rambaut2016a}, 
+cf also treedater approach \citep{Volz2017}. 
+Cholera hypermutator example \citep{Didelot2015}.
+Compute likelihood per branch and compare to expected distribution.
 
-Another approach is to consider the distribution of residuals after fitting a model, following methodology
+\subsection*{Posterior predictive analysis}
+
+\begin{figure}[p!]
+\begin{center}
+A\hspace*{10cm}~\\
+\includegraphics[width=10cm]{examplePPCheck1.pdf}
+\\B\hspace*{10cm}~\\
+\includegraphics[width=10cm]{examplePPCheck2.pdf}
+\end{center}
+\caption{Example of posterior predictive analysis.
+(A) Inference using incorrect model. 
+(B) Inference using correct model.
+\label{fig:ppCheck}}
+\end{figure}
+
+
+Posterior predictive assessment is a popular way to perform
+model diagnostics in Bayesian statistics \citep{Meng1994,Gelman1996}.
+It is frequently used for example in infectious disease epidemiology modeling \citep{Didelot2017b,Whittles2017,gibsonComparisonAssessmentEpidemic2018}.
+
+%Need to select summary statistics, and need to combine
+%tests between them, eg using harmonic mean
+%p-value \citep{wilsonHarmonicMeanPvalue2019}.
+%Can also be done based on maximum likelihood inference.
+
+
+\subsection*{Residual analysis following Bayesian inference}
+
+Another diagnostic method is to consider the distribution of residuals after fitting a model, following methodology
 reminiscent of regression models
 \citep{coxGeneralDefinitionResiduals1968,dunnRandomizedQuantileResiduals1996},
 but also previously applied more generally for example to
 epidemic models \citep{lauNewModelDiagnostics2014} or 
 Hidden Markov Models \citep{zucchini2009hidden,buckbyModelCheckingHidden2020}.
-
-List of diagnostics to cover:
-\begin{enumerate}
-\item Comparison to ground truth (when available), using distance or coverage
-\item Outliers detection eg in root-to-tip plot cf tempest \citep{Rambaut2016a}, 
-cf also treedater approach \citep{Volz2017}. 
-Cholera hypermutator example \citep{Didelot2015}.
-\item Compute likelihood per branch and compare to expected distribution
-\item Posterior predictive checks
-\item Residuals approach
-\end{enumerate}
-
-\section*{RESULTS}
-
-\subsection*{Posterior predictive analysis}
-
-\subsection*{Residual analysis following Bayesian inference}
 
 \begin{figure}[p!]
 \begin{center}
@@ -229,8 +256,8 @@ of a single model, without comparison to other models.
 dated phylogeny. 
 (C) Distribution of residuals in the ML tree. 
 (D) QQ plot of residuals in the ML tree.
-(E) Distribution of residuals in a tree from the approximate posterior. 
-(F) QQ plot of residuals in a tree from the approximate posterior.
+(E) Distribution of residuals in a tree from the pseudo-posterior. 
+(F) QQ plot of residuals in a tree from the pseudo-posterior.
 \label{fig:exampleML}}
 \end{figure}
 
@@ -252,10 +279,10 @@ distribution for the residuals.
 
 To remedy this problem, and bridge the gap between Bayesian and 
 ML inference, we propose to generate an approximate Bayesian posterior sample centered
-around the ML inference (see Methods). The residuals for a single sample from this approximate posterior
+around the ML inference (see Methods). The residuals for a single sample from this pseudo-posterior
 are shown in Figures \ref{fig:exampleML}E and \ref{fig:exampleML}F, from which it can be seen
 that they follow the expected Normal distribution. Indeed the Anderson-Darling test had a p-value
-of 0.42. As previously, we can compute such a p-value for all samples in the approximate posterior,
+of 0.42. As previously, we can compute such a p-value for all samples in the pseudo-posterior,
 which resulted in a posterior distribution of p-values (Figure \ref{fig:exampleMLSup}) with 2.7\% of 
 values below 0.05, and the median p-value was $p=0.57$.
 
@@ -343,9 +370,6 @@ times $(1+\omega)$ in the two relaxed clock models.
 
 \subsection*{Posterior predictive checks}
 
-Posterior predictive assessment is a popular way to perform
-model diagnostics in Bayesian statistics \citep{Meng1994,Gelman1996}.
-Frequently used for example in infectious disease epidemiology modeling \citep{Didelot2017b,Whittles2017,gibsonComparisonAssessmentEpidemic2018}.
 When applied to the phylogenetic dating problem, posterior predictive checking requires
 to simulate many undated phylogenies from the posterior sample of dated phylogeny,
 and comparing them to the observed undated phylogeny from which inference was performed.
@@ -454,7 +478,7 @@ for example the proportion of p-values that are below 0.05
 to focus on the median of the posterior sample of p-values,
 since it can be interpreted more directly as a p-value.
 
-\subsection*{Approximate posterior sampling given a point estimate}
+\subsection*{pseudo-posterior sampling given a point estimate}
 
 We now consider the case where the dated phylogeny $\mathcal{D}$ that we wish
 to diagnose was not sampled from the posterior. Instead it may be a point estimate, 
@@ -495,7 +519,7 @@ but rather related through each other via the coalescent process. Secondly
 the clock is not usually strict with a known rate so that
 a posterior would not be analytically available. 
 However, we can follow
-a similar idea of generating an approximate posterior sample centered on the given
+a similar idea of generating an pseudo-posterior sample centered on the given
 point estimate $\mathcal{D}$. To do so, we perform a short run of BactDating \citep{Didelot2018}
 for the input phylogeny $\mathcal{R}$ 
 with branch lengths equal to
@@ -590,7 +614,7 @@ We acknowledge funding from the National Institute for Health Research (NIHR) He
 \begin{center}
 \includegraphics[width=10cm]{exampleMLSup.pdf}
 \end{center}
-\caption{Posterior distribution of p-values for the approximate posterior based on ML inference.
+\caption{Posterior distribution of p-values for the pseudo-posterior based on ML inference.
 \label{fig:exampleMLSup}}
 \end{figure}
 

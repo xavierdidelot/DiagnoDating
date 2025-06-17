@@ -52,6 +52,6 @@ computeStats=function(phy)
   sta[2]=var(phy$edge.length)#Variance of branch lengths
   sta[3]=max(phy$edge.length)#Max branch length
   sta[4]=sum(phy$edge.length[which(phy$edge[,2]>Ntip(phy))])/sta[1]#Stemminess
-  names(sta)<-c('Mean bralen','Var bralen','Max bralen','Stemminess')
+  names(sta)<-c('Mean branch length','Variance branch length','Maximum branch length','Stemminess')
   return(sta)
 }

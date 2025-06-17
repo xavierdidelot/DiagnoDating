@@ -17,6 +17,7 @@ tree=unroot(midpoint(tree))
 suppressWarnings(r0<-resDating(dt,tree,rate=10,model = 'poisson')) #fine to ignore warning
 r=runDating(tree,dates,algo='BactDating',model='poisson',showProgress=T)
 r2=runDating(tree,dates,algo='BactDating',model='arc',showProgress=T)
+modelcompare(r,r2)
 
 modr=r;class(modr)<-'resBactDating';print(modr)
 modr2=r2;class(modr2)<-'resBactDating';print(modr2)
@@ -54,8 +55,6 @@ fig_label('B',cex=2)
 dev.off()
 system('open exampleS2.pdf')
 
-modelcompare(r,r2)
-
 if (F) {
 set.seed(0)
 a1=runDating(tree,dates,algo='LSD')
@@ -76,3 +75,14 @@ fig_label('D',cex=2)
 dev.off()
 system('open exampleS3.pdf')
 }
+
+set.seed(1)
+pdf('examplePPCheck1.pdf',10,10)
+ppcheck(r,showPlot = T)
+dev.off()
+system('open examplePPCheck1.pdf')
+
+pdf('examplePPCheck2.pdf',10,10)
+ppcheck(r2,showPlot = T)
+dev.off()
+system('open examplePPCheck2.pdf')
