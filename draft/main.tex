@@ -46,9 +46,26 @@ $^5$ Biomathematics and Statistics Scotland, The James Hutton Institute, Edinbur
 $^6$ MRC Centre for Global Infectious Disease Analysis, Department of Infectious Disease Epidemiology, Imperial College London, London, United Kingdom\\
 $^*$ Corresponding author. Tel: 0044 (0)2476 572827. Email: \verb+xavier.didelot@warwick.ac.uk+
 
-%\newpage
-%\section*{ABSTRACT}
-%TODO
+\newpage
+\section*{ABSTRACT}
+Microbial population genetic studies often involve the use of a dated phylogeny
+to show how the genomes are related over a relevant timescale. 
+Many tools have recently been developed to date
+the nodes of a standard phylogeny, but all make underlying assumptions that may
+not be realistic for a given dataset, making the results potentially unreliable. 
+Model comparison is sometimes used to remedy this, whereby inference
+under several models is compared to establish which result can be trusted.
+Although such comparison is clearly useful to assess the relative merits
+of several inferences, here instead we focus on the problem
+of evaluating how good an inference is in absolute terms, without comparison.
+We consider several approaches for diagnosing potential issues
+in a reconstructed dated phylogeny, including outlier detection, 
+posterior predictive checking and residual analysis. These methods are
+well-established diagnostics tools in other areas of statistics, but here
+we show how they can be applied to the specific inference of
+dated phylogenies. We illustrate their use on many simulated and real datasets.
+We advocate the use of these diagnostics tools for all microbial population genetic
+studies that involve the reconstruction of a dated phylogeny.
 
 \newpage
 \section*{INTRODUCTION}
@@ -304,7 +321,7 @@ ML inference as can be seen if we consider a simpler independently and identical
 distributed model instead of a tree model (see Methods). This complicates the analysis of residuals
 compared the the previous Bayesian case, since we no longer have a straightforward expected 
 distribution for the residuals. 
-
+%
 To remedy this problem, and bridge the gap between Bayesian and 
 ML inference, we propose to generate an approximate Bayesian posterior sample centered
 around the ML inference (see Methods). The residuals for a single sample from this pseudo-posterior
@@ -328,35 +345,37 @@ TODO: find two or three examples of dated tree to diagnose
 
 \section*{DISCUSSION}
 
-\begin{figure}[p!]
-\begin{center}
-A\hspace*{6cm}B\hspace*{6cm}~\\
-\includegraphics[width=10cm]{fig1.png}
-\end{center}
-\caption{(A) General approach for diagnostics of a dated phylogeny built by dating the nodes of a standard phylogeny. (B) General approach for diagnostics of a dated phylogeny built directly from a sequence alignment.
-\label{fig:approach}}
-\end{figure}
+TODO 
 
-We want to diagnose a dated phylogeny $\mathcal{D}$, previously constructed using
-any method. We propose to do so by comparing the dated phylogeny $\mathcal{D}$ with 
-an undated phylogeny $\mathcal{L}$. 
-If the method used to construct $\mathcal{D}$ involved dating the nodes of an undated
-phylogeny, for example TreeTime \citep{Sagulenko2018} or treedater \citep{Volz2017}, 
-then this is readily available for diagnosics and we therefore focus on this case in this article
-(Figure \ref{fig:approach}A). However, the diagnosics methodology
-above can also be applied to methods that build a dated phylogeny directly from the alignment
-such as BEAST \citep{Suchard2018},
-simply by constructing a separate undated phylogeny from the same alignment using
-for example PhyML \citep{Guindon2010} or RAxML \citep{Stamatakis2015} 
-(Figure \ref{fig:approach}B). 
-\footnote{Not clear what to do if the dated phylogeny and undated phylogeny don't have the same topology.}
-For each branch in the dated phylogeny $\mathcal{D}$ we can
-consider its inferred length, the number of substitutions happening on that branch in the standard phylogeny
-$\mathcal{L}$, and the model and parameters used when building the dated phylogeny $\mathcal{D}$,
-in order to compute a residual for that branch (see Methods). If the inference is valid,
-these residuals will follow their theoretical distribution
-\citep{coxGeneralDefinitionResiduals1968,dunnRandomizedQuantileResiduals1996}. 
-We use this property as a way to test the validity of the dated phylogeny $\mathcal{D}$.
+%\begin{figure}[p!]
+%\begin{center}
+%A\hspace*{6cm}B\hspace*{6cm}~\\
+%\includegraphics[width=10cm]{fig1.png}
+%\end{center}
+%\caption{(A) General approach for diagnostics of a dated phylogeny built by dating the nodes of a standard phylogeny. (B) General approach for diagnostics of a dated phylogeny built directly from a sequence alignment.
+%\label{fig:approach}}
+%\end{figure}
+%
+%We want to diagnose a dated phylogeny $\mathcal{D}$, previously constructed using
+%any method. We propose to do so by comparing the dated phylogeny $\mathcal{D}$ with 
+%an undated phylogeny $\mathcal{L}$. 
+%If the method used to construct $\mathcal{D}$ involved dating the nodes of an undated
+%phylogeny, for example TreeTime \citep{Sagulenko2018} or treedater \citep{Volz2017}, 
+%then this is readily available for diagnosics and we therefore focus on this case in this article
+%(Figure \ref{fig:approach}A). However, the diagnosics methodology
+%above can also be applied to methods that build a dated phylogeny directly from the alignment
+%such as BEAST \citep{Suchard2018},
+%simply by constructing a separate undated phylogeny from the same alignment using
+%for example PhyML \citep{Guindon2010} or RAxML \citep{Stamatakis2015} 
+%(Figure \ref{fig:approach}B). 
+%\footnote{Not clear what to do if the dated phylogeny and undated phylogeny don't have the same topology.}
+%For each branch in the dated phylogeny $\mathcal{D}$ we can
+%consider its inferred length, the number of substitutions happening on that branch in the standard phylogeny
+%$\mathcal{L}$, and the model and parameters used when building the dated phylogeny $\mathcal{D}$,
+%in order to compute a residual for that branch (see Methods). If the inference is valid,
+%these residuals will follow their theoretical distribution
+%\citep{coxGeneralDefinitionResiduals1968,dunnRandomizedQuantileResiduals1996}. 
+%We use this property as a way to test the validity of the dated phylogeny $\mathcal{D}$.
 
 \section*{MATERIALS AND METHODS}
 
@@ -510,7 +529,7 @@ for example the proportion of p-values that are below 0.05
 to focus on the median of the posterior sample of p-values,
 since it can be interpreted more directly as a p-value.
 
-\subsection*{pseudo-posterior sampling given a point estimate}
+\subsection*{Pseudo-posterior sampling given a point estimate}
 
 We now consider the case where the dated phylogeny $\mathcal{D}$ that we wish
 to diagnose was not sampled from the posterior. Instead it may be a point estimate, 
@@ -551,7 +570,7 @@ but rather related through each other via the coalescent process. Secondly
 the clock is not usually strict with a known rate so that
 a posterior would not be analytically available. 
 However, we can follow
-a similar idea of generating an pseudo-posterior sample centered on the given
+a similar idea of generating a pseudo-posterior sample centered on the given
 point estimate $\mathcal{D}$. To do so, we perform a short run of BactDating \citep{Didelot2018}
 for the input phylogeny $\mathcal{R}$ 
 with branch lengths equal to
