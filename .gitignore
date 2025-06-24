@@ -1,5 +1,6 @@
 
 reproducibility/*.pdf
+reproducibility/*.tex
 unsorted/*.pdf
 .Rproj.user
 .Rhistory

@@ -1,0 +1,25 @@
+% latex table generated in R 4.4.2 by xtable 1.8-4 package
+% Tue Jun 24 09:20:25 2025
+\begin{table}[ht]
+\centering
+\begin{tabular}{|r|r|r|r|r|r|}
+   \hline
+Method & Test & Given nothing & Given root & Given rate & Given root and rate \\ 
+   \hline
+BactDating & PPcheck & 0 & 1 & 1 & 1 \\ 
+   & Residuals & 0 & 1 & 0 & 1 \\ 
+  treedater & PPcheck & 0 & 1 & 0 & 1 \\ 
+   & Residuals & 4 & 5 & 2 & 5 \\ 
+  node.dating & PPcheck & 23 & 3 & 28 & 2 \\ 
+   & Residuals & 18 & 1 & 24 & 1 \\ 
+  TreeTime & PPcheck & 24 & 2 & 35 & 2 \\ 
+   & Residuals & 34 & 4 & 42 & 3 \\ 
+  LSD & PPcheck & 0 & 1 & 0 & 1 \\ 
+   & Residuals & 3 & 3 & 4 & 5 \\ 
+   \hline
+\end{tabular}
+\caption{Number of false positives found amongst a set of 100 replicates. Five different methods were used (BactDating, treedater, node.dating, TreeTime and LSD)
+and two different tests (posterior predictive check and residual analysis). Each method was applied in four different conditions: given the correct root, given the
+correct rate, given both or given neither.} 
+\label{tab:falsePos}
+\end{table}

@@ -54,11 +54,18 @@ w=which(allres[,'keepRoot']==F&!is.na(allres[,'rate']))
 hist(allres[w,'nodedating'],main='',xlab='P-values',breaks=seq(0,1,0.05))
 
 tab=matrix(NA,10,4)
-rownames(tab)=colnames(allres)[5:14]
-colnames(tab)=c('Given nothing','Given root','Given rate','Given root and rate')
 for (i in 1:10) for (j in 1:4) {
   if (j==1 || j==2) keepRoot=F else keepRoot=T
   if (j==1 || j==3) isna=T else isna=F
   w=which(allres[,'keepRoot']==keepRoot&is.na(allres[,'rate'])==isna)
   tab[i,j]=length(which(allres[w,i+4]<0.05))
 }
+tab=cbind(c('BactDating','','treedater','','node.dating','','TreeTime','','LSD',''),rep(c('PPcheck','Residuals'),5),tab)
+tab=rbind(c('Method','Test','Given nothing','Given root','Given rate','Given root and rate'),tab)
+
+library(xtable)
+xt=xtable(tab,caption='Number of false positives found amongst a set of 100 replicates. Five different methods were used (BactDating, treedater, node.dating, TreeTime and LSD)
+and two different tests (posterior predictive check and residual analysis). Each method was applied in four different conditions: given the correct root, given the
+correct rate, given both or given neither.',label='tab:falsePos')
+align(xt)<-'|r|r|r|r|r|r|r|'
+print(xt,file='falsePos.tex',include.rownames=FALSE,include.colnames=FALSE,hline.after = c(0,1,nrow(xt)))
