@@ -167,7 +167,7 @@ Before dating a phylogeny, it is useful to test the temporal signal by computing
 between the known isolation dates of the tips and the distances from each tip to the root 
 (assuming for now that the root is known). A frequently used software for this analysis is TempEst,
 which also allows to detect outliers as potential problems \citep{Rambaut2016a}. 
-For example, in an analysis of 260 genomes from the current pandemic of \citep{Vibrio cholerae},
+For example, in an analysis of 260 genomes from the current pandemic of \textit{Vibrio cholerae},
 17 genomes were found to be outliers in the root-to-tip analysis which was 
 explained by the fact they were hypermutators \citep{Didelot2015}. A similar outlier detection
 approach was implemented in treedater with the difference that it is 
@@ -178,7 +178,7 @@ a dated phylogeny was simulated including 100 leaves uniformly distributed betwe
 under the heterochronous coalescent model \citep{Drummond2002}
 with constant population size $N_\mathrm{e}g=1$ year. 
 We applied a strict clock model (Equation \ref{eq:sc}) to this dated phylogeny,
-with mean clock rate $\mu=10$ substitutions per year, except that for five randomly selected leaves
+with clock rate $\mu=10$ substitutions per year, except that for five randomly selected leaves
 we added 20 substitutions, resulting in the phylogeny shown in Figure \ref{fig:outlier}A.
 The analysis of root-to-tip distances is shown in Figure \ref{fig:outlier}B, with all five modified tips
 clearly visible but close to the upper bound of the 95\% expected envelope. 
@@ -333,7 +333,21 @@ values below 0.05, and the median p-value was $p=0.57$.
 
 \subsection*{Benchmarking}
 
-TODO: many repeats of single examples shown previously
+\input{falsePos}
+
+We simulated 100 datasets, each with 100 leaves 
+uniformly distributed between 2010 and 2020, 
+constant population size $N_\mathrm{e}g=1$ year and 
+a strict clock model with  clock rate $\mu=10$ substitutions per year.
+For each dataset, we performed dating using five methods: 
+BactDating \citep{Didelot2018}, treedater \citep{Volz2017},
+node.dating \citep{Jones2017}, TreeTime \citep{Sagulenko2018} and LSD \citep{To2016}.
+In each case the dating was performed under four conditions:
+with the root given, with the rate given, with both given and with neither given.
+Finally, for each inference we computed the p-value according to the posterior
+predictive analysis and residual analysis as described previously. We counted the number
+of times that the p-values were below 5\% and the results are shown in 
+Table \ref{tab:falsePos}.
 
 \subsection*{Confounding effect of population structure} 
 
