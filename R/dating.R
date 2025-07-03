@@ -143,7 +143,7 @@ runLSD=function(tree,dates,rate=NA,keepRoot=F,...) {
 #' @return resDating object containing results of node.dating analysis
 #'
 runNodeDating=function(tree,dates,rate=NA,keepRoot=F,...) {
-  if (keepRoot) tre=tree else try(suppressWarnings(tre<-rtt(unroot(tree),dates)),silent=T)
+  if (keepRoot) tre=tree else try(suppressWarnings(tre<-rtt(unroot(tree),dates,objective='rms')),silent=T)
   if (!is.na(rate)) mu=rate
   else {
     try(suppressWarnings(mu<-ape::estimate.mu(tre,dates)),silent=T)
@@ -179,6 +179,7 @@ runTreeTime=function(tree,dates,rate=NA,keepRoot=F,...) {
   write.table(sts,sprintf('/tmp/dates%d.tsv',tag),quote = F,col.names='strain\tdate',sep='\t')
   if (keepRoot) opts='--keep-root' else opts=''
   if (!is.na(rate)) opts=sprintf('%s --clock-rate %f',opts,rate/l)
+  try(suppressWarnings({
   system(sprintf("treetime --keep-polytomies --tree /tmp/tree%d.nwk --dates /tmp/dates%d.tsv --sequence-length %d --outdir /tmp/%d %s > /dev/null",tag,tag,l,tag,opts))
   resrate=read.table(sprintf('/tmp/%d/molecular_clock.txt',tag))[1,1]*l
   restree=read.nexus(sprintf('/tmp/%d/timetree.nexus',tag))
@@ -188,7 +189,8 @@ runTreeTime=function(tree,dates,rate=NA,keepRoot=F,...) {
   trees=.compressTipLabel(trees)
   restree=trees[[2]]
   res=resDating(restree,tree,algo='TreeTime',model='poisson',rate=resrate,relax=0,rootdate=resrootdate)
-  return(res)
+  return(res)}),silent = T)
+  return(list(rate=NA,rootdate=NA))
 }
 
 #' Estimation of the coalescent rate alpha

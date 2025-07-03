@@ -5,6 +5,7 @@ rm(list=ls())
 
 cl <- parallel::makeCluster(parallel::detectCores() - 1, type = "PSOCK")
 doParallel::registerDoParallel(cl)
+algos=c('BactDating','treedater','node.dating','TreeTime','LSD')
 
 allres <- foreach (rep = 1:100,.packages = c('ape','BactDating','DiagnoDating')) %dopar% {
   set.seed(rep)
@@ -13,12 +14,9 @@ allres <- foreach (rep = 1:100,.packages = c('ape','BactDating','DiagnoDating'))
   dates=unname(dist.nodes(dt)[Ntip(dt)+1,1:Ntip(dt)])+dt$root.time
 
   tree=simobsphy(dt,mu=10,model='poisson')
-  r1=runDating(tree,dates,algo=1)
-  r2=runDating(tree,dates,algo=2)
-  r3=runDating(tree,dates,algo=3)
-  r4=runDating(tree,dates,algo=4)
-  r5=runDating(tree,dates,algo=5)
-  return(list(seed=rep,dt=dt,r1,r2,r3,r4,r5))
+  l=list(seed=rep,dt=dt)
+  for (i in 1:5) l[[i+2]]=runDating(tree,dates,algo=algos[i])
+  return(l)
 }
 parallel::stopCluster(cl)
 save.image('confounding-multi.RData')
@@ -33,8 +31,12 @@ for (i in 1:length(allres)) {
       v[i,1+(j-1)*2+1]=res$rootdate-allres[[i]]$dt$root.time
     }
 }
+colnames(v)=sprintf(rep(c('Rate %s','TMRCA %s'),5),rep(algos,each=2))
+pdf('confounding-multi.pdf',10,10)
 par(mfrow=c(5,2))
 for (i in 1:10) {
-  hist(v[,i],breaks=20)
+  hist(v[,i],breaks=20,xlab = '',ylab='',main=colnames(v)[i])
 }
+dev.off()
+system('open confounding-multi.pdf')
 
