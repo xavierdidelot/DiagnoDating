@@ -143,19 +143,21 @@ runLSD=function(tree,dates,rate=NA,keepRoot=F,...) {
 #' @return resDating object containing results of node.dating analysis
 #'
 runNodeDating=function(tree,dates,rate=NA,keepRoot=F,...) {
-  if (keepRoot) tre=tree else try(suppressWarnings(tre<-rtt(unroot(tree),dates,objective='rms')),silent=T)
+  try(suppressWarnings({
+  if (keepRoot) tre=tree else tre=rtt(unroot(tree),dates)
   if (!is.na(rate)) mu=rate
   else {
-    try(suppressWarnings(mu<-ape::estimate.mu(tre,dates)),silent=T)
+    mu=ape::estimate.mu(tre,dates)
     if (mu<=0) mu=0.01
   }
-  suppressWarnings(d<-ape::estimate.dates(tre,dates,mu=mu))
+  d=ape::estimate.dates(tre,dates,mu=mu)
   dt=tre
   dt$subs=dt$edge.length
   for (i in 1:nrow(dt$edge)) dt$edge.length[i]=d[dt$edge[i,2]]-d[dt$edge[i,1]]
   dt$root.time=min(d)
   res=resDating(dt,tree,algo='node.dating',model='poisson',rate=mu,relax=0,rootdate=min(d))
-  return(res)
+  return(res)}),silent = T)
+  return(list(rate=NA,rootdate=NA))
 }
 
 #' Date a tree using TreeTime
