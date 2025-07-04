@@ -7,10 +7,10 @@ cl <- parallel::makeCluster(parallel::detectCores() - 1, type = "PSOCK")
 doParallel::registerDoParallel(cl)
 algos=c('BactDating','treedater','node.dating','TreeTime','LSD')
 
-allres <- foreach (rep = 1:100,.packages = c('ape','BactDating','DiagnoDating')) %dopar% {
+allres <- foreach (rep = 1:10,.packages = c('ape','BactDating','DiagnoDating')) %dopar% {
   set.seed(rep)
-  s=list(runif(30,2010,2010.1),runif(30,2010.1,2010.2),runif(30,2010.2,2010.3))
-  dt=simStructure(popStarts=c(2009,2009,2009),samplingDates=s)
+  s=list(runif(50,2010,2010),runif(50,2011,2011),runif(50,2012,2012))
+  dt=simStructure(popStarts=c(2009,2009,2009),samplingDates=s,globalNeg = 100)
   dates=unname(dist.nodes(dt)[Ntip(dt)+1,1:Ntip(dt)])+dt$root.time
 
   tree=simobsphy(dt,mu=10,model='poisson')
@@ -40,3 +40,8 @@ for (i in 1:10) {
 dev.off()
 system('open confounding-multi.pdf')
 
+allpvals=matrix(NA,length(allres),2)
+for (i in 1:length(allres)) {
+allpvals[i,1]=ppcheck(allres[[i]][[3]])
+allpvals[i,2]=median(postdistpvals(allres[[i]][[3]])$ps)
+}
