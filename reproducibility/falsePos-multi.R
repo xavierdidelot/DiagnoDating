@@ -1,10 +1,10 @@
 rm(list=ls())
 
 library(DiagnoDating,quietly=T)
-library(foreach)
+library(doParallel)
 
-cl <- parallel::makeCluster(parallel::detectCores() - 1, type = "PSOCK")
-doParallel::registerDoParallel(cl)
+cl <- makeCluster(parallel::detectCores() - 1, type = "PSOCK")
+registerDoParallel(cl)
 algos=c('BactDating','treedater','node.dating','TreeTime','LSD')
 
 reps=100

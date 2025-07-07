@@ -1,13 +1,14 @@
-library(DiagnoDating)
-library(foreach)
-
 rm(list=ls())
 
-cl <- parallel::makeCluster(parallel::detectCores() - 1, type = "PSOCK")
-doParallel::registerDoParallel(cl)
+library(DiagnoDating,quietly=T)
+library(doParallel)
+
+cl <- makeCluster(parallel::detectCores() - 1, type = "PSOCK", outfile="")
+registerDoParallel(cl)
 algos=c('BactDating','treedater','node.dating','TreeTime','LSD')
 
-allres <- foreach (rep = 1:10,.packages = c('ape','BactDating','DiagnoDating')) %dopar% {
+reps=20
+allres <- foreach (rep = 1:reps,.packages = c('ape','BactDating','DiagnoDating')) %dopar% {
   set.seed(rep)
   s=list(runif(50,2010,2010),runif(50,2011,2011),runif(50,2012,2012))
   dt=simStructure(popStarts=c(2009,2009,2009),samplingDates=s,globalNeg = 100)
@@ -16,6 +17,7 @@ allres <- foreach (rep = 1:10,.packages = c('ape','BactDating','DiagnoDating')) 
   tree=simobsphy(dt,mu=10,model='poisson')
   l=list(seed=rep,dt=dt)
   for (i in 1:5) l[[i+2]]=runDating(tree,dates,algo=algos[i])
+  cat('Finished iteration number',rep,'\n')
   return(l)
 }
 parallel::stopCluster(cl)
