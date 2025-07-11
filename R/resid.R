@@ -33,7 +33,7 @@ calcLikBranches = function(x,log=FALSE) {
 #' @param x object of class resDating
 #'
 calcResiduals = function(x) {
-  if (!inherits(x,'resDating')) stop('Not a resDating object.')
+  if (!inherits(x,'resDating') && !inherits(x,'resBactDating')) stop('Not a resDating object.')
   xs=x$tree$edge.length
   ys=x$tree$subs
   rate=x$rate

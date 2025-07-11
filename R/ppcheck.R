@@ -51,7 +51,7 @@ computeStats=function(phy)
   sta[1]=mean(phy$edge.length)#Mean of branch lengths
   sta[2]=var(phy$edge.length)#Variance of branch lengths
   sta[3]=max(phy$edge.length)#Max branch length
-  sta[4]=sum(phy$edge.length[which(phy$edge[,2]>Ntip(phy))])/sta[1]#Stemminess
+  sta[4]=sum(phy$edge.length[which(phy$edge[,2]>Ntip(phy))])/sum(phy$edge.length)#Stemminess
   names(sta)<-c('Mean branch length','Variance branch length','Maximum branch length','Stemminess')
   return(sta)
 }
