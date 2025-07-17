@@ -47,7 +47,7 @@ ppcheck=function(x,nrep=1000,showProgress=T,showPlot=F)
 computeStats=function(phy)
 {
   phy=unroot(phy)
-  sta=rep(NA,2)
+  sta=rep(NA,4)
   sta[1]=mean(phy$edge.length)#Mean of branch lengths
   sta[2]=var(phy$edge.length)#Variance of branch lengths
   sta[3]=max(phy$edge.length)#Max branch length
