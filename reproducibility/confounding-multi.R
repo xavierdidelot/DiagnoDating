@@ -12,18 +12,22 @@ allres <- foreach (rep = 1:reps,.packages = c('ape','BactDating','DiagnoDating')
   cat('Starting task',rep,'\n')
   capture.output({
     set.seed(rep)
-    s=list(runif(50,2010,2010),runif(50,2011,2011),runif(50,2012,2012))
-    dt=simStructure(popStarts=c(2009,2009,2009),samplingDates=s,globalNeg = 100)
+    popStarts=c(2009,2010,2011)-10
+    v1=20;v2=20.1
+    s=list(runif(100,popStarts[1]+v1,popStarts[1]+v1),runif(100,popStarts[2]+v1,popStarts[2]+v2),runif(100,popStarts[3]+v1,popStarts[3]+v2))
+    dt=simStructure(popStarts = popStarts,samplingDates=s,globalNeg = 10)
     dates=unname(dist.nodes(dt)[Ntip(dt)+1,1:Ntip(dt)])+dt$root.time
 
     tree=simobsphy(dt,mu=10,model='poisson')
+    tree=unroot(tree)
     l=list(seed=rep,dt=dt)
     for (i in 1:5) {
+      if (i==1){
       rd=runDating(tree,dates,algo=algos[i])
       if (i==1) {
         rd$p1=ppcheck(rd)
         rd$p2=median(postdistpvals(rd)$ps)
-      }
+      }}
       l=c(l,list(rd))
     }
   })
