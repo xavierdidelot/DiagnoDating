@@ -53,13 +53,11 @@ Root-to-tip regression:
 r=roottotip(tree,dates)
 ```
 
-Run all dating analysis methods:
+Run BactDating analysis:
 ```{r}
-for (a in 1:5) {
-  r=runDating(tree,dates,algo=a)
-  plot(r,show.tip.label=F)
-  print(r)
-  validate(r)
-}
+r=runDating(tree,dates)
+plot(r,show.tip.label=F)
+print(r)
+postdistpvals(r,showPlot = T)
 ```
 

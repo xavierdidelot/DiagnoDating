@@ -30,12 +30,12 @@ tree=simobsphy(dt,mu=10,model='poisson')
 roottotip(tree,dates)
 ```
 
-Run and validate BactDating:
+Run and diagnose BactDating:
 ```{r}
 r=runDating(tree,dates,algo=3,nbIts=2e4)
 rb=r;class(rb)<-'resBactDating'
 plot(rb,'treeCI',show.tip.label=F)
 print(rb)
 plot(rb,'trace')
-validate(r)
+postdistpvals(r,showPlot = T)
 ```

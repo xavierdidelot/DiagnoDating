@@ -539,6 +539,49 @@
   doi =           {10.1093/molbev/msw275},
 }
 
+@article{Rambaut2016a,
+  author =        {Rambaut, Andrew and Lam, Tommy T. and
+                   Max Carvalho, Luiz and Pybus, Oliver G.},
+  journal =       {Virus Evolution},
+  number =        {1},
+  pages =         {vew007},
+  title =         {Exploring the Temporal Structure of Heterochronous
+                   Sequences Using {{TempEst}} (Formerly
+                   {{Path-O-Gen}})},
+  volume =        {2},
+  year =          {2016},
+  abstract =      {Gene sequences sampled at different points in time
+                   can be used to infer molecular phylogenies on a
+                   natural timescale of months or years, provided that
+                   the sequences in question undergo measurable amounts
+                   of evolutionary change between sampling times. Data
+                   sets with this property are termed heterochronous and
+                   have become increasingly common in several fields of
+                   biology, most notably the molecular epidemiology of
+                   rapidly evolving viruses. Here we introduce the
+                   cross-platform software tool, TempEst (formerly known
+                   as Path-O-Gen), for the visualization and analysis of
+                   temporally sampled sequence data. Given a molecular
+                   phylogeny and the dates of sampling for each
+                   sequence, TempEst uses an interactive regression
+                   approach to explore the association between genetic
+                   divergence through time and sampling dates. TempEst
+                   can be used to (1) assess whether there is sufficient
+                   temporal signal in the data to proceed with
+                   phylogenetic molecular clock analysis, and (2)
+                   identify sequences whose genetic divergence and
+                   sampling date are incongruent. Examination of the
+                   latter can help identify data quality problems,
+                   including errors in data annotation, sample
+                   contamination, sequence recombination, or alignment
+                   error. We recommend that all users of the molecular
+                   clock models implemented in BEAST first check their
+                   data using TempEst prior to analysis.},
+  doi =           {10.1093/ve/vew007},
+  isbn =          {2057-1577},
+  issn =          {2057-1577},
+}
+
 @article{Duchene2015a,
   author =        {Duchene, Sebasti{\'a}n and Duch{\^e}ne, David and
                    Holmes, Edward C. and Ho, Simon Y.W.},
@@ -585,6 +628,66 @@
                    date-randomization test and allow us to propose
                    guidelines for interpretation of its results.},
   doi =           {10.1093/molbev/msv056},
+  issn =          {15371719},
+}
+
+@article{Rambaut2000,
+  author =        {Rambaut, Andrew},
+  journal =       {Bioinformatics},
+  number =        {4},
+  pages =         {395--399},
+  title =         {Incorporating {{Non-Contemporaneous Sequences Into
+                   Maximum Likelihood Phylogenies}}},
+  volume =        {16},
+  year =          {2000},
+}
+
+@article{Duchene2020,
+  author =        {Duchene, Sebastian and Lemey, Philippe and
+                   Stadler, Tanja and Ho, Simon Y.W. and
+                   Duchene, David A. and Dhanasekaran, Vijaykrishna and
+                   Baele, Guy},
+  journal =       {Molecular Biology and Evolution},
+  number =        {11},
+  pages =         {3363--3379},
+  title =         {Bayesian Evaluation of Temporal Signal in Measurably
+                   Evolving Populations},
+  volume =        {37},
+  year =          {2020},
+  abstract =      {Phylogenetic methods can use the sampling times of
+                   molecular sequence data to calibrate the molecular
+                   clock, enabling the estimation of evolutionary rates
+                   and timescales for rapidly evolving pathogens and
+                   data sets containing ancient DNA samples. A key
+                   aspect of such calibrations is whether a sufficient
+                   amount of molecular evolution has occurred over the
+                   sampling time window, that is, whether the data can
+                   be treated as having come from a measurably evolving
+                   population. Here, we investigate the performance of a
+                   fully Bayesian evaluation of temporal signal (BETS)
+                   in sequence data. The method involves comparing the
+                   fit to the data of two models: a model in which the
+                   data are accompanied by the actual (heterochronous)
+                   sampling times, and a model in which the samples are
+                   constrained to be contemporaneous (isochronous). We
+                   conducted simulations under a wide range of
+                   conditions to demonstrate that BETS accurately
+                   classifies data sets according to whether they
+                   contain temporal signal or not, even when there is
+                   substantial among-lineage rate variation. We explore
+                   the behavior of this classification in analyses of
+                   five empirical data sets: modern samples of A/H1N1
+                   influenza virus, the bacterium Bordetella pertussis,
+                   coronaviruses from mammalian hosts, ancient DNA from
+                   Hepatitis B virus, and mitochondrial genomes of dog
+                   species. Our results indicate that BETS is an
+                   effective alternative to other tests of temporal
+                   signal. In particular, this method has the key
+                   advantage of allowing a coherent assessment of the
+                   entire model, including the molecular clock and tree
+                   prior which are essential aspects of Bayesian
+                   phylodynamic analyses.},
+  doi =           {10.1093/molbev/msaa163},
   issn =          {15371719},
 }
 
@@ -954,288 +1057,6 @@
   issn =          {1471-2148},
 }
 
-@article{Duchene2020,
-  author =        {Duchene, Sebastian and Lemey, Philippe and
-                   Stadler, Tanja and Ho, Simon Y.W. and
-                   Duchene, David A. and Dhanasekaran, Vijaykrishna and
-                   Baele, Guy},
-  journal =       {Molecular Biology and Evolution},
-  number =        {11},
-  pages =         {3363--3379},
-  title =         {Bayesian Evaluation of Temporal Signal in Measurably
-                   Evolving Populations},
-  volume =        {37},
-  year =          {2020},
-  abstract =      {Phylogenetic methods can use the sampling times of
-                   molecular sequence data to calibrate the molecular
-                   clock, enabling the estimation of evolutionary rates
-                   and timescales for rapidly evolving pathogens and
-                   data sets containing ancient DNA samples. A key
-                   aspect of such calibrations is whether a sufficient
-                   amount of molecular evolution has occurred over the
-                   sampling time window, that is, whether the data can
-                   be treated as having come from a measurably evolving
-                   population. Here, we investigate the performance of a
-                   fully Bayesian evaluation of temporal signal (BETS)
-                   in sequence data. The method involves comparing the
-                   fit to the data of two models: a model in which the
-                   data are accompanied by the actual (heterochronous)
-                   sampling times, and a model in which the samples are
-                   constrained to be contemporaneous (isochronous). We
-                   conducted simulations under a wide range of
-                   conditions to demonstrate that BETS accurately
-                   classifies data sets according to whether they
-                   contain temporal signal or not, even when there is
-                   substantial among-lineage rate variation. We explore
-                   the behavior of this classification in analyses of
-                   five empirical data sets: modern samples of A/H1N1
-                   influenza virus, the bacterium Bordetella pertussis,
-                   coronaviruses from mammalian hosts, ancient DNA from
-                   Hepatitis B virus, and mitochondrial genomes of dog
-                   species. Our results indicate that BETS is an
-                   effective alternative to other tests of temporal
-                   signal. In particular, this method has the key
-                   advantage of allowing a coherent assessment of the
-                   entire model, including the molecular clock and tree
-                   prior which are essential aspects of Bayesian
-                   phylodynamic analyses.},
-  doi =           {10.1093/molbev/msaa163},
-  issn =          {15371719},
-}
-
-@article{Rambaut2000,
-  author =        {Rambaut, Andrew},
-  journal =       {Bioinformatics},
-  number =        {4},
-  pages =         {395--399},
-  title =         {Incorporating {{Non-Contemporaneous Sequences Into
-                   Maximum Likelihood Phylogenies}}},
-  volume =        {16},
-  year =          {2000},
-}
-
-@article{efronBayesianInferenceParametric2012,
-  author =        {Efron, Bradley},
-  journal =       {The Annals of Applied Statistics},
-  month =         dec,
-  number =        {4},
-  title =         {Bayesian Inference and the Parametric Bootstrap},
-  volume =        {6},
-  year =          {2012},
-  doi =           {10.1214/12-AOAS571},
-  issn =          {1932-6157},
-}
-
-@article{Meng1994,
-  author =        {Meng, Xiao-Li},
-  journal =       {The Annals of Statistics},
-  month =         sep,
-  number =        {3},
-  title =         {Posterior {{Predictive}} P-{{Values}}},
-  volume =        {22},
-  year =          {1994},
-  doi =           {10.1214/aos/1176325622},
-  issn =          {0090-5364},
-}
-
-@article{Gelman1996,
-  author =        {Gelman, Andrew and Meng, {\relax XL} and Stern, Hal},
-  journal =       {Stat Sinica},
-  pages =         {733--807},
-  title =         {Posterior Predictive Assessment of Model Fitness via
-                   Realized Discrepancies},
-  volume =        {6},
-  year =          {1996},
-}
-
-@article{wilsonHarmonicMeanPvalue2019,
-  author =        {Wilson, Daniel J},
-  journal =       {PNAS},
-  number =        {11},
-  title =         {The Harmonic Mean P-Value for Combining Dependent
-                   Tests},
-  year =          {2019},
-  doi =           {10.1073/pnas.1814092116},
-}
-
-@article{coxGeneralDefinitionResiduals1968,
-  author =        {Cox, D. R. and Snell, E. J.},
-  journal =       {Journal of the Royal Statistical Society Series B:
-                   Statistical Methodology},
-  month =         jul,
-  number =        {2},
-  pages =         {248--265},
-  title =         {A {{General Definition}} of {{Residuals}}},
-  volume =        {30},
-  year =          {1968},
-  abstract =      {Residuals are usually defined in connection with
-                   linear models. Here a more general definition is
-                   given and some asymptotic properties found. Some
-                   illustrative examples are discussed, including a
-                   regression problem involving exponentially
-                   distributed errors and some problems concerning
-                   Poisson and binomially distributed observations.},
-  doi =           {10.1111/j.2517-6161.1968.tb00724.x},
-  issn =          {1369-7412, 1467-9868},
-}
-
-@article{dunnRandomizedQuantileResiduals1996,
-  author =        {Dunn, Peter K and Smyth, Gordon K},
-  journal =       {Journal of Computational and Graphical Statistics},
-  number =        {3},
-  pages =         {236--244},
-  title =         {Randomized {{Quantile Residuals}}},
-  volume =        {5},
-  year =          {1996},
-}
-
-@article{lauNewModelDiagnostics2014,
-  author =        {Lau, Max S.Y. and Marion, Glenn and
-                   Streftaris, George and Gibson, Gavin J.},
-  journal =       {Journal of the Royal Society Interface},
-  number =        {93},
-  pages =         {1--10},
-  title =         {New Model Diagnostics for Spatio-Temporal Systems in
-                   Epidemiology and Ecology},
-  volume =        {11},
-  year =          {2014},
-  abstract =      {A cardinal challenge in epidemiological and
-                   ecological modelling is to develop effective and
-                   easily deployed tools for model assessment. The
-                   availability of such methods would greatly improve
-                   understanding, prediction and management of disease
-                   and ecosystems. Conventional Bayesian model
-                   assessment tools such as Bayes factors and the
-                   deviance information criterion (DIC) are natural
-                   candidates but suffer from important limitations
-                   because of their sensitivity and complexity.
-                   Posterior predictive checks, which use summary
-                   statistics of the observed process simulated from
-                   competing models, can provide a measure of model fit
-                   but appropriate statistics can be difficult to
-                   identify. Here, we develop a novel approach for
-                   diagnosing mis-specifications of a general
-                   spatio-temporal transmission model by embedding
-                   classical ideas within a Bayesian analysis.
-                   Specifically, by proposing suitably designed
-                   non-centred parametrization schemes, we construct
-                   latent residuals whose sampling properties are known
-                   given the model specification and which can be used
-                   to measure overall fit and to elicit evidence of the
-                   nature of misspecifications of spatial and temporal
-                   processes included in the model. This model
-                   assessment approach can readily be implemented as an
-                   addendum to standard estimation algorithms for
-                   sampling from the posterior distributions, for
-                   example Markov chain Monte Carlo. The proposed
-                   methodology is first tested using simulated data and
-                   subsequently applied to data describing the spread of
-                   Heracleum mantegazzianum (giant hogweed) across Great
-                   Britain over a 30-year period. The proposed methods
-                   are compared with alternative techniques including
-                   posterior predictive checking and the DIC. Results
-                   show that the proposed diagnostic tools are effective
-                   in assessing competing stochastic spatio-temporal
-                   transmission models and may offer improvements in
-                   power to detect model mis-specifications. Moreover,
-                   the latent-residual framework introduced here extends
-                   readily to a broad range of ecological and
-                   epidemiological models. {\copyright} 2014 The
-                   Author(s) Published by the Royal Society. All rights
-                   reserved.},
-  doi =           {10.1098/rsif.2013.1093},
-  issn =          {17425662},
-}
-
-@book{zucchini2009hidden,
-  author =        {Zucchini, Walter and MacDonald, Iain L},
-  publisher =     {{Chapman and Hall/CRC}},
-  title =         {Hidden {{Markov}} Models for Time Series: An
-                   Introduction Using {{R}}},
-  year =          {2009},
-}
-
-@article{buckbyModelCheckingHidden2020,
-  author =        {Buckby, Jodie and Wang, Ting and Zhuang, Jiancang and
-                   Obara, Kazushige},
-  journal =       {Journal of Computational and Graphical Statistics},
-  month =         oct,
-  number =        {4},
-  pages =         {859--874},
-  title =         {Model {{Checking}} for {{Hidden Markov Models}}},
-  volume =        {29},
-  year =          {2020},
-  abstract =      {Residual analysis is a useful tool for checking lack
-                   of fit and for providing insight into model
-                   improvement. However, literature on residual analysis
-                   and the goodness of fit for hidden Markov models
-                   (HMMs) is limited. As HMMs with complex structures
-                   are increasingly used to accommodate different types
-                   of data, there is a need for further tools to check
-                   the validity of models applied to real world data. We
-                   review model checking methods for HMMs and develop
-                   new methods motivated by a particular case study
-                   involving a two-dimensional HMM developed for time
-                   series with many null events. We propose new residual
-                   analysis and stochastic reconstruction methods, which
-                   are adapted from model checking techniques for point
-                   process models. We apply the new methods to the case
-                   study model and discuss their adequacy. We find that
-                   there is not one ``best'' test for diagnostics but
-                   that our new methods have some advantages over
-                   previously developed tools. The importance of
-                   multiple tests for complex HMMs is highlighted and we
-                   use the results of our model checking to provide
-                   suggestions for possible improvements to the case
-                   study model. Supplementary materials for this article
-                   are available online.},
-  doi =           {10.1080/10618600.2020.1743295},
-  issn =          {1061-8600, 1537-2715},
-}
-
-@article{Rambaut2016a,
-  author =        {Rambaut, Andrew and Lam, Tommy T. and
-                   Max Carvalho, Luiz and Pybus, Oliver G.},
-  journal =       {Virus Evolution},
-  number =        {1},
-  pages =         {vew007},
-  title =         {Exploring the Temporal Structure of Heterochronous
-                   Sequences Using {{TempEst}} (Formerly
-                   {{Path-O-Gen}})},
-  volume =        {2},
-  year =          {2016},
-  abstract =      {Gene sequences sampled at different points in time
-                   can be used to infer molecular phylogenies on a
-                   natural timescale of months or years, provided that
-                   the sequences in question undergo measurable amounts
-                   of evolutionary change between sampling times. Data
-                   sets with this property are termed heterochronous and
-                   have become increasingly common in several fields of
-                   biology, most notably the molecular epidemiology of
-                   rapidly evolving viruses. Here we introduce the
-                   cross-platform software tool, TempEst (formerly known
-                   as Path-O-Gen), for the visualization and analysis of
-                   temporally sampled sequence data. Given a molecular
-                   phylogeny and the dates of sampling for each
-                   sequence, TempEst uses an interactive regression
-                   approach to explore the association between genetic
-                   divergence through time and sampling dates. TempEst
-                   can be used to (1) assess whether there is sufficient
-                   temporal signal in the data to proceed with
-                   phylogenetic molecular clock analysis, and (2)
-                   identify sequences whose genetic divergence and
-                   sampling date are incongruent. Examination of the
-                   latter can help identify data quality problems,
-                   including errors in data annotation, sample
-                   contamination, sequence recombination, or alignment
-                   error. We recommend that all users of the molecular
-                   clock models implemented in BEAST first check their
-                   data using TempEst prior to analysis.},
-  doi =           {10.1093/ve/vew007},
-  isbn =          {2057-1577},
-  issn =          {2057-1577},
-}
-
 @article{Didelot2015,
   author =        {Didelot, Xavier and Wilson, Daniel J},
   journal =       {PLoS Computational Biology},
@@ -1276,195 +1097,26 @@
   year =          {2002},
 }
 
-@article{Didelot2021,
-  author =        {Didelot, Xavier and Siveroni, Igor and Volz, Erik M},
-  journal =       {Molecular Biology and Evolution},
-  pages =         {307--317},
-  title =         {Additive Uncorrelated Relaxed Clock Models for the
-                   Dating of Genomic Epidemiology Phylogenies},
-  volume =        {38},
-  year =          {2021},
-  abstract =      {Phylogenetic dating is one of the most powerful and
-                   commonly used methods of drawing epidemiological
-                   interpretations from pathogen genomic data. Building
-                   such trees requires considering a molecular clock
-                   model which represents the rate at which
-                   substitutions accumulate on genomes. When the
-                   molecular clock rate is constant throughout the tree
-                   then the clock is said to be strict, but this is
-                   often not an acceptable assumption. Alternatively,
-                   relaxed clock models consider variations in the clock
-                   rate, often based on a distribution of rates for each
-                   branch. However, we show here that the distributions
-                   of rates across branches in commonly used relaxed
-                   clock models are incompatible with the biological
-                   expectation that the sum of the numbers of
-                   substitutions on two neighbouring branches should be
-                   distributed as the substitution number on a single
-                   branch of equivalent length. We call this expectation
-                   the additivity property. We further show how
-                   assumptions of commonly used relaxed clock models can
-                   lead to estimates of evolutionary rates and dates
-                   with low precision and biased confidence intervals.
-                   We therefore propose a new additive relaxed clock
-                   model where the additivity property is satisfied. We
-                   illustrate the use of our new additive relaxed clock
-                   model on a range of simulated and real datasets, and
-                   we show that using this new model leads to more
-                   accurate estimates of mean evolutionary rates and
-                   ancestral dates.},
-  doi =           {10.1093/molbev/msaa193},
-  issn =          {0737-4038},
-}
-
-@article{Spiegelhalter2002,
-  author =        {Spiegelhalter, D.J. and Best, N.G. and Carlin, B.P. and
-                   {Van der Linde}, A.},
-  journal =       {Journal of the Royal Statistical Society. Series B},
-  number =        {4},
-  pages =         {583--639},
-  publisher =     {JSTOR},
-  title =         {Bayesian Measures of Model Complexity and Fit},
-  volume =        {64},
-  year =          {2002},
-  issn =          {1369-7412},
-}
-
-@article{Guindon2010,
-  author =        {Guindon, St{\'e}phane and
-                   Dufayard, Jean-Fran{\c c}ois and Lefort, Vincent and
-                   Anisimova, Maria and Hordijk, Wim and
-                   Gascuel, Olivier},
-  journal =       {Systematic biology},
-  month =         may,
+@article{Meng1994,
+  author =        {Meng, Xiao-Li},
+  journal =       {The Annals of Statistics},
+  month =         sep,
   number =        {3},
-  pages =         {307--21},
-  title =         {New Algorithms and Methods to Estimate
-                   Maximum-Likelihood Phylogenies: Assessing the
-                   Performance of {{PhyML}} 3.0.},
-  volume =        {59},
-  year =          {2010},
-  abstract =      {PhyML is a phylogeny software based on the
-                   maximum-likelihood principle. Early PhyML versions
-                   used a fast algorithm performing nearest neighbor
-                   interchanges to improve a reasonable starting tree
-                   topology. Since the original publication (Guindon S.,
-                   Gascuel O. 2003. A simple, fast and accurate
-                   algorithm to estimate large phylogenies by maximum
-                   likelihood. Syst. Biol. 52:696-704), PhyML has been
-                   widely used ({$>$}2500 citations in ISI Web of
-                   Science) because of its simplicity and a fair
-                   compromise between accuracy and speed. In the
-                   meantime, research around PhyML has continued, and
-                   this article describes the new algorithms and methods
-                   implemented in the program. First, we introduce a new
-                   algorithm to search the tree space with user-defined
-                   intensity using subtree pruning and regrafting
-                   topological moves. The parsimony criterion is used
-                   here to filter out the least promising topology
-                   modifications with respect to the likelihood
-                   function. The analysis of a large collection of real
-                   nucleotide and amino acid data sets of various sizes
-                   demonstrates the good performance of this method.
-                   Second, we describe a new test to assess the support
-                   of the data for internal branches of a phylogeny.
-                   This approach extends the recently proposed
-                   approximate likelihood-ratio test and relies on a
-                   nonparametric, Shimodaira-Hasegawa-like procedure. A
-                   detailed analysis of real alignments sheds light on
-                   the links between this new approach and the more
-                   classical nonparametric bootstrap method. Overall,
-                   our tests show that the last version (3.0) of PhyML
-                   is fast, accurate, stable, and ready to use. A Web
-                   server and binary files are available from
-                   http://www.atgc-montpellier.fr/phyml/.},
-  doi =           {10.1093/sysbio/syq010},
-  issn =          {1076-836X},
+  title =         {Posterior {{Predictive}} P-{{Values}}},
+  volume =        {22},
+  year =          {1994},
+  doi =           {10.1214/aos/1176325622},
+  issn =          {0090-5364},
 }
 
-@article{Stamatakis2015,
-  author =        {Stamatakis, Alexandros},
-  journal =       {Current Protocols in Bioinformatics},
-  number =        {1},
-  pages =         {6.14.1-6.14.14},
-  title =         {Using {{RAxML}} to {{Infer Phylogenies}}},
-  volume =        {51},
-  year =          {2015},
-  abstract =      {Inference of phylogenetic trees under the maximum
-                   likelihood (ML) criterion represents a routine task
-                   in biological data analysis. In this unit we describe
-                   how to plan analyses and use Randomized Accelerated
-                   Maximum Likelihood (RAxML) for phylogenetic
-                   inferences under ML, how to infer support values
-                   using the standard bootstrap procedure as well as
-                   other statistical measures, and how to conduct
-                   post-analyses on collections/sets of phylogenetic
-                   trees including statistical significance tests and
-                   consensus tree methods. We also discuss what measures
-                   can be taken and what further analyses can be
-                   conducted when relationships in the inferred tree
-                   exhibit ``low'' support. {\copyright} 2015 by John
-                   Wiley \& Sons, Inc.},
-  doi =           {10.1002/0471250953.bi0614s51},
-  isbn =          {0471250953},
-  issn =          {1934340X},
-}
-
-@incollection{Zuckerkandl1962,
-  address =       {New York},
-  author =        {Zuckerkandl, Emile and Pauling, Linus},
-  booktitle =     {Horizons in {{Biochemistry}}},
-  editor =        {Kasha, M and Pullman, B},
-  pages =         {189--222},
-  publisher =     {Academic Press},
-  title =         {Molecular {{Disease}}, {{Evolution}}, and {{Genic
-                   Heterogeneity}}},
-  year =          {1962},
-  doi =           {10.1016/S0140-6736(54)91105-8},
-  issn =          {0028-7091},
-}
-
-@article{Drummond2006,
-  author =        {Drummond, Alexei J and Ho, Simon Y W and
-                   Phillips, Matthew J and Rambaut, Andrew},
-  journal =       {PLoS Biology},
-  month =         may,
-  number =        {5},
-  pages =         {e88},
-  title =         {Relaxed Phylogenetics and Dating with Confidence.},
-  volume =        {4},
-  year =          {2006},
-  abstract =      {In phylogenetics, the unrooted model of phylogeny and
-                   the strict molecular clock model are two extremes of
-                   a continuum. Despite their dominance in phylogenetic
-                   inference, it is evident that both are biologically
-                   unrealistic and that the real evolutionary process
-                   lies between these two extremes. Fortunately,
-                   intermediate models employing relaxed molecular
-                   clocks have been described. These models open the
-                   gate to a new field of "relaxed phylogenetics." Here
-                   we introduce a new approach to performing relaxed
-                   phylogenetic analysis. We describe how it can be used
-                   to estimate phylogenies and divergence times in the
-                   face of uncertainty in evolutionary rates and
-                   calibration times. Our approach also provides a means
-                   for measuring the clocklikeness of datasets and
-                   comparing this measure between different genes and
-                   phylogenies. We find no significant rate
-                   autocorrelation among branches in three large
-                   datasets, suggesting that autocorrelated models are
-                   not necessarily suitable for these data. In addition,
-                   we place these datasets on the continuum of
-                   clocklikeness between a strict molecular clock and
-                   the alternative unrooted extreme. Finally, we present
-                   analyses of 102 bacterial, 106 yeast, 61 plant, 99
-                   metazoan, and 500 primate alignments. From these we
-                   conclude that our method is phylogenetically more
-                   accurate and precise than the traditional unrooted
-                   model while adding the ability to infer a timescale
-                   to evolution.},
-  doi =           {10.1371/journal.pbio.0040088},
-  issn =          {1545-7885},
+@article{Gelman1996,
+  author =        {Gelman, Andrew and Meng, {\relax XL} and Stern, Hal},
+  journal =       {Stat Sinica},
+  pages =         {733--807},
+  title =         {Posterior Predictive Assessment of Model Fitness via
+                   Realized Discrepancies},
+  volume =        {6},
+  year =          {1996},
 }
 
 @article{Didelot2017b,
@@ -1618,6 +1270,363 @@
   issn =          {1350-0872},
 }
 
+@article{Didelot2021,
+  author =        {Didelot, Xavier and Siveroni, Igor and Volz, Erik M},
+  journal =       {Molecular Biology and Evolution},
+  pages =         {307--317},
+  title =         {Additive Uncorrelated Relaxed Clock Models for the
+                   Dating of Genomic Epidemiology Phylogenies},
+  volume =        {38},
+  year =          {2021},
+  abstract =      {Phylogenetic dating is one of the most powerful and
+                   commonly used methods of drawing epidemiological
+                   interpretations from pathogen genomic data. Building
+                   such trees requires considering a molecular clock
+                   model which represents the rate at which
+                   substitutions accumulate on genomes. When the
+                   molecular clock rate is constant throughout the tree
+                   then the clock is said to be strict, but this is
+                   often not an acceptable assumption. Alternatively,
+                   relaxed clock models consider variations in the clock
+                   rate, often based on a distribution of rates for each
+                   branch. However, we show here that the distributions
+                   of rates across branches in commonly used relaxed
+                   clock models are incompatible with the biological
+                   expectation that the sum of the numbers of
+                   substitutions on two neighbouring branches should be
+                   distributed as the substitution number on a single
+                   branch of equivalent length. We call this expectation
+                   the additivity property. We further show how
+                   assumptions of commonly used relaxed clock models can
+                   lead to estimates of evolutionary rates and dates
+                   with low precision and biased confidence intervals.
+                   We therefore propose a new additive relaxed clock
+                   model where the additivity property is satisfied. We
+                   illustrate the use of our new additive relaxed clock
+                   model on a range of simulated and real datasets, and
+                   we show that using this new model leads to more
+                   accurate estimates of mean evolutionary rates and
+                   ancestral dates.},
+  doi =           {10.1093/molbev/msaa193},
+  issn =          {0737-4038},
+}
+
+@article{Spiegelhalter2002,
+  author =        {Spiegelhalter, D.J. and Best, N.G. and Carlin, B.P. and
+                   {Van der Linde}, A.},
+  journal =       {Journal of the Royal Statistical Society. Series B},
+  number =        {4},
+  pages =         {583--639},
+  publisher =     {JSTOR},
+  title =         {Bayesian Measures of Model Complexity and Fit},
+  volume =        {64},
+  year =          {2002},
+  issn =          {1369-7412},
+}
+
+@article{tsayModelCheckingParametric1992,
+  author =        {Tsay, Ruey S.},
+  journal =       {Applied Statistics},
+  number =        {1},
+  pages =         {1},
+  publisher =     {JSTOR},
+  title =         {Model {{Checking}} via {{Parametric Bootstraps}} in
+                   {{Time Series Analysis}}},
+  volume =        {41},
+  year =          {1992},
+  abstract =      {This paper uses parametric bootstraps in conjunction
+                   with selected functionals such as the spectral
+                   density function to derive methods for model checking
+                   in time series analysis. The methods proposed
+                   emphasize the reproducibilities of the fitted models.
+                   They are widely applicable and easy to implement. In
+                   particular, they can be used to check special
+                   characteristics of the underlying process such as
+                   time reversibility and long memory dependence. The
+                   paper also addresses the importance of model-building
+                   objectives in model checking. Several examples
+                   including a wind speed data set for Ireland are used
+                   to illustrate the procedures proposed.},
+  doi =           {10.2307/2347612},
+  issn =          {0035-9254},
+}
+
+@article{gelmanDiagnosticChecksDiscrete2000,
+  author =        {Gelman, Andrew and Goegebeur, Yuri and
+                   Tuerlinckx, Francis and Van Mechelen, Iven Van},
+  journal =       {Journal of the Royal Statistical Society Series C:
+                   Applied Statistics},
+  month =         jun,
+  number =        {2},
+  pages =         {247--268},
+  publisher =     {Oxford University Press (OUP)},
+  title =         {Diagnostic {{Checks}} for {{Discrete Data Regression
+                   Models Using Posterior Predictive Simulations}}},
+  volume =        {49},
+  year =          {2000},
+  abstract =      {Model checking with discrete data regressions can be
+                   dif{\textregistered}cult because the usual methods
+                   such as residual plots have complicated reference
+                   distributions that depend on the parameters in the
+                   model. Posterior predictive checks have been proposed
+                   as a Bayesian way to average the results of
+                   goodness-of-{\textregistered}t tests in the presence
+                   of uncertainty in estimation of the parameters. We
+                   try this approach using a variety of discrepancy
+                   variables for generalized linear models
+                   {\textregistered}tted to a historical data set on
+                   behavioural learning. We then discuss the general
+                   applicability of our {\textregistered}ndings in the
+                   context of a recent applied example on which we have
+                   worked. We {\textregistered}nd that the following
+                   discrepancy variables work well, in the sense of
+                   being easy to interpret and sensitive to important
+                   model failures: structured displays of the entire
+                   data set, general discrepancy variables based on
+                   plots of binned or smoothed residuals versus
+                   predictors and speci{\textregistered}c discrepancy
+                   variables created on the basis of the particular
+                   concerns arising in an application. Plots of binned
+                   residuals are especially easy to use because their
+                   predictive distributions under the model are
+                   suf{\textregistered}ciently simple that model checks
+                   can often be made implicitly. The following
+                   discrepancy variables did not work well: scatterplots
+                   of latent residuals de{\textregistered}ned from an
+                   underlying continuous model and
+                   quantile{\textpm}quantile plots of these residuals.},
+  doi =           {10.1111/1467-9876.00190},
+  issn =          {0035-9254, 1467-9876},
+}
+
+@article{leePoorPersonsPosterior2016,
+  author =        {Lee, Taehun and Cai, Li and Kuhfeld, Megan},
+  journal =       {Structural Equation Modeling: A Multidisciplinary
+                   Journal},
+  month =         mar,
+  number =        {2},
+  pages =         {206--220},
+  publisher =     {Informa UK Limited},
+  title =         {A {{Poor Person}}'s {{Posterior Predictive Checking}}
+                   of {{Structural Equation Models}}},
+  volume =        {23},
+  year =          {2016},
+  abstract =      {Posterior Predictive Model Checking (PPMC) is a
+                   Bayesian model checking method that compares the
+                   observed data to (plausible) future observations from
+                   the posterior predictive distribution. We propose an
+                   alternative to PPMC in the context of structural
+                   equation modeling, which we term the Poor Persons
+                   PPMC (PP-PPMC), for the situation wherein one cannot
+                   afford (or is unwilling) to draw samples from the
+                   full posterior. Using only byproducts of
+                   likelihood-based estimation (maximum likelihood
+                   estimate and information matrix), the PP-PPMC offers
+                   a natural method to handle parameter uncertainty in
+                   model fit assessment. In particular, a coupling
+                   relationship between the classical p-values from the
+                   model fit chi-square test and the predictive p-values
+                   from the PP-PPMC method is carefully examined,
+                   suggesting that PP-PPMC may offer an alternative,
+                   principled approach for model fit assessment. We also
+                   illustrate the flexibility of the PP-PPMC approach by
+                   applying it to case-influence diagnostics.},
+  doi =           {10.1080/10705511.2015.1014041},
+  issn =          {1070-5511, 1532-8007},
+}
+
+@article{coxGeneralDefinitionResiduals1968,
+  author =        {Cox, D. R. and Snell, E. J.},
+  journal =       {Journal of the Royal Statistical Society Series B:
+                   Statistical Methodology},
+  month =         jul,
+  number =        {2},
+  pages =         {248--265},
+  title =         {A {{General Definition}} of {{Residuals}}},
+  volume =        {30},
+  year =          {1968},
+  abstract =      {Residuals are usually defined in connection with
+                   linear models. Here a more general definition is
+                   given and some asymptotic properties found. Some
+                   illustrative examples are discussed, including a
+                   regression problem involving exponentially
+                   distributed errors and some problems concerning
+                   Poisson and binomially distributed observations.},
+  doi =           {10.1111/j.2517-6161.1968.tb00724.x},
+  issn =          {1369-7412, 1467-9868},
+}
+
+@article{dunnRandomizedQuantileResiduals1996,
+  author =        {Dunn, Peter K and Smyth, Gordon K},
+  journal =       {Journal of Computational and Graphical Statistics},
+  number =        {3},
+  pages =         {236--244},
+  title =         {Randomized {{Quantile Residuals}}},
+  volume =        {5},
+  year =          {1996},
+}
+
+@article{lauNewModelDiagnostics2014,
+  author =        {Lau, Max S.Y. and Marion, Glenn and
+                   Streftaris, George and Gibson, Gavin J.},
+  journal =       {Journal of the Royal Society Interface},
+  number =        {93},
+  pages =         {1--10},
+  title =         {New Model Diagnostics for Spatio-Temporal Systems in
+                   Epidemiology and Ecology},
+  volume =        {11},
+  year =          {2014},
+  abstract =      {A cardinal challenge in epidemiological and
+                   ecological modelling is to develop effective and
+                   easily deployed tools for model assessment. The
+                   availability of such methods would greatly improve
+                   understanding, prediction and management of disease
+                   and ecosystems. Conventional Bayesian model
+                   assessment tools such as Bayes factors and the
+                   deviance information criterion (DIC) are natural
+                   candidates but suffer from important limitations
+                   because of their sensitivity and complexity.
+                   Posterior predictive checks, which use summary
+                   statistics of the observed process simulated from
+                   competing models, can provide a measure of model fit
+                   but appropriate statistics can be difficult to
+                   identify. Here, we develop a novel approach for
+                   diagnosing mis-specifications of a general
+                   spatio-temporal transmission model by embedding
+                   classical ideas within a Bayesian analysis.
+                   Specifically, by proposing suitably designed
+                   non-centred parametrization schemes, we construct
+                   latent residuals whose sampling properties are known
+                   given the model specification and which can be used
+                   to measure overall fit and to elicit evidence of the
+                   nature of misspecifications of spatial and temporal
+                   processes included in the model. This model
+                   assessment approach can readily be implemented as an
+                   addendum to standard estimation algorithms for
+                   sampling from the posterior distributions, for
+                   example Markov chain Monte Carlo. The proposed
+                   methodology is first tested using simulated data and
+                   subsequently applied to data describing the spread of
+                   Heracleum mantegazzianum (giant hogweed) across Great
+                   Britain over a 30-year period. The proposed methods
+                   are compared with alternative techniques including
+                   posterior predictive checking and the DIC. Results
+                   show that the proposed diagnostic tools are effective
+                   in assessing competing stochastic spatio-temporal
+                   transmission models and may offer improvements in
+                   power to detect model mis-specifications. Moreover,
+                   the latent-residual framework introduced here extends
+                   readily to a broad range of ecological and
+                   epidemiological models. {\copyright} 2014 The
+                   Author(s) Published by the Royal Society. All rights
+                   reserved.},
+  doi =           {10.1098/rsif.2013.1093},
+  issn =          {17425662},
+}
+
+@book{zucchini2009hidden,
+  author =        {Zucchini, Walter and MacDonald, Iain L},
+  publisher =     {{Chapman and Hall/CRC}},
+  title =         {Hidden {{Markov}} Models for Time Series: An
+                   Introduction Using {{R}}},
+  year =          {2009},
+}
+
+@article{buckbyModelCheckingHidden2020,
+  author =        {Buckby, Jodie and Wang, Ting and Zhuang, Jiancang and
+                   Obara, Kazushige},
+  journal =       {Journal of Computational and Graphical Statistics},
+  month =         oct,
+  number =        {4},
+  pages =         {859--874},
+  title =         {Model {{Checking}} for {{Hidden Markov Models}}},
+  volume =        {29},
+  year =          {2020},
+  abstract =      {Residual analysis is a useful tool for checking lack
+                   of fit and for providing insight into model
+                   improvement. However, literature on residual analysis
+                   and the goodness of fit for hidden Markov models
+                   (HMMs) is limited. As HMMs with complex structures
+                   are increasingly used to accommodate different types
+                   of data, there is a need for further tools to check
+                   the validity of models applied to real world data. We
+                   review model checking methods for HMMs and develop
+                   new methods motivated by a particular case study
+                   involving a two-dimensional HMM developed for time
+                   series with many null events. We propose new residual
+                   analysis and stochastic reconstruction methods, which
+                   are adapted from model checking techniques for point
+                   process models. We apply the new methods to the case
+                   study model and discuss their adequacy. We find that
+                   there is not one ``best'' test for diagnostics but
+                   that our new methods have some advantages over
+                   previously developed tools. The importance of
+                   multiple tests for complex HMMs is highlighted and we
+                   use the results of our model checking to provide
+                   suggestions for possible improvements to the case
+                   study model. Supplementary materials for this article
+                   are available online.},
+  doi =           {10.1080/10618600.2020.1743295},
+  issn =          {1061-8600, 1537-2715},
+}
+
+@incollection{Zuckerkandl1962,
+  address =       {New York},
+  author =        {Zuckerkandl, Emile and Pauling, Linus},
+  booktitle =     {Horizons in {{Biochemistry}}},
+  editor =        {Kasha, M and Pullman, B},
+  pages =         {189--222},
+  publisher =     {Academic Press},
+  title =         {Molecular {{Disease}}, {{Evolution}}, and {{Genic
+                   Heterogeneity}}},
+  year =          {1962},
+  doi =           {10.1016/S0140-6736(54)91105-8},
+  issn =          {0028-7091},
+}
+
+@article{Drummond2006,
+  author =        {Drummond, Alexei J and Ho, Simon Y W and
+                   Phillips, Matthew J and Rambaut, Andrew},
+  journal =       {PLoS Biology},
+  month =         may,
+  number =        {5},
+  pages =         {e88},
+  title =         {Relaxed Phylogenetics and Dating with Confidence.},
+  volume =        {4},
+  year =          {2006},
+  abstract =      {In phylogenetics, the unrooted model of phylogeny and
+                   the strict molecular clock model are two extremes of
+                   a continuum. Despite their dominance in phylogenetic
+                   inference, it is evident that both are biologically
+                   unrealistic and that the real evolutionary process
+                   lies between these two extremes. Fortunately,
+                   intermediate models employing relaxed molecular
+                   clocks have been described. These models open the
+                   gate to a new field of "relaxed phylogenetics." Here
+                   we introduce a new approach to performing relaxed
+                   phylogenetic analysis. We describe how it can be used
+                   to estimate phylogenies and divergence times in the
+                   face of uncertainty in evolutionary rates and
+                   calibration times. Our approach also provides a means
+                   for measuring the clocklikeness of datasets and
+                   comparing this measure between different genes and
+                   phylogenies. We find no significant rate
+                   autocorrelation among branches in three large
+                   datasets, suggesting that autocorrelated models are
+                   not necessarily suitable for these data. In addition,
+                   we place these datasets on the continuum of
+                   clocklikeness between a strict molecular clock and
+                   the alternative unrooted extreme. Finally, we present
+                   analyses of 102 bacterial, 106 yeast, 61 plant, 99
+                   metazoan, and 500 primate alignments. From these we
+                   conclude that our method is phylogenetically more
+                   accurate and precise than the traditional unrooted
+                   model while adding the ability to infer a timescale
+                   to evolution.},
+  doi =           {10.1371/journal.pbio.0040088},
+  issn =          {1545-7885},
+}
+
 @article{Benjamini1995,
   author =        {Benjamini, Y and Hochberg, Yosef},
   journal =       {Journal of the Royal Statisitical Society, Series B},
@@ -1627,6 +1636,16 @@
                    Powerful Approach to Multiple Testing.},
   volume =        {57},
   year =          {1995},
+}
+
+@article{wilsonHarmonicMeanPvalue2019,
+  author =        {Wilson, Daniel J},
+  journal =       {PNAS},
+  number =        {11},
+  title =         {The Harmonic Mean P-Value for Combining Dependent
+                   Tests},
+  year =          {2019},
+  doi =           {10.1073/pnas.1814092116},
 }
 
 @article{brockwellUniversalResidualsMultivariate2007,
@@ -1803,6 +1822,18 @@
   doi =           {10.1186/1471-2148-13-221},
   isbn =          {1471-2148},
   issn =          {14712148},
+}
+
+@article{efronBayesianInferenceParametric2012,
+  author =        {Efron, Bradley},
+  journal =       {The Annals of Applied Statistics},
+  month =         dec,
+  number =        {4},
+  title =         {Bayesian Inference and the Parametric Bootstrap},
+  volume =        {6},
+  year =          {2012},
+  doi =           {10.1214/12-AOAS571},
+  issn =          {1932-6157},
 }
 
 @article{Didelot2022detectimports,

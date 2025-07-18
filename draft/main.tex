@@ -255,7 +255,8 @@ stemminess (Figure \ref{fig:ppCheck}A). On the other hand, when the correct mode
 used, the posterior predictive assessment did not detect any issue for any of the four
 summary statistics (Figure \ref{fig:ppCheck}B). 
 The posterior predictive assessment can also be applied more or less directly in the 
-case where inference was performed using for example maximum likelihood methods,
+case where inference was performed using maximum likelihood methods
+\citep{tsayModelCheckingParametric1992,Gelman1996,gelmanDiagnosticChecksDiscrete2000,leePoorPersonsPosterior2016},
 either by replacing the posterior samples with the point estimate or by building a
 pseudo-posterior (see Methods and next section). 
 
@@ -307,7 +308,6 @@ them had p-values below 0.05, and the median p-value was $p=0.513$ (Figure \ref{
 \end{center}
 \caption{Example of residual analysis for a maximum-likelihood (ML) dated phylogeny.
 (A) Simulated dated phylogeny. (B) Likelihood of substitutions in the ML tree.
-dated phylogeny. 
 (C) Distribution of residuals in the ML tree. 
 (D) QQ plot of residuals in the ML tree.
 (E) Distribution of residuals in a tree from the pseudo-posterior. 
@@ -367,7 +367,52 @@ were caused by a misidentification of the correct root.
 
 \subsection*{Confounding effect of population structure} 
 
-TODO: simulate confounding situation, apply diagnosis
+\begin{figure}[p!]
+\begin{center}
+\includegraphics[width=10cm]{confounding-case.pdf}
+\end{center}
+\caption{Example of diagnosis of the confounding effect of population structure.
+(A) Simulated phylogeny. 
+(B) Root-to-tip regression analysis.
+(C) QQ plot of residuals for a single posterior sample.
+(D) Distribution of p-values from the residual analysis.
+\label{fig:confounding}}
+\end{figure}
+
+Population structure can have a confounding effect on dating analysis, especially when
+it is associated with systematic differences in sampling dates 
+\citep{Duchene2015a,Murray2016,tongComparisonMethodsEstimating2018}.
+To explore whether this issue can be diagnosed, we simulated datasets with a population structure 
+made of three components, each of which is sampled 50 times in three different years (cf Methods).
+These datasets are similar to the ones generated in a previous study \citep{Murray2016}
+and we found evidence of confounding in about a third of datasets, but for illustration
+here we describe the results on a single example, for which  
+the root of the tree existed in 1946 and
+a strict molecular clock (Equation \ref{eq:sc}) was used with rate 10 substitutions per year.
+
+Figure \ref{fig:confounding}A shows the simulated phylogeny.
+A root-to-tip regression analysis (Figure \ref{fig:confounding}B) suggests a strong temporal signal,
+with no outliers. The correlation coefficient was $R^2=0.95$ and 
+a date randomization test had a p-value $p<10^{-4}$. However, the slope of this regression
+suggested a clock rate of 43 substitutions per year and the intersect with the x-axis suggested
+that the root existed in 2003. This is typical of what happens when population structure
+confounds the temporal signal, with an overestimation of the clock rate and an underestimation
+of age \citep{Murray2016}. Note that this is the opposite of what happens when the temporal signal
+is weak, typically resulting in underestimation of clock rates and overestimation of ages 
+\citep{Duchene2015a}, and therefore the tools previously proposed to ensure that the temporal
+signal is strong enough do not help diagnose the issue \citep{Murray2016}. 
+
+We ran BactDating \citep{Didelot2018} on this dataset assuming the correct strict clock model, 
+which estimated a clock rate of 
+16.4 [14.7-18.1] and a root date of 1976 [1971;1981]. Although these estimates are not
+as inaccurate as the ones quoted above for the root-to-tip analysis, the same issue is still clearly
+affecting the results with neither of the two credible intervals covering the ground truths of 
+10 and 1946, respectively. The posterior predictive checks resulted in a p-value of 0.19 which
+is smaller than usually found for simulated datasets without structure, but not statistically significant.
+Figure \ref{fig:confounding}C shows the QQ plot of residuals for a single posterior sample,
+for which the Anderson-Darling test rejects the hypothesis of standard normality of the residuals ($p=3\times10^{-3}$). Repeating this test for all posterior samples resulted in the posterior distribution
+of p-values shown in Figure \ref{fig:confounding}D, which has a median value of $p=4\times10^{-3}$.
+The residual analysis was therefore successfully able to diagnose that there is an issue with the results.
 
 \subsection*{Real data examples}
 

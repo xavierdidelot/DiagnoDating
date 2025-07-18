@@ -43,7 +43,7 @@ print(r)
 
 Validation analysis:
 ```{r}
-validate(r)
+postdistpvals(r,showPlot = T)
 ```
 
 Run analysis with correct model:
@@ -54,5 +54,5 @@ print(r)
 
 Validation analysis:
 ```{r}
-validate(r)
+postdistpvals(r,showPlot = T)
 ```

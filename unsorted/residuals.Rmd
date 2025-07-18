@@ -48,6 +48,6 @@ for (a in 1:5) {
   r=runDating(tree,dates,algo=a)
   print(r)
   plot(r,show.tip.label=F)
-  validate(r)
+  postdistpvals(r,showPlot = T)
 }
 ```
