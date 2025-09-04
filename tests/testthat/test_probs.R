@@ -34,5 +34,19 @@ test_that("Probabilities agree with simulation.", {
   class(r) <- 'resDating'
   expect_equal(p$prob,sum(calcLikBranches(r,log=T)))
 
+  #NegBin
+  p=simobsphy(t,model='negbin',mu=10,sigma=2)
+  r=list(model='negbin',rate=10,relax=2,tree=t)
+  r$tree$subs=p$edge.length
+  class(r) <- 'resDating'
+  expect_equal(p$prob,sum(calcLikBranches(r,log=T)))
+
+  #RelaxedGamma
+  p=simobsphy(t,model='relaxedgamma',mu=10,sigma=2)
+  r=list(model='relaxedgamma',rate=10,relax=2,tree=t)
+  r$tree$subs=p$edge.length
+  class(r) <- 'resDating'
+  expect_equal(p$prob,sum(calcLikBranches(r,log=T)))
+
 })
 

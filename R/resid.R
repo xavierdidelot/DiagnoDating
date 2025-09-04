@@ -25,6 +25,16 @@ calcLikBranches = function(x,log=FALSE) {
     return(probs)
   }
 
+  if (x$model=='relaxedgamma') {
+    probs=dgamma(ys,shape=xs*rate*rate/(rate+xs*relax*relax),scale=1+xs*relax*relax/rate,log=log)
+    return(probs)
+  }
+  if (x$model=='negbin') {
+    k=rate*rate/relax/relax
+    theta=relax*relax/rate
+    probs=dnbinom(ys,size=k,prob=1/(1+theta*xs),log=log)
+    return(probs)
+  }
   stop(sprintf('Model %s is not yet implemented.',x$model))
 }
 
@@ -57,9 +67,28 @@ calcResiduals = function(x) {
 
   if (x$model=='strictgamma' || x$model=='carc') {
     probs=pgamma(ys,shape=xs*rate/(1+relax),scale=1+relax)
+    print(probs)
     n=qnorm(probs)
     w=which(probs==1)
     if (length(w)>0) n[w]=qnorm(pgamma(ys[w],shape=xs[w]*rate/(1+relax),scale=1+relax,lower.tail=F),lower.tail = F)
+    return(n)
+  }
+
+  if (x$model=='relaxedgamma') {
+    probs=pgamma(ys,shape=xs*rate*rate/(rate+xs*relax*relax),scale=1+xs*relax*relax/rate)
+    n=qnorm(probs)
+    w=which(probs==1)
+    if (length(w)>0) n[w]=qnorm(pgamma(ys[w],shape=xs[w]*rate*rate/(rate+xs[w]*relax*relax),scale=1+xs[w]*relax*relax/rate,lower.tail=F),lower.tail = F)
+    return(n)
+  }
+
+  if (x$model=='negbin') {
+    k=rate*rate/relax/relax
+    theta=relax*relax/rate
+    probs=runif(length(ys),pnbinom(round(ys-1),size=k,prob=1/(1+theta*xs)),pnbinom(round(ys),size=k,prob=1/(1+theta*xs)))
+    n=qnorm(probs)
+    w=which(probs==1)
+    if (length(w)>0) n[w]=qnorm(runif(length(w),pnbinom(round(ys[w]-1),size=k,prob=1/(1+theta*xs[w]),lower.tail=F),pnbinom(round(ys[w]),size=k,prob=1/(1+theta*xs),lower.tail=F)),lower.tail=F)
     return(n)
   }
 

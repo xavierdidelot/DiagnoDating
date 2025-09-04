@@ -43,7 +43,7 @@ print(r)
 
 Pseudo-residual analysis:
 ```{r}
-plotProbBranches(r)
+plotLikBranches(r)
 plotResid(r)
 print(testResid(r))
 ```
