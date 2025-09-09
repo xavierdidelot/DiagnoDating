@@ -32,7 +32,7 @@ calcLikBranches = function(x,log=FALSE) {
   if (x$model=='negbin') {
     k=rate*rate/relax/relax
     theta=relax*relax/rate
-    probs=dnbinom(ys,size=k,prob=1/(1+theta*xs),log=log)
+    probs=dnbinom(round(ys),size=k,prob=1/(1+theta*xs),log=log)
     return(probs)
   }
   stop(sprintf('Model %s is not yet implemented.',x$model))
@@ -142,7 +142,19 @@ plotLikBranches = function(x,sub=NA,color=T,minProb=NA,...) {
       lines(xss,qgamma(  plim/2,shape=xss*rate/(1+relax),scale=1+relax),lty='dashed')
       lines(xss,qgamma(1-plim/2,shape=xss*rate/(1+relax),scale=1+relax),lty='dashed')
     }
-  }
+
+    if (x$model=='relaxedgamma') {
+      lines(xss,qgamma(  plim/2,shape=xss*rate*rate/(rate+xss*relax*relax),scale=1+xss*relax*relax/rate),lty='dashed')
+      lines(xss,qgamma(1-plim/2,shape=xss*rate*rate/(rate+xss*relax*relax),scale=1+xss*relax*relax/rate),lty='dashed')
+    }
+
+    if (x$model=='negbin') {
+      k=rate*rate/relax/relax
+      theta=relax*relax/rate
+      lines(xss,qnbinom(  plim/2,size=k,prob=1/(1+theta*xss)),lty='dashed')
+      lines(xss,qnbinom(1-plim/2,size=k,prob=1/(1+theta*xss)),lty='dashed')
+    }
+}
 
   normed=(ll-min(ll,na.rm=T))/(max(ll,na.rm=T)-min(ll,na.rm=T))
   normed2=normed;normed2[is.na(normed2)]=1
