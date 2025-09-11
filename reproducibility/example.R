@@ -8,6 +8,18 @@ dt=simcoaltree(dates,alpha=1)
 
 tree=simobsphy(dt,mu=10,sigma=5,model='arc')
 
+if (F) {
+  pdf('exampleS0.pdf',12,8)
+  r0=resDating(dt,tree,model = 'poisson',rate = 10)
+  par(mfrow=c(1,2),mar=c(4,4,2,2))
+  plotLikBranches(r0,minProb=1e-3,sub=2)
+  fig_label('A',cex=2)
+  plotLikBranches(r0,minProb=1e-3,sub=1)
+  fig_label('B',cex=2)
+  dev.off()
+  system('open exampleS0.pdf')
+}
+
 pdf('exampleS1.pdf',12,8)
 roottotip(initRoot(tree,dates),dates)
 dev.off()
