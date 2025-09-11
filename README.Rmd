@@ -15,10 +15,10 @@ set.seed(0)
 
 # Introduction
 
-The aim of this package is to check if a dated phylogeny is valid. 
+The aim of this package is to diagnose the results of phylogeny dating analysis. 
 Many tools exist to produce dated phylogenies, but there are several factors that can invalidate the results.
 This includes the confounding effect that population structure can have on dating.
-But it also includes incorrect assumptions made when running a dating analysis, for example using an inappropriate clock model. 
+But it also includes incorrect assumptions made when running a dating analysis, for example using an inappropriate clock model, not accounting for recombination, etc. 
 
 ## Installation
 

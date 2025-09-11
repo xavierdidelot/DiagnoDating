@@ -1,6 +1,6 @@
 Package: DiagnoDating
 Type: Package
-Title: DiagnoDating: validating dated phylogenies
+Title: DiagnoDating: diagnostics for dated phylogenetic analysis
 Version: 0.0.1
 Date: 2024-07-02
 Authors@R: person("Xavier","Didelot",email="xavier.didelot@gmail.com",role=c("aut", "cre"))
@@ -17,7 +17,7 @@ Suggests: knitr,
     mlesky,
     treedater,
     treeio
-Description: DiagnoDating is a R package to test the validity of dated phylogenies.
+Description: DiagnoDating is a R package to diagnose the results of phylogeny dating analysis.
 VignetteBuilder: knitr
 License: MIT + file LICENSE
 URL: https://github.com/xavierdidelot/DiagnoDating

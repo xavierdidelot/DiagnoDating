@@ -3,12 +3,13 @@
 
 # Introduction
 
-The aim of this package is to check if a dated phylogeny is valid. Many
-tools exist to produce dated phylogenies, but there are several factors
-that can invalidate the results. This includes the confounding effect
-that population structure can have on dating. But it also includes
-incorrect assumptions made when running a dating analysis, for example
-using an inappropriate clock model.
+The aim of this package is to diagnose the results of phylogeny dating
+analysis. Many tools exist to produce dated phylogenies, but there are
+several factors that can invalidate the results. This includes the
+confounding effect that population structure can have on dating. But it
+also includes incorrect assumptions made when running a dating analysis,
+for example using an inappropriate clock model, not accounting for
+recombination, etc.
 
 ## Installation
 
@@ -88,6 +89,8 @@ p=postdistpvals(r,showPlot = T)
 ```
 
 ![](man/figures/unnamed-chunk-9-1.png)<!-- -->
+
+    #> The posterior distribution of p-values has median 0.58 and 4.40% of values below 5%
 
 ## More information and getting help
 
