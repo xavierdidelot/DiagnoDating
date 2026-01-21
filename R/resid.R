@@ -315,9 +315,10 @@ resample=function(x,showProgress=T,showTraces=F,nbIts=1e4)
 #' @param x object of class resDating
 #' @param nrep number of repeats to perform
 #' @param showPlot Whether or not to show the plot
+#' @param showTraces Whether or not to show traces when running bactdate
 #' @export
 #'
-postdistpvals=function(x,nrep=1000,showPlot=F)
+postdistpvals=function(x,nrep=1000,showPlot=F,showTraces=F)
 {
   resampling=0;showProgress=T;shoeTraces=F;nbIts=1e4#old arguments
   ps=rep(NA,nrep)

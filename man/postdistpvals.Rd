@@ -4,7 +4,7 @@
 \alias{postdistpvals}
 \title{Compute posterior distribution of p-values}
 \usage{
-postdistpvals(x, nrep = 1000, showPlot = F)
+postdistpvals(x, nrep = 1000, showPlot = F, showTraces = F)
 }
 \arguments{
 \item{x}{object of class resDating}
@@ -12,6 +12,8 @@ postdistpvals(x, nrep = 1000, showPlot = F)
 \item{nrep}{number of repeats to perform}
 
 \item{showPlot}{Whether or not to show the plot}
+
+\item{showTraces}{Whether or not to show traces when running bactdate}
 }
 \description{
 Compute posterior distribution of p-values

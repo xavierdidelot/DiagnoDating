@@ -1,0 +1,74 @@
+---
+title: "Analysis of simulated data"
+author: "Xavier Didelot"
+date: '`r Sys.Date()`'
+output:
+  html_document: default
+vignette: >
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteIndexEntry{Analysis of simulated data}
+  %\usepackage[utf8]{inputenc}
+---
+
+# Simulation
+
+We start by generating a dated tree with no structure and a small effective population size 
+$N_e g=1$ year relative to the sampling frame of 10 years between 2010 and 2020:
+
+```{r}
+library(DiagnoDating,quietly=T)
+set.seed(1)
+dates=runif(100,2010,2020)
+dt=simcoaltree(dates,alpha=1)
+plot(dt,show.tip.label = F)
+axisPhylo(backward = F)
+```
+
+Next we generate a phylogenetic tree using a ARC(10,5) mutation model:
+```{r}
+tree=simobsphy(dt,mu=10,sigma=5,model='arc')
+plot(tree,show.tip.label = F)
+axisPhylo(1,backward=F)
+```
+
+A root-to-tip regression analysis works quite well:
+
+```{r}
+res=roottotip(tree,dates)
+```
+
+# Analysis using incorrect model
+
+Run dating analysis with incorrect clock model:
+```{r}
+r=runDating(unroot(tree),dates,model='poisson')
+print(r)
+```
+
+Posterior predictive analysis:
+```{r}
+ppcheck(r,showPlot = T,showProgress = F)
+```
+
+Residual analysis:
+```{r}
+ps=postdistpvals(r,showPlot = T)
+```
+
+# Analysis using correct model
+
+Perform dating with correct model:
+```{r}
+r=runDating(unroot(tree),dates,model='arc')
+print(r)
+```
+
+Posterior predictive analysis:
+```{r}
+ppcheck(r,showPlot = T,showProgress = F)
+```
+
+Residual analysis:
+```{r}
+ps=postdistpvals(r,showPlot = T)
+```
