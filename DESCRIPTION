@@ -1,8 +1,8 @@
 Package: DiagnoDating
 Type: Package
-Title: DiagnoDating: diagnostics for dated phylogenetic analysis
-Version: 0.0.1
-Date: 2024-07-02
+Title: DiagnoDating: diagnostics for dated phylogenies in microbial population genetics
+Version: 0.9
+Date: 2026-01-01
 Authors@R: person("Xavier","Didelot",email="xavier.didelot@gmail.com",role=c("aut", "cre"))
 Maintainer: Xavier Didelot <xavier.didelot@gmail.com>
 Depends: R (>= 3.5.0), ape, BactDating
@@ -20,8 +20,8 @@ Suggests: knitr,
 Description: DiagnoDating is a R package to diagnose the results of phylogeny dating analysis.
 VignetteBuilder: knitr
 License: MIT + file LICENSE
-URL: https://github.com/xavierdidelot/DiagnoDating
+URL: https://xavierdidelot.github.io/DiagnoDating/
 BugReports: https://github.com/xavierdidelot/DiagnoDating/issues
-RoxygenNote: 7.3.2
+RoxygenNote: 7.3.3
 Encoding: UTF-8
 LazyData: true

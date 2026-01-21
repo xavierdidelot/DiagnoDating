@@ -2,7 +2,7 @@
 % Please edit documentation in R/package.R
 \name{DiagnoDating}
 \alias{DiagnoDating}
-\title{DiagnoDating:  diagnostics for dated phylogenies}
+\title{DiagnoDating:  diagnostics for dated phylogenies in microbial population genetics}
 \description{
 DiagnoDating is a R package to diagnose dated phylogenies.
 

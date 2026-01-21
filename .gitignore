@@ -7,8 +7,5 @@ unsorted/*.pdf
 .Rhistory
 .DS_Store
 *.RData
-/doc/
-/Meta/
-doc/*.html
 tests/testthat/Rplots.pdf
 Rplots.pdf
