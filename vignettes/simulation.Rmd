@@ -24,7 +24,8 @@ plot(dt,show.tip.label = F)
 axisPhylo(backward = F)
 ```
 
-Next we generate a phylogenetic tree using a ARC(10,5) mutation model:
+Next we generate a phylogenetic tree using an additive clock model (ARC) with parameters 10 and 5:
+
 ```{r}
 tree=simobsphy(dt,mu=10,sigma=5,model='arc')
 plot(tree,show.tip.label = F)
@@ -39,36 +40,42 @@ res=roottotip(tree,dates)
 
 # Analysis using incorrect model
 
-Run dating analysis with incorrect clock model:
+Let us first run an analysis using an incorrect Poisson clock model instead of the correct ARC model.
+
 ```{r}
 r=runDating(unroot(tree),dates,model='poisson')
 print(r)
 ```
 
-Posterior predictive analysis:
+We can see that there are issues using a posterior predictive check:
+
 ```{r}
 ppcheck(r,showPlot = T,showProgress = F)
 ```
 
-Residual analysis:
+We can also see the issues when performing a residual analysis:
+
 ```{r}
 ps=postdistpvals(r,showPlot = T)
 ```
 
 # Analysis using correct model
 
-Perform dating with correct model:
+Let us now perform dating under the correct ARC clock model:
+
 ```{r}
 r=runDating(unroot(tree),dates,model='arc')
 print(r)
 ```
 
-Posterior predictive analysis:
+The posterior predictive check is satisfied:
+
 ```{r}
 ppcheck(r,showPlot = T,showProgress = F)
 ```
 
-Residual analysis:
+The residual analysis is also satisfied:
+
 ```{r}
 ps=postdistpvals(r,showPlot = T)
 ```

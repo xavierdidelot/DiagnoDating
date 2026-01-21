@@ -95,8 +95,8 @@ p=postdistpvals(r,showPlot = T)
 ## More information and getting help
 
 For more detailed examples of how to use DiagnoDating, see the vignettes
-[here](https://github.com/xavierdidelot/DiagnoDating/tree/master/vignettes).
-See also the help included in the package using the R command
+[here](https://xavierdidelot.github.io/DiagnoDating/). See also the help
+included in the package using the R command
 `help(package='DiagnoDating')`.
 
 If you have any problem or question please create an issue

@@ -1,0 +1,51 @@
+---
+title: "Analysis of HBV data"
+author: "Xavier Didelot"
+date: '`r Sys.Date()`'
+output:
+  html_document: default
+vignette: >
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteIndexEntry{Analysis of HBV data}
+  %\usepackage[utf8]{inputenc}
+---
+
+# Loading the data
+
+In this vignette we demonstrate the usage of DiagnoDating on a dataset of
+Hepatitis B virus (HBV) published by Zoe Patterson Ross et al (2018).
+The data for this example can be loaded using the command `data(HBV)`.
+This will load in your environment the object `phy` which is the phylogeny constructed using PhyML.
+To perform dating, we also need to know the dates of the samples. This is stored
+in labels of the tips of the phylogeny, and can be extracted as follows:
+
+```{r}
+library(DiagnoDating,quietly=T)
+set.seed(1)
+data(HBV)
+dates=as.numeric(gsub(".*_","",phy$tip.label))
+names(dates)=phy$tip.label
+```
+
+# Dating analysis
+
+Let us perform a dating analysis using BactDating and the additive relaxed clock model (ARC):
+
+```{r}
+r=runDating(unroot(phy),dates,model='arc')
+print(r)
+```
+
+# Diagnostics of the dating analysis
+
+The posterior predictive check is not satisfied:
+
+```{r}
+ppcheck(r,showPlot = T,showProgress = F)
+```
+
+The residual analysis is also not satisfied:
+
+```{r}
+ps=postdistpvals(r,showPlot = T)
+```

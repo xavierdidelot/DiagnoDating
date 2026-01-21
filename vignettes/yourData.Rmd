@@ -1,0 +1,91 @@
+---
+title: "Using DiagnoDating on your own data"
+author: "Xavier Didelot"
+date: '`r Sys.Date()`'
+output:
+  html_document: default
+vignette: >
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteIndexEntry{Using DiagnoDating on your own data}
+  %\usepackage[utf8]{inputenc}
+---
+
+In this vignette we describe how you can use DiagnoDating on your own data.
+
+# First input: phylogenetic tree
+
+The first required input (let's call it `t`) is a phylogenetic tree
+of the class `phylo` from the `ape` package,
+which can be loaded from a Newick or Nexus file using respectively the following commands
+from the `ape` package: 
+
+```{r eval=FALSE}
+library(ape)
+t=read.tree('filename.nwk')
+t=read.nexus('filename.nex')
+```
+
+This tree should have branch lengths measured in units of substitutions.
+In other words, the branch lengths should not be measured in substitutions per site. 
+If you are not sure whether the branch lengths are measured correctly or not, try
+to compute `sum(t$edge.length)`. This should be the total number of substitutions throughout the tree,
+so if you get a value below one or even only a bit above one, your branch lengths are probably
+not in the correct unit.
+
+If the branch branch lengths are measured per site, you will need to rescale them using the command:
+```{r eval=F}
+t$edge.length=t$edge.length*L
+```
+where `L` is the number of sites which were used to build this tree. 
+
+# Second input: isolation dates
+
+The second required input (let's call it `d`) is the dates at which the isolates were sampled. 
+Dates need to be expressed in decimal years, for example `2015.5` means 1st July 2015.
+If needed, you can convert into decimal years from other date formats using the `decimal_date`
+function of the `lubridate` package.
+This input can be simply a vector of decimal dates, in which case the order needs to be the same
+as the order of the tree tips in `t$tip.label`. For example, if `t$tip.label` is `(A,B,C)` 
+then `d=c(2010,2011,2012)` indicates that `A` was isolated in 2010, B in 2011 and C in 2012.
+
+Alternatively, the vector `d` does not have to be ordered if `names(d)` corresponds to the tip names.
+For example, d=c(2011,2010,2012)` with names(d)=c('B','A','C')` would have the same meaning
+as in the previous example.
+
+If some isolation dates are unknown, this can be indicated using `NA` in the vector, in 
+which case the date is considered unknown but within the range of known dates,
+ie with the range return by the command `range(d,na.rm=T)`.
+
+# Running a dating analysis
+
+Once the two inputs `t` and `d` described above are in the correct format, 
+you are ready to run a dating analysis using the main command:
+```{r,eval=F}
+library(DiagnoDating)
+r=runDating(t,d)
+```
+
+Note that there are several optional arguments for this command that can be useful,
+to select the dating algorithm to use, the clock model, whether the tree is rooted or should be estimated, and whether the rate is known or should be estimated. For more details see `help(runDating)`
+
+# Computing diagnostics on the dating analysis
+
+You can perform a posterior predictive check using the command:
+```{r eval=FALSE}
+p=ppcheck(r,showPlot = T,showProgress = F)
+```
+
+You can see the likelihood of each branch using the command:
+```{r eval=FALSE}
+plotLikBranches(r)
+```
+
+You can compute the residuals as follows:
+```{r eval=FALSE}
+plotResid(r)
+```
+
+You can compute the posterior distribution of residual p-values as follows:
+```{r eval=FALSE}
+p=postdistpvals(r,showPlot = T)
+```
