@@ -1,6 +1,7 @@
 
 reproducibility/*.pdf
 reproducibility/*.tex
+reproducibility/*.html
 unsorted/*.pdf
 .Rproj.user
 .Rhistory
@@ -8,14 +9,6 @@ unsorted/*.pdf
 *.RData
 /doc/
 /Meta/
-*.html
-draft/main.aux
-draft/main.bbl
-draft/main.blg
-draft/main.log
-draft/main.out
-draft/main.synctex.gz
-draft/scr.sh
+doc/*.html
 tests/testthat/Rplots.pdf
 Rplots.pdf
-draft/main.pdf
