@@ -1,8 +1,8 @@
 Package: DiagnoDating
 Type: Package
 Title: DiagnoDating: diagnostics for dated phylogenies in microbial population genetics
-Version: 0.9
-Date: 2026-01-01
+Version: 0.9.1
+Date: 2026-07-14
 Authors@R: person("Xavier","Didelot",email="xavier.didelot@gmail.com",role=c("aut", "cre"))
 Maintainer: Xavier Didelot <xavier.didelot@gmail.com>
 Depends: R (>= 3.5.0), ape, BactDating

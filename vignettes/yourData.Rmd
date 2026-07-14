@@ -68,6 +68,43 @@ r=runDating(t,d)
 Note that there are several optional arguments for this command that can be useful,
 to select the dating algorithm to use, the clock model, whether the tree is rooted or should be estimated, and whether the rate is known or should be estimated. For more details see `help(runDating)`
 
+## A note on units when using treedater
+
+The clock rate reported by DiagnoDating is in substitutions per genome per year, to match the
+branch lengths of `t`, which are in substitutions. Most of the dating algorithms are happy to work
+in these units, but treedater is not: it works in substitutions per site, and needs to be told how
+many sites there are. When using it, pass the same `L` as above:
+
+```{r eval=F}
+r=runDating(t,d,algo='treedater',seqlen=L)
+```
+
+This matters as soon as you want to constrain the rate. The `rate` argument of `runDating` is per
+genome, like everything else in DiagnoDating:
+
+```{r eval=F}
+r=runDating(t,d,algo='treedater',seqlen=L,rate=20)#20 substitutions per genome per year
+```
+
+whereas the `omega0` and `meanRateLimits` arguments of treedater are per site, and are handed
+straight to it without conversion, so they are smaller by a factor of `L`:
+
+```{r eval=F}
+r=runDating(t,d,algo='treedater',seqlen=L,meanRateLimits=c(1e-3,2e-3))#per site per year
+```
+
+Passing either of those without also giving `seqlen` is an error, rather than being silently
+rescaled by whatever arbitrary factor happens to be in use.
+
+The clock model of treedater is chosen with `clock`, which can be `strict` or `additive`. The
+additive relaxed clock is the same model as the `arc` model of BactDating, so the two are directly
+comparable, and the relaxation parameter reported for each means the same thing on the same scale:
+
+```{r eval=F}
+r1=runDating(t,d,algo='BactDating',model='arc')
+r2=runDating(t,d,algo='treedater',seqlen=L,clock='additive')
+```
+
 # Computing diagnostics on the dating analysis
 
 You can perform a posterior predictive check using the command:

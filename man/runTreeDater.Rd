@@ -4,16 +4,28 @@
 \alias{runTreeDater}
 \title{Date a tree using treedater}
 \usage{
-runTreeDater(tree, dates, rate = NA, keepRoot = F, ...)
+runTreeDater(
+  tree,
+  dates,
+  rate = NA,
+  keepRoot = F,
+  seqlen = NA,
+  clock = "strict",
+  ...
+)
 }
 \arguments{
-\item{tree}{Tree to date}
+\item{tree}{Tree to date, with branch lengths in number of substitutions (cf details)}
 
-\item{dates}{Dates of leaves in the tree}
+\item{dates}{Dates of leaves in the tree, matched by name if named and by order otherwise}
 
-\item{rate}{If provided, force analysis to use specified value for rate}
+\item{rate}{If provided, force analysis to use specified value for rate, in substitutions per genome per unit of time}
 
 \item{keepRoot}{Whether to keep the root as in the input}
+
+\item{seqlen}{Length of the alignment from which the tree was built (cf details)}
+
+\item{clock}{Clock model for treedater to use, either 'strict' or 'additive'}
 
 \item{...}{Passed on to treedater::dater}
 }
@@ -22,4 +34,32 @@ resDating object containing results of treedater analysis
 }
 \description{
 Date a tree using treedater
+}
+\details{
+treedater does not use the same units as the rest of DiagnoDating, so some care is needed.
+DiagnoDating follows BactDating: the input \code{tree} has branch lengths in numbers of
+substitutions, and \code{rate} is in substitutions per genome per unit of time. treedater
+instead takes branch lengths in substitutions per site together with the sequence length
+\code{s}, and reports rates in substitutions per site per unit of time.
+
+This function converts between the two conventions: the tree is divided by \code{seqlen}
+on the way in, and the rate returned by treedater is multiplied by \code{seqlen} on the way
+out. The \code{rate} argument above is therefore in DiagnoDating units (per genome), whereas
+any rate-valued argument passed through \code{...} straight to treedater, in particular
+\code{omega0} and \code{meanRateLimits}, is in treedater units (per site). Supplying
+\code{seqlen} is what keeps the two consistent. If \code{seqlen} is omitted a nominal value
+is used instead, which cancels out of the fit exactly, but which would silently rescale
+\code{omega0} and \code{meanRateLimits} by an arbitrary factor, so passing either of those
+without \code{seqlen} is an error.
+
+The clock models translate as follows. The \code{'strict'} clock of treedater is the
+\code{'poisson'} model, which has no relaxation parameter. The \code{'additive'} clock of
+treedater is the additive relaxed clock of Didelot et al (2021), which is exactly the
+\code{'arc'} model of BactDating: in both, a branch of duration t under a clock of mean rate
+mu has a negative binomial number of substitutions, with size mu*t/sigma and probability
+1/(1+sigma). The variance parameter that treedater calls \code{sp} is thus the same quantity
+that BactDating calls \code{sigma} and that DiagnoDating calls \code{relax}, measured on the
+same per genome scale, and it is carried across without rescaling. The \code{'uncorrelated'}
+clock of treedater has no equivalent here, since its variance is not additive in the duration
+of a branch and so cannot be written as a \code{relax} parameter.
 }
