@@ -7,13 +7,13 @@
 runDating(tree, dates, algo = "BactDating", rate = NA, keepRoot = F, ...)
 }
 \arguments{
-\item{tree}{Tree to date}
+\item{tree}{Tree to date, with branch lengths in number of substitutions (cf details)}
 
 \item{dates}{Dates of leaves in the tree}
 
 \item{algo}{Algorithm to use, can be one of: LSD, node.dating, BactDating, treedater, TreeTime}
 
-\item{rate}{If provided, force analysis to use specified value for rate}
+\item{rate}{If provided, force analysis to use specified value for rate, in substitutions per genome per unit of time}
 
 \item{keepRoot}{Whether to keep the root as in the input}
 
@@ -24,4 +24,25 @@ resDating object containing results of dating analysis
 }
 \description{
 Run a dating analysis
+}
+\details{
+Throughout DiagnoDating, as in BactDating, the branch lengths of \code{tree} are numbers of
+substitutions rather than substitutions per site, and the \code{rate} of a fitted model is in
+substitutions per genome per unit of time. The \code{relax} parameter of a fitted model is on
+the same per genome scale.
+
+Not all of the dating algorithms use this convention internally, and treedater in particular
+works with rates per site. Each of them is converted, but when \code{algo='treedater'} the
+conversion needs the length of the alignment, which should be given as \code{seqlen}, and the
+clock model can be selected with \code{clock}. Both are passed on through \code{...}: see
+\code{\link{runTreeDater}} for the details, which are worth reading before passing any rate
+valued argument on to treedater.
+}
+\examples{
+\dontrun{
+#BactDating with the additive relaxed clock
+r=runDating(tree,dates,algo='BactDating',model='arc')
+#treedater with the same clock model, which it calls additive
+r=runDating(tree,dates,algo='treedater',clock='additive',seqlen=10000)
+}
 }

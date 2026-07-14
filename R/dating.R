@@ -1,14 +1,34 @@
 #' Run a dating analysis
-#' @param tree Tree to date
+#' @param tree Tree to date, with branch lengths in number of substitutions (cf details)
 #' @param dates Dates of leaves in the tree
 #' @param algo Algorithm to use, can be one of: LSD, node.dating, BactDating, treedater, TreeTime
-#' @param rate If provided, force analysis to use specified value for rate
+#' @param rate If provided, force analysis to use specified value for rate, in substitutions per genome per unit of time
 #' @param keepRoot Whether to keep the root as in the input
 #' @param ... Passed on to dating algorithm
+#'
+#' @details
+#' Throughout DiagnoDating, as in BactDating, the branch lengths of \code{tree} are numbers of
+#' substitutions rather than substitutions per site, and the \code{rate} of a fitted model is in
+#' substitutions per genome per unit of time. The \code{relax} parameter of a fitted model is on
+#' the same per genome scale.
+#'
+#' Not all of the dating algorithms use this convention internally, and treedater in particular
+#' works with rates per site. Each of them is converted, but when \code{algo='treedater'} the
+#' conversion needs the length of the alignment, which should be given as \code{seqlen}, and the
+#' clock model can be selected with \code{clock}. Both are passed on through \code{...}: see
+#' \code{\link{runTreeDater}} for the details, which are worth reading before passing any rate
+#' valued argument on to treedater.
 #'
 #' @return resDating object containing results of dating analysis
 #' @export
 #'
+#' @examples
+#' \dontrun{
+#' #BactDating with the additive relaxed clock
+#' r=runDating(tree,dates,algo='BactDating',model='arc')
+#' #treedater with the same clock model, which it calls additive
+#' r=runDating(tree,dates,algo='treedater',clock='additive',seqlen=10000)
+#' }
 runDating=function(tree,dates,algo='BactDating',rate=NA,keepRoot=F,...) {
   r=NULL
   if (!is.rooted(tree) && keepRoot) stop('Need rooted tree as input for keepRoot option')
@@ -79,23 +99,85 @@ takeSample=function(r,w=nrow(r$record)) {
 
 #' Date a tree using treedater
 #'
-#' @param tree Tree to date
-#' @param dates Dates of leaves in the tree
-#' @param rate If provided, force analysis to use specified value for rate
+#' @param tree Tree to date, with branch lengths in number of substitutions (cf details)
+#' @param dates Dates of leaves in the tree, matched by name if named and by order otherwise
+#' @param rate If provided, force analysis to use specified value for rate, in substitutions per genome per unit of time
 #' @param keepRoot Whether to keep the root as in the input
+#' @param seqlen Length of the alignment from which the tree was built (cf details)
+#' @param clock Clock model for treedater to use, either 'strict' or 'additive'
 #' @param ... Passed on to treedater::dater
+#'
+#' @details
+#' treedater does not use the same units as the rest of DiagnoDating, so some care is needed.
+#' DiagnoDating follows BactDating: the input \code{tree} has branch lengths in numbers of
+#' substitutions, and \code{rate} is in substitutions per genome per unit of time. treedater
+#' instead takes branch lengths in substitutions per site together with the sequence length
+#' \code{s}, and reports rates in substitutions per site per unit of time.
+#'
+#' This function converts between the two conventions: the tree is divided by \code{seqlen}
+#' on the way in, and the rate returned by treedater is multiplied by \code{seqlen} on the way
+#' out. The \code{rate} argument above is therefore in DiagnoDating units (per genome), whereas
+#' any rate-valued argument passed through \code{...} straight to treedater, in particular
+#' \code{omega0} and \code{meanRateLimits}, is in treedater units (per site). Supplying
+#' \code{seqlen} is what keeps the two consistent. If \code{seqlen} is omitted a nominal value
+#' is used instead, which cancels out of the fit exactly, but which would silently rescale
+#' \code{omega0} and \code{meanRateLimits} by an arbitrary factor, so passing either of those
+#' without \code{seqlen} is an error.
+#'
+#' The clock models translate as follows. The \code{'strict'} clock of treedater is the
+#' \code{'poisson'} model, which has no relaxation parameter. The \code{'additive'} clock of
+#' treedater is the additive relaxed clock of Didelot et al (2021), which is exactly the
+#' \code{'arc'} model of BactDating: in both, a branch of duration t under a clock of mean rate
+#' mu has a negative binomial number of substitutions, with size mu*t/sigma and probability
+#' 1/(1+sigma). The variance parameter that treedater calls \code{sp} is thus the same quantity
+#' that BactDating calls \code{sigma} and that DiagnoDating calls \code{relax}, measured on the
+#' same per genome scale, and it is carried across without rescaling. The \code{'uncorrelated'}
+#' clock of treedater has no equivalent here, since its variance is not additive in the duration
+#' of a branch and so cannot be written as a \code{relax} parameter.
 #'
 #' @return resDating object containing results of treedater analysis
 #'
-runTreeDater=function(tree,dates,rate=NA,keepRoot=F,...) {
+runTreeDater=function(tree,dates,rate=NA,keepRoot=F,seqlen=NA,clock='strict',...) {
+  if (!requireNamespace('treedater',quietly=T)) stop('The treedater package is needed to use algo="treedater".')
+  if (length(clock)!=1 || !clock %in% c('strict','additive')) stop(sprintf(paste0(
+    'clock="%s" is not supported. Use "strict", which is the "poisson" model, or "additive", which is the "arc" model. ',
+    'The "uncorrelated" clock of treedater has a variance that is not additive in the duration of a branch, ',
+    'so it has no equivalent "relax" parameter.'),paste(clock,collapse=',')))
+
+  dots=list(...)
+  persite=intersect(c('omega0','meanRateLimits'),names(dots))
+  if ('s' %in% names(dots)) stop('Do not pass s to treedater, use seqlen instead.')
+  if (length(persite)>0 && !is.na(rate)) stop(sprintf(
+    'Do not supply both rate and %s: they fix the same thing, the former per genome and the latter per site.',paste(persite,collapse=' and ')))
+  if (is.na(seqlen)) {
+    if (length(persite)>0) stop(sprintf(paste0(
+      'seqlen is needed when passing %s on to treedater, because these are rates per site, ',
+      'which cannot be interpreted without the true length of the alignment.'),paste(persite,collapse=' and ')))
+    seqlen=1000 #Nominal value, which cancels out exactly as long as no per site rate is given
+  }
+
   if (keepRoot) tre=tree else tre=unroot(tree)
-  l=1000#round(sum(tre$edge.length)*100)
-  tre$edge.length=tre$edge.length/l
+  tre$edge.length=tre$edge.length/seqlen #Substitutions to substitutions per site
   sts=dates
-  names(sts)=tre$tip.label
-  if (is.na(rate)) o=capture.output(rtd<-suppressWarnings(treedater::dater(tre,sts,s=l,...)))
-  else o=capture.output(rtd<-suppressWarnings(treedater::dater(tre,sts,s=l,omega0=rate/l,meanRateLimits=c(1-1e-10,1+1e-10)*rate/l,...)))
-  res=resDating(rtd,tree,algo='treedater',model='poisson',rate=rtd$mean.rate*l,relax=0,rootdate=rtd$timeOfMRCA)
+  if (is.null(names(sts))) names(sts)=tre$tip.label #Named dates are matched by name, as in bactdate
+
+  args=c(list(tre=tre,sts=sts,s=seqlen,clock=clock),dots)
+  if (!is.na(rate)) {
+    args$omega0=rate/seqlen
+    args$meanRateLimits=c(1-1e-10,1+1e-10)*rate/seqlen
+  }
+  o=capture.output(rtd<-suppressWarnings(do.call(treedater::dater,args)))
+
+  if (clock=='additive') {
+    model='arc'
+    relax=rtd$sp #The sp of treedater is the sigma of BactDating, on the same scale
+    if (!is.finite(relax) || relax<=0) stop('treedater returned a relaxation parameter that is not positive, so the arc model is undefined for this fit.')
+  } else {
+    model='poisson'
+    relax=0
+  }
+
+  res=resDating(rtd,tree,algo='treedater',model=model,rate=rtd$mean.rate*seqlen,relax=relax,rootdate=rtd$timeOfMRCA)
   return(res)
 }
 
